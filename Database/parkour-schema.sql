@@ -28,6 +28,7 @@ CREATE TABLE spot(
     added_date timestamp default CURRENT_TIMESTAMP,
     lng decimal(11,7) NOT NULL,
     lat decimal(11,7) NOT NULL,
+    rating int NOT NULL,
     PRIMARY KEY (spot_id),
     FOREIGN KEY (city_id) REFERENCES city(city_id)
 );

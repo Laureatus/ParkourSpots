@@ -1,0 +1,161 @@
+/*
+╔══════════════════════╗
+║        FARBEN        ║
+╚══════════════════════╝
+
+Blau           #1F4E8C
+Dunkel Grau    #3D3F45
+Hell Grau      #E5E5E5
+Rot            #A62C21
+*/
+
+
+/*
+╔══════════════════════╗
+║        GLOBAL        ║
+╚══════════════════════╝
+*/
+
+html {
+    font-size: 16px;
+}
+
+body {
+    margin: 0;
+    font-family: 'Raleway', 'Lato', 'Helvetica Neue', 'Arial',sans-serif;
+    font-size: 16px;
+}
+
+
+section {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+}
+
+@media (max-width: 1366px) {
+
+    section {
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+    }
+
+}
+
+@media (max-width: 1024px) {
+
+    section {
+        padding-top: 1.5rem;
+        padding-bottom: 1.5rem;
+    }
+
+}
+
+@media (max-width: 768px) {
+
+    section {
+        padding-top: .5rem;
+        padding-bottom: .5rem;
+    }
+
+}
+
+:focus {
+    outline: none;
+    -webkit-box-shadow: 0 0 2px 2px #E5E5E5, 0 0 10px #E5E5E5;
+    box-shadow: 0 0 2px 2px #E5E5E5, 0 0 10px #E5E5E5;
+}
+
+/*
+╔═══════════════════════╗
+║       GENERELLES      ║
+╚═══════════════════════╝
+*/
+
+.clearfix::after {
+    content: "";
+    display: block;
+    clear: both;
+}
+
+.active {
+    background-color: #A62C21 !important;
+}
+
+.screenreader {
+    display: none;
+}
+
+/*
+╔════════════════════════╗
+║       GRID-SYSTEM      ║
+╚════════════════════════╝
+ */
+.container {
+    width: 95%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.row::after {
+    content: "";
+    clear: both;
+    display: block;
+}
+
+[class*="col-"] {
+    float: left;
+    min-height: 1px;
+    padding: .8rem;
+}
+
+.col-1 {width: 16.666%}
+.col-2 {width: 33.333%}
+.col-3 {width: 50%    }
+.col-4 {width: 66.666%}
+.col-6 {width: 100%   }
+
+@media (max-width: 1024px) {
+
+    .col-1 { width: 33.333%; }
+
+}
+
+@media (max-width: 768px) {
+
+    .col-1 { width: 50%;  }
+    .col-2 { width: 100%; }
+    .col-3 { width: 100%; }
+    .col-4 { width: 100%; }
+
+}
+
+
+@media (max-width: 480px) {
+
+    .col-1 { width: 100%; }
+    .col-2 { width: 100%; }
+    .col-3 { width: 100%; }
+    .col-4 { width: 100%; }
+
+}
+
+
+/*
+╔════════════════════════╗
+║         TABLES         ║
+╚════════════════════════╝
+ */
+
+
+
+table {
+    width: 100%;
+    margin-bottom: 0px;
+    border-collapse: collapse;
+    border: 1px solid grey;
+}
+
+th, td{
+    border: 1px solid grey;
+}
+

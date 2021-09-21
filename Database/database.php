@@ -67,7 +67,7 @@ function connect(string $hostname, string $username, string $database, string $p
 
 
 function get_parkour_spots($connection){
-    $query = "SELECT name, location, added_date, lng, lat FROM spot";
+    $query = "select name, location, city, country, added_date, rating from spot inner join city using(city_id) inner join country using(country_id);";
 
     $q = $connection->query($query);
     $q->setFetchMode(PDO::FETCH_ASSOC);
@@ -86,18 +86,20 @@ if ($count > 0){
     echo "<tr>";
     echo "<th>Name</th>";
     echo "<th>Location</th>";
-    echo "<th>added_date</th>";
-    echo "<th>longitude</th>";
-    echo "<th>lattitude</th>";
+    echo "<th>City</th>";
+    echo "<th>Country</th>";
+    echo "<th>Rating</th>";
+    echo "<th>Added Date</th>";
     echo "</tr>";
     //LOOP THROUGH ALL QUERY RESULTS
     while ($rows = $statement->fetch()){
         echo "<tr>";
         echo "<td>" . $rows['name'] . "</td>";
         echo "<td>" . $rows['location'] . "</td>";
+        echo "<td>" . $rows['city'] . "</td>";
+        echo "<td>" . $rows['country'] . "</td>";
+        echo "<td>" . $rows['rating'] . "/10 </td>";
         echo "<td>" . $rows['added_date'] . "</td>";
-        echo "<td>" . $rows['lng'] . "</td>";
-        echo "<td>" . $rows['lat'] . "</td>";
         echo "</tr>";
 
     }

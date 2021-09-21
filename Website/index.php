@@ -1,6 +1,4 @@
-<?php
-    include '../Database/database.php';
-?>
+
 <!DOCTYPE html>
 <html lang="de">
 
@@ -23,7 +21,7 @@
             <h1>Parkour Spots</h1>
             <div>
                 <?php
-
+                include '../Database/database.php';
                 ?>
             </div>
         </article>

@@ -17,7 +17,7 @@ services:
     creds:
       user: lorin
       password: db_P@ssw0rd
-      database: Parkour
+      database: parkour
 tooling:
   xdebug-on:
     service: appserver
