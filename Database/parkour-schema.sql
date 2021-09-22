@@ -3,9 +3,11 @@ CREATE DATABASE parkour;
 
 USE parkour;
 
-CREATE TABLE country(
-    country_id int NOT NULL AUTO_INCREMENT,
-    country varchar(255) NOT NULL,
+CREATE TABLE country (
+    country_id int NOT NULL,
+    country varchar(75) NOT NULL,
+    alpha_2 char(2) NOT NULL,
+    alpha_3 char(3) NOT NULL,
     PRIMARY KEY (country_id)
 );
 
