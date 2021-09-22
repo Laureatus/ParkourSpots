@@ -72,9 +72,7 @@ function get_parkour_spots($connection){
     $q = $connection->query($query);
     $q->setFetchMode(PDO::FETCH_ASSOC);
     return $q;
-
 }
-
 
 $connection = connect("database","lorin", "parkour", "db_P@ssw0rd");
 $statement = get_parkour_spots($connection);

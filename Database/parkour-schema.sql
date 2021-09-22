@@ -24,7 +24,7 @@ CREATE TABLE city(
 
 CREATE TABLE spot(
     spot_id int NOT NULL AUTO_INCREMENT,
-    city_id int NOT NULL,
+    city_id int NULL,
     name varchar(255) NOT NULL,
     location varchar(255) NOT NULL,
     added_date timestamp default CURRENT_TIMESTAMP,

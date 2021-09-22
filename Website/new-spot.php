@@ -11,10 +11,6 @@
 
 <body>
 
-<?php
-include 'src/Scripts/newSpot.php';
-?>
-
 <!-- NAVIGATIONSLEISTE -->
 
 <nav id="header-nav">
@@ -60,9 +56,9 @@ include 'src/Scripts/newSpot.php';
         <article class="leistungs-box leistung-box-empfohlen">
             <h1>Neuen Spot hinzufügen</h1>
             <div>
-                <form>
-                    <input type="text" >
-                </form>
+                <?php
+                include 'src/Scripts/newSpot.php';
+                ?>
             </div>
         </article>
 

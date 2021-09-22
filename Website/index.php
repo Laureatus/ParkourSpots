@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Index</title>
     <!-- STYLESHEET -->
-    <link rel="stylesheet" type="text/css" href="src/styles.css">
+    <link rel="stylesheet" type="text/css" href="src/Styles/styles.css">
 </head>
 
 <body>
@@ -58,7 +58,7 @@
             <h1>Parkour Spots</h1>
             <div>
                 <?php
-                include '../Database/database.php';
+                include 'src/Scripts/database.php';
                 ?>
             </div>
         </article>
