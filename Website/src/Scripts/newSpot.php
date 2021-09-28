@@ -1,82 +1,69 @@
 <?php
 
-/**
- * Connects to a mysql database.
- *
- * @param string $hostname
- *   The hostname to connect.
- * @param string $username
- * @param string $database
- * @param string $password
- *
- * @return PDO
- *
- */
+include 'functions.inc.php';
 
-function connect(string $hostname, string $username, string $database, string $password) : PDO {
-    return new PDO("mysql:host=$hostname;dbname=$database", $username, $password);
-}
-
-/**
- * Gets Information from the Database
- *
- * @param PDO $connection
- *      The database to connect to
- * @param $query
- *      The MySQL Query to get the spots Information
- *
- * @return PDOStatement|false
- */
+$name = "";
+$location = "";
+$array = "";
+$city = "";
+$rating = "";
 
 
-function get_parkour_spots($connection){
-    $query = "select country,country_id from country;";
+if (isset($_POST['submit'])) {
+    $errors = [];
 
-    $q = $connection->query($query);
-    $q->setFetchMode(PDO::FETCH_ASSOC);
-    return $q;
-}
-
-
-
-
-
-function displayCountrys(){
+    $name = $_POST['name'];
+    $location = $_POST['address'];
+    $array = array_values($_POST);
+    $city = $array[2];
+    $rating = $_POST['rating'];
     $connection = connect("database","lorin", "parkour", "db_P@ssw0rd");
-    $statement = get_parkour_spots($connection);
-    $count = $statement->rowCount();
-    if ($count > 0) {
-        while ($rows = $statement->fetch()){
-            echo "<option value= ". $rows['country_id'] . ">" .$rows['country'] . "</option>";
+
+    if (empty($name)) {
+        $errors[] = 'Spot Name darf nicht leer sein';
+    }
+
+    if (empty($location)) {
+        $errors[] = 'Addresse darf nicht leer sein';
+    }
+
+    if (empty($city)) {
+        $errors[] = 'Stadt darf nicht leer sein';
+    }
+
+    if (empty($rating)) {
+        $errors[] = 'Bewertung darf nicht leer sein';
+    }
+
+    if (count($errors) > 0) {
+        echo '<h2>Ihr Formular ist nicht vollständig ausgefüllt</h2>';
+        echo '<p>Füllen Sie auch die folgenden Felder aus:<br>';
+        echo implode('<br>', $errors);
+        echo '</p>';
+    } else {
+        if (insert_spot($name, $location, $city, $rating)) {
+            echo "Neuer Spot wurde hinzugefügt";
+            // Redirect
+            header('Location: ../../index.php');
         }
     }
 }
 
-    echo "<form action='/src/Scripts/newSpotValidate.php' method='post'>";
-        //Name
-        echo  "<label for='name'>Spot Name:</label><br>";
-        echo "<input type='text' id='name' name='name'><br>";
-        //Location
-        echo  "<label for='location'>Spot Location:</label><br>";
-        echo "<input type='text' id='location' name='location'><br>";
-        //City
-        echo  "<label for='city'>City</label><br>";
-        echo "<input type='text' id='city' name='city'><br>";
-        //Country
-        echo  "<label for='country'>Country</label><br>";
-        echo "<select name='country' id='country'>";
-                displayCountrys();
-        echo "</select><br>";
-        //Rating
-        echo  "<label for='rating'>Rating 1-10:</label><br>";
-        echo "<input type='number' id='rating' name='rating' min='1' max='10'><br>";
-        //Submit
-        echo "<input type='submit' value='Submit'>";
-    echo "</form>";
-
-
-
-
-//CLOSE CONNECTION
-$connection = null;
-
+echo "<form action='/src/Scripts/newSpot.php' method='post'>";
+    //Name
+    echo  "<label for='name'>Spot Name:</label><br>";
+    echo "<input type='text' id='name' name='name' value='$name'><br>";
+    //Location
+    echo  "<label for='address'>Spot Location:</label><br>";
+    echo "<input type='text' id='address' name='address' value='$location'><br>";
+    //City
+    echo  "<label for='city'>City</label><br>";
+    echo "<select name='city' id='city' value='$city'>";
+            displayCity();
+    echo "</select><br>";
+    //Rating
+    echo  "<label for='rating'>Rating 1-10:</label><br>";
+    echo "<input type='number' id='rating' name='rating' min='1' max='10' value='$rating'><br>";
+    //Submit
+    echo "<input type='submit' name='submit' value='Submit'>";
+echo "</form>";

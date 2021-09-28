@@ -67,7 +67,7 @@ function connect(string $hostname, string $username, string $database, string $p
 
 
 function get_parkour_spots($connection){
-    $query = "select name, location, city, country, added_date, rating from spot inner join city using(city_id) inner join country using(country_id);";
+    $query = "select name, address, city, added_date, rating from spot inner join location using(city);";
 
     $q = $connection->query($query);
     $q->setFetchMode(PDO::FETCH_ASSOC);
@@ -85,7 +85,6 @@ if ($count > 0){
     echo "<th>Name</th>";
     echo "<th>Location</th>";
     echo "<th>City</th>";
-    echo "<th>Country</th>";
     echo "<th>Rating</th>";
     echo "<th>Added Date</th>";
     echo "</tr>";
@@ -93,9 +92,8 @@ if ($count > 0){
     while ($rows = $statement->fetch()){
         echo "<tr>";
         echo "<td>" . $rows['name'] . "</td>";
-        echo "<td>" . $rows['location'] . "</td>";
+        echo "<td>" . $rows['address'] . "</td>";
         echo "<td>" . $rows['city'] . "</td>";
-        echo "<td>" . $rows['country'] . "</td>";
         echo "<td>" . $rows['rating'] . "/10 </td>";
         echo "<td>" . $rows['added_date'] . "</td>";
         echo "</tr>";
