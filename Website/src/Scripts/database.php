@@ -34,45 +34,9 @@
 // array
 // objects
 //Modulo Operator
+include_once 'functions.inc.php';
 
 
-
-/**
- * Connects to a mysql database.
- *
- * @param string $hostname
- *   The hostname to connect.
- * @param string $username
- * @param string $database
- * @param string $password
- *
- * @return PDO
- *
- */
-
-function connect(string $hostname, string $username, string $database, string $password) : PDO {
-    return new PDO("mysql:host=$hostname;dbname=$database", $username, $password);
-}
-
-/**
- * Gets Information from the Database
- *
- * @param PDO $connection
- *      The database to connect to
- * @param $query
- *      The MySQL Query to get the spots Information
- *
- * @return PDOStatement|false
- */
-
-
-function get_parkour_spots($connection){
-    $query = "select name, address, city, added_date, rating from spot inner join location using(city);";
-
-    $q = $connection->query($query);
-    $q->setFetchMode(PDO::FETCH_ASSOC);
-    return $q;
-}
 
 $connection = connect("database","lorin", "parkour", "db_P@ssw0rd");
 $statement = get_parkour_spots($connection);
@@ -87,6 +51,8 @@ if ($count > 0){
     echo "<th>City</th>";
     echo "<th>Rating</th>";
     echo "<th>Added Date</th>";
+    echo "<th>Delete</th>";
+
     echo "</tr>";
     //LOOP THROUGH ALL QUERY RESULTS
     while ($rows = $statement->fetch()){
@@ -96,11 +62,13 @@ if ($count > 0){
         echo "<td>" . $rows['city'] . "</td>";
         echo "<td>" . $rows['rating'] . "/10 </td>";
         echo "<td>" . $rows['added_date'] . "</td>";
+        echo "<td><a href=\"/index.php?spot_id=". $rows['spot_id']. "\">Delete</a></td>";
         echo "</tr>";
-
     }
     echo "</table>";
 }
+
+
 
 
 //CLOSE CONNECTION
