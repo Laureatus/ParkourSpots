@@ -8,7 +8,6 @@ $array = "";
 $city = "";
 $rating = "";
 
-
 if (isset($_POST['submit'])) {
     $errors = [];
 

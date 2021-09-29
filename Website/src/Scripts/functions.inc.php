@@ -46,27 +46,36 @@ function get_all_cities($connection){
  */
 function get_parkour_spots($connection){
     $query = "select spot_id, name, address, city, added_date, rating from spot inner join location using(city);";
-
     $q = $connection->query($query);
     $q->setFetchMode(PDO::FETCH_ASSOC);
     return $q;
 }
 
 /**
- * @todo Comment me! :-)
+ * Displays all Cities
+ * @param null $city
  */
-function displayCity(){
+function displayCity($city = null){
     $connection = connect("database","lorin", "parkour", "db_P@ssw0rd");
     $statement = get_all_cities($connection);
     $count = $statement->rowCount();
     if ($count > 0) {
         while ($rows = $statement->fetch()){
-            echo "<option value= ". $rows['city'] . ">" .$rows['city'] . "</option>";
+
+            $selected = "";
+
+            if ($city === $rows['city']) {
+               $selected = 'selected="true"';
+            }
+            echo "<option $selected value='". $rows['city'] . "'>" .$rows['city'] . "</option>";
+
         }
     }
 }
 
 /**
+ * Adds new Spot to database
+ *
  * @param $name
  * @param $location
  * @param $city
@@ -86,6 +95,41 @@ function insert_spot($name, $location, $city, $rating) {
     ]);
 }
 
+/**
+ * Get the spot that needs to be updated
+ * @param $spot_id
+ * @return false|PDOStatement
+ */
+function get_update_spot($spot_id){
+    $query = "select spot_id, name, address, city, added_date, rating from spot inner join location using(city) where spot_id = $spot_id;";
+    $connection = connect("database","lorin", "parkour", "db_P@ssw0rd");
+    $q = $connection->query($query);
+    $q->setFetchMode(PDO::FETCH_ASSOC);
+    return $q;
+}
+
+/**
+ * Updates the spot Information
+ * @param $spot_id
+ * @param $name
+ * @param $address
+ * @param $city
+ * @param $rating
+ * @return bool
+ */
+function update_spot($spot_id, $name, $address, $city, $rating){
+    $connection = connect("database","lorin", "parkour", "db_P@ssw0rd");
+    $editStatement = "update spot set name =  '$name', address = '$address', city = '$city', rating = '$rating' where spot_id = '$spot_id'";
+    $editSpot = $connection->prepare($editStatement);
+    return $editSpot->execute();
+}
+
+/**
+ * Deletes a spot from the Database
+ *
+ * @param $spot_id
+ * @return bool
+ */
 function delete_spot($spot_id) {
     $connection = connect("database","lorin", "parkour", "db_P@ssw0rd");
     $deleteStatement = "delete from spot where spot_id = $spot_id;";
