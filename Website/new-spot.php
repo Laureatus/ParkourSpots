@@ -1,51 +1,12 @@
 <!DOCTYPE html>
 <html lang="de">
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Index</title>
-    <!-- STYLESHEET -->
-    <link rel="stylesheet" type="text/css" href="src/Styles/styles.css">
-</head>
-
 <body>
 
-<!-- NAVIGATIONSLEISTE -->
-
-<nav id="header-nav">
-
-    <!-- DESKTOP-NAVIGATION -->
-
-    <div class="container" id="desktop-nav">
-        <div class="row">
-            <div class="col-6">
-                <ul>
-                    <li><a href="index.php">Startseite</a></li>
-                    <li class="active"><a href="new-spot.php">Neuer Spot</a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
-
-    <!-- MOBILE-NAVIGATION -->
-
-    <div class="container" id="mobile-nav">
-        <div class="row">
-            <div class="col-6">
-                <div id="mobile-nav-dropdown" class="clearfix">
-                    <div id="mobile-nav-button"><span>&equiv;</span></div>
-                    <div id="mobile-nav-content" class="clearfix">
-                        <ul>
-                            <li><a href="index.php">Startseite</a></li>
-                            <li class="active"><a href="new-spot.php">Neuer Spot</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</nav>
+<?php
+include 'src/Scripts/head.php';
+include 'src/Scripts/navbar.php';
+?>
 
 
 <!-- NEUER SPOT SCRIPT -->
@@ -61,7 +22,6 @@
                 ?>
             </div>
         </article>
-
     </div>
 
 </section>

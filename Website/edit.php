@@ -1,7 +1,9 @@
 <?php
-
-
-include_once 'functions.inc.php';
+echo "<head>";
+echo "<link rel='stylesheet' type='text/css' href='src/Styles/styles.css'>";
+echo "</head>";
+include_once 'src/Scripts/functions.inc.php';
+include 'src/Scripts/navbar.php';
 
 //Get spot_id using GET method
 $spot_id = ($_GET['spot_id']);
@@ -62,6 +64,11 @@ if (isset($_POST['submit'])) {
     }
 }
 
+echo "<section class='container' >";
+echo "    <div class='col-6'>";
+echo "        <article class='leistungs-box leistung-box-empfohlen'>";
+echo "            <h1>Spot Editieren</h1>";
+echo "            <div>";
 echo "<form action='/src/Scripts/edit.php' method='post'>";
 echo "<input type='hidden' id='spot_id' name='spot_id' value='$spot_id'><br>";
 //Name
@@ -81,3 +88,7 @@ echo "<input type='number' id='rating' name='rating' min='1' max='10' value='$ra
 //Submit
 echo "<input type='submit' name='submit' value='Submit'>";
 echo "</form>";
+echo "            </div>";
+echo "        </article>";
+echo "    </div>";
+echo "</section>";
