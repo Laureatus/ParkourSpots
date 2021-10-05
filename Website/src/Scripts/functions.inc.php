@@ -147,10 +147,12 @@ function alert($message){
 class Message {
 
     public static function setMessage($message) {
+        session_start();
         $_SESSION['message'] = $message;
     }
 
     public static function getMessage(){
+        session_start();
         if (isset($_SESSION['message'])) {
             $message = $_SESSION['message'];
             unset($_SESSION['message']);

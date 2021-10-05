@@ -13,7 +13,6 @@ $spot_id = ($_GET['spot_id']);
 delete_spot($spot_id);
 }
 include 'src/Scripts/navbar.php';
-echo Message::getMessage();
 ?>
 
 <!-- PARKOUR SPOTS LISTE -->
@@ -26,6 +25,7 @@ echo Message::getMessage();
             <h1>Parkour Spots</h1>
             <div>
                 <?php
+                echo Message::getMessage();
                 include 'src/Scripts/database.php';
                 ?>
             </div>

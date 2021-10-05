@@ -41,7 +41,7 @@ if (isset($_POST['submit'])) {
         echo '</p>';
     } else {
         if (insert_spot($name, $location, $city, $rating)) {
-            echo "Neuer Spot wurde hinzugefügt";
+            Message::setMessage("Neuer Spot wurde erfolgreich hinzugefügt!");
             // Redirect
             header('Location: ../../index.php');
         }
