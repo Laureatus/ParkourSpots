@@ -1,7 +1,5 @@
 /*
-╔══════════════════════╗
-║        FARBEN        ║
-╚══════════════════════╝
+FARBEN
 
 Blau           #1F4E8C
 Dunkel Grau    #3D3F45
@@ -11,9 +9,7 @@ Rot            #A62C21
 
 
 /*
-╔══════════════════════╗
-║        GLOBAL        ║
-╚══════════════════════╝
+GLOBAL
 */
 
 html {
@@ -66,9 +62,7 @@ section {
 }
 
 /*
-╔═══════════════════════╗
-║       GENERELLES      ║
-╚═══════════════════════╝
+GENERELLES
 */
 
 .clearfix::after {
@@ -159,9 +153,7 @@ section {
 }
 
 /*
-╔═══════════════════════════════════╗
-║     NAVIGATIONSLEISTE (MOBIL)     ║
-╚═══════════════════════════════════╝
+NAVIGATIONSLEISTE (MOBIL)
 */
 
 #mobile-nav-button {
@@ -226,9 +218,7 @@ section {
 
 
 /*
-╔════════════════════════╗
-║       GRID-SYSTEM      ║
-╚════════════════════════╝
+GRID-SYSTEM
  */
 .container {
     width: 95%;
@@ -281,12 +271,8 @@ section {
 
 
 /*
-╔════════════════════════╗
-║         TABLES         ║
-╚════════════════════════╝
+TABLES
  */
-
-
 
 table {
     width: 60%;
@@ -305,4 +291,9 @@ td {
     padding-left: 5px;
     border: 1px solid #3D3F45;
 }
+
+/*
+FORM
+ */
+
 

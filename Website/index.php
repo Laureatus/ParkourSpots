@@ -12,10 +12,12 @@ if (isset($_GET['spot_id']))
 $spot_id = ($_GET['spot_id']);
 delete_spot($spot_id);
 }
-include 'src/Scripts/navbar.php'
+include 'src/Scripts/navbar.php';
+echo Message::getMessage();
 ?>
 
 <!-- PARKOUR SPOTS LISTE -->
+
 
 <section class="container" >
     <div class="col-6">

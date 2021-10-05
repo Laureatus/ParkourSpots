@@ -17,7 +17,7 @@ CREATE TABLE spot(
     city varchar(255) NOT NULL,
     name varchar(255) NOT NULL,
     address varchar(255) NOT NULL,
-    added_date timestamp default CURRENT_TIMESTAMP,
+    added_date datetime default CURRENT_TIMESTAMP,
     lng decimal(11,7) NULL,
     lat decimal(11,7) NULL,
     rating int NOT NULL,

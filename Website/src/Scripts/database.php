@@ -28,7 +28,7 @@ if ($count > 0){
         echo "<td>" . $rows['address'] . "</td>";
         echo "<td>" . $rows['city'] . "</td>";
         echo "<td>" . $rows['rating'] . "/10 </td>";
-        echo "<td>" . $rows['added_date'] . "</td>";
+        echo "<td>" . $rows['date'] . "</td>";
         echo "<td><a href=\"/index.php?spot_id=". $rows['spot_id']. "\">Delete</a></td>";
         echo "<td><a href=\"/edit.php?spot_id=". $rows['spot_id']. "\">Edit</a></td>";
         echo "</tr>";

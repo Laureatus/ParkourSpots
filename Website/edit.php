@@ -6,11 +6,7 @@ include_once 'src/Scripts/functions.inc.php';
 include 'src/Scripts/navbar.php';
 
 //Get spot_id using GET method
-$spot_id = ($_GET['spot_id']);
-//Set spot_id using POST method GET returns null
-if ($spot_id == null) {
-    $spot_id= $_POST['spot_id'];
-}
+$spot_id = $_GET['spot_id'] ?? $_POST['spot_id'];
 
 
 $q = get_update_spot($spot_id);
@@ -27,11 +23,11 @@ while ($row = $q->fetch()) {
 
 if (isset($_POST['submit'])) {
     $errors = [];
-    $name = $_POST['name'];
-    $location = $_POST['address'];
+    $name = htmlspecialchars($_POST['name']);
+    $location = htmlspecialchars($_POST['address']);
     $array = array_values($_POST);
     $city = $array[3];
-    $rating = $_POST['rating'];
+    $rating = htmlspecialchars($_POST['rating']);
     $spot_id = $_POST['spot_id'];
 
     if (empty($name)) {
@@ -57,9 +53,9 @@ if (isset($_POST['submit'])) {
         echo '</p>';
     } else {
         if (update_spot($spot_id,$name, $location, $city, $rating)) {
-            echo "Spot wurde aktualisiert";
-            // Redirect
-            header('Location: ../../index.php');
+            //alert("Änderungen wurden erfolgreich gespeichert");
+            Message::setMessage("Änderungen wurden erfolgreich gespeichert");
+            header("Location: index.php");
         }
     }
 }
@@ -69,7 +65,7 @@ echo "    <div class='col-6'>";
 echo "        <article class='leistungs-box leistung-box-empfohlen'>";
 echo "            <h1>Spot Editieren</h1>";
 echo "            <div>";
-echo "<form action='/src/Scripts/edit.php' method='post'>";
+echo "<form action='edit.php' method='post'>";
 echo "<input type='hidden' id='spot_id' name='spot_id' value='$spot_id'><br>";
 //Name
 echo  "<label for='name'>Spot Name:</label><br>";

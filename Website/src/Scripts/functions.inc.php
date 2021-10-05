@@ -45,7 +45,7 @@ function get_all_cities($connection){
  * @return PDOStatement|false
  */
 function get_parkour_spots($connection){
-    $query = "select spot_id, name, address, city, added_date, rating from spot inner join location using(city);";
+    $query = "select spot_id, name, address, city, date_format(added_date, '%d-%m-%Y') as date, rating from spot inner join location using(city);";
     $q = $connection->query($query);
     $q->setFetchMode(PDO::FETCH_ASSOC);
     return $q;
@@ -136,3 +136,26 @@ function delete_spot($spot_id) {
     $deleteSpot = $connection->prepare($deleteStatement);
     return $deleteSpot->execute();
 }
+
+function alert($message){
+    echo "<script>
+            alert('$message');
+            window.location.replace('index.php');
+          </script>";
+}
+
+class Message {
+
+    public static function setMessage($message) {
+        $_SESSION['message'] = $message;
+    }
+
+    public static function getMessage(){
+        if (isset($_SESSION['message'])) {
+            $message = $_SESSION['message'];
+            unset($_SESSION['message']);
+            return $message;
+        }
+    }
+}
+
