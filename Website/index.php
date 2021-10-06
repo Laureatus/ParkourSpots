@@ -10,7 +10,7 @@ include_once 'src/Scripts/functions.inc.php';
 if (isset($_GET['spot_id']))
 {
 $spot_id = ($_GET['spot_id']);
-delete_spot($spot_id);
+remove_directory($spot_id);
 }
 include 'src/Scripts/navbar.php';
 ?>

@@ -87,12 +87,18 @@ function insert_spot($name, $location, $city, $rating) {
     $statementSpot = "insert into spot (name,address,city,rating) VALUES (:name,:address,:city,:rating)";
     $insertSpot = $connection->prepare($statementSpot);
 
-    return $insertSpot->execute([
+    $result = $insertSpot->execute([
         ':name' => $name,
         ':address' => $location,
         ':city' => $city,
         ':rating' => $rating
     ]);
+
+    if ($result === TRUE) {
+        return $connection->lastInsertId();
+    }
+
+    return FALSE;
 }
 
 /**
@@ -147,12 +153,10 @@ function alert($message){
 class Message {
 
     public static function setMessage($message) {
-        session_start();
         $_SESSION['message'] = $message;
     }
 
     public static function getMessage(){
-        session_start();
         if (isset($_SESSION['message'])) {
             $message = $_SESSION['message'];
             unset($_SESSION['message']);
@@ -161,3 +165,16 @@ class Message {
     }
 }
 
+function remove_directory($spot_id){
+    delete_spot($spot_id);
+    $dir = "src/Scripts/uploads/$spot_id";
+    array_map('unlink', glob("$dir/*.*"));
+    rmdir($dir);
+}
+
+function get_spot_id($city, $location, $name){
+    $connection = connect("database","lorin", "parkour", "db_P@ssw0rd");
+    $SelectStatement = "SELECT spot_id FROM spot where city = ".$city." AND address = ".$location." AND name = ".$name.";";
+    $SelectSpot = $connection->prepare($SelectStatement);
+    return $SelectSpot->execute();
+}

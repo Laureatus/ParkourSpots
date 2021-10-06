@@ -19,6 +19,8 @@ if ($count > 0){
     echo "<th>Added Date</th>";
     echo "<th>Delete</th>";
     echo "<th>Edit</th>";
+    echo "<th>Images</th>";
+
 
     echo "</tr>";
     //LOOP THROUGH ALL QUERY RESULTS
@@ -31,6 +33,8 @@ if ($count > 0){
         echo "<td>" . $rows['date'] . "</td>";
         echo "<td><a href=\"/index.php?spot_id=". $rows['spot_id']. "\">Delete</a></td>";
         echo "<td><a href=\"/edit.php?spot_id=". $rows['spot_id']. "\">Edit</a></td>";
+        echo "<td><a href=\"/images.php?spot_id=". $rows['spot_id']. "\">Images</a></td>";
+
         echo "</tr>";
     }
     echo "</table>";
