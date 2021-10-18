@@ -143,19 +143,21 @@ function delete_spot($spot_id) {
     return $deleteSpot->execute();
 }
 
-function alert($message){
-    echo "<script>
-            alert('$message');
-            window.location.replace('index.php');
-          </script>";
-}
-
+/**
+ * Class Message
+ */
 class Message {
 
+    /**
+     * @param $message
+     */
     public static function setMessage($message) {
         $_SESSION['message'] = $message;
     }
 
+    /**
+     * @return mixed
+     */
     public static function getMessage(){
         if (isset($_SESSION['message'])) {
             $message = $_SESSION['message'];
@@ -165,16 +167,15 @@ class Message {
     }
 }
 
+/**
+ * @param $spot_id
+ */
 function remove_directory($spot_id){
     delete_spot($spot_id);
     $dir = "src/Scripts/uploads/$spot_id";
     array_map('unlink', glob("$dir/*.*"));
-    rmdir($dir);
-}
+    if (is_dir($dir)){
+        rmdir($dir);
+    }
 
-function get_spot_id($city, $location, $name){
-    $connection = connect("database","lorin", "parkour", "db_P@ssw0rd");
-    $SelectStatement = "SELECT spot_id FROM spot where city = ".$city." AND address = ".$location." AND name = ".$name.";";
-    $SelectSpot = $connection->prepare($SelectStatement);
-    return $SelectSpot->execute();
 }

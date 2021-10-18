@@ -31,12 +31,12 @@ if (isset($_POST['submit'])) {
     $spot_id = $_POST['spot_id'];
 
     if (($_FILES['my_file']['name']!=="")){
-
-        if (is_dir("src/Scripts/uploads/$spot_id")){
-            $target_dir = "src/Scripts/uploads/$spot_id/";
+        $dir = "src/Scripts/uploads/$spot_id";
+        if (is_dir($dir)){
+            $target_dir = $dir;
         } else {
-            mkdir("src/Scripts/uploads/$spot_id",0777,false, null);
-            $target_dir = "src/Scripts/uploads/$spot_id/";
+            mkdir($dir,0777,false, null);
+            $target_dir = $dir;
             chmod($target_dir, 0777);
         }
 
@@ -45,7 +45,7 @@ if (isset($_POST['submit'])) {
         $filename = $path['filename'];
         $ext = $path['extension'];
         $temp_name = $_FILES['my_file']['tmp_name'];
-        $path_filename_ext = $target_dir.$filename.".".$ext;
+        $path_filename_ext = $target_dir."/".$filename.".".$ext;
 
         if (file_exists($path_filename_ext)) {
             $errors[] = 'Bild existiert bereits bitte wählen sie einen anderen Dateinamen';

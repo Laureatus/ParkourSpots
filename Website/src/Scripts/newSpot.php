@@ -51,7 +51,6 @@ if (isset($_POST['submit'])) {
                     $target_dir = $dir;
                     chmod($target_dir, 0777);
                 }
-
                 $file = $_FILES['my_file']['name'];
                 $path = pathinfo($file);
                 $filename = $path['filename'];
@@ -68,7 +67,7 @@ if (isset($_POST['submit'])) {
             }
             Message::setMessage("Neuer Spot wurde erfolgreich hinzugefügt!");
             // Redirect
-
+            header('Location: ../../index.php');
         }
     }
 }
