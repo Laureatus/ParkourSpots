@@ -8,7 +8,7 @@
 <div id="images">
 <?php
     $spot_id = $_GET['spot_id'];
-    $directory = "src/Scripts/uploads/$spot_id";
+    $directory = "src/uploads/$spot_id";
     if (!is_dir($directory)) {
         echo "Couldn't find enclosing image folder:  " . $directory;
     }

@@ -1,12 +1,12 @@
 <?php
 
 include_once 'functions.inc.php';
+include_once 'settings.php';
+$connection = connect(HOSTNAME,USERNAME, DATABASE, PASSWORD);
 
-$connection = connect("database","lorin", "parkour", "db_P@ssw0rd");
 
+$spots = get_parkour_spots();
 
-$statement = get_parkour_spots($connection);
-$count = $statement->rowCount();
 
 if ($count > 0){
 
@@ -31,10 +31,9 @@ if ($count > 0){
         echo "<td>" . $rows['city'] . "</td>";
         echo "<td>" . $rows['rating'] . "/10 </td>";
         echo "<td>" . $rows['date'] . "</td>";
-        echo "<td><a href=\"/index.php?spot_id=". $rows['spot_id']. "\">Delete</a></td>";
-        echo "<td><a href=\"/edit.php?spot_id=". $rows['spot_id']. "\">Edit</a></td>";
+        echo "<td><a href=\"/index.php?spot_id=". $rows['spot_id']."&action=delete". "\">Delete</a></td>";
+        echo "<td><a href=\"/index.php?spot_id=". $rows['spot_id']."&action=edit". "\">Edit</a></td>";
         echo "<td><a href=\"/images.php?spot_id=". $rows['spot_id']. "\">Images</a></td>";
-
         echo "</tr>";
     }
     echo "</table>";

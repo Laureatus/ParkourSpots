@@ -43,7 +43,7 @@ if (isset($_POST['submit'])) {
         if ($spot_id = insert_spot($name, $location, $city, $rating)) {
 
             if (($_FILES['my_file']['name']!=="")){
-                $dir = "uploads/$spot_id/";
+                $dir = "../uploads/$spot_id/";
                 if (is_dir($dir)){
                     $target_dir = $dir;
                 } else {

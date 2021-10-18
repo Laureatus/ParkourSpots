@@ -31,7 +31,7 @@ if (isset($_POST['submit'])) {
     $spot_id = $_POST['spot_id'];
 
     if (($_FILES['my_file']['name']!=="")){
-        $dir = "src/Scripts/uploads/$spot_id";
+        $dir = "src/uploads/$spot_id";
         if (is_dir($dir)){
             $target_dir = $dir;
         } else {
@@ -86,33 +86,27 @@ if (isset($_POST['submit'])) {
 
 
 
-echo "<section class='container' >";
-echo "    <div class='col-6'>";
-echo "        <article class='leistungs-box leistung-box-empfohlen'>";
-echo "            <h1>Spot Editieren</h1>";
-echo "            <div>";
-echo "<form enctype='multipart/form-data' action='edit.php' method='post'>";
-echo "<input type='hidden' id='spot_id' name='spot_id' value='$spot_id'><br>";
-//Name
-echo  "<label for='name'>Spot Name:</label><br>";
-echo "<input type='text' id='name' name='name' value='$name'><br>";
-//Location
-echo  "<label for='address'>Spot Location:</label><br>";
-echo "<input type='text' id='address' name='address' value='$location'><br>";
-//City
-echo "<label for='city'>City</label><br>";
-echo "<select name='city' id='city' value='$city'>";
-displayCity($city);
-echo "</select><br>";
-//Rating
-echo "<label for='rating'>Rating 1-10:</label><br>";
-echo "<input type='number' id='rating' name='rating' min='1' max='10' value='$rating'><br>";
-echo "<input type='file' name='my_file'>" ;
-
-//Submit
-echo "<input type='submit' name='submit' value='Submit'>";
-echo "</form>";
-echo "            </div>";
-echo "        </article>";
-echo "    </div>";
-echo "</section>";
+<section class='container' >
+    <div class='col-6'>
+        <article class='leistungs-box leistung-box-empfohlen'>
+            <h1>Spot Editieren</h1>
+            <div>
+<form enctype='multipart/form-data' action='edit.php' method='post'>
+<input type='hidden' id='spot_id' name='spot_id' value='$spot_id'><br>
+<label for='name'>Spot Name:</label><br>
+<input type='text' id='name' name='name' value='$name'><br>
+<label for='address'>Spot Location:</label><br>
+<input type='text' id='address' name='address' value='$location'><br>
+<label for='city'>City</label><br>
+<select name='city' id='city' value='$city'>
+displayCity($city
+</select><br>
+<label for='rating'>Rating 1-10:</label><br>
+<input type='number' id='rating' name='rating' min='1' max='10' value='$rating'><br>
+<input type='file' name='my_file'>"
+<input type='submit' name='submit' value='Submit'>
+</form>
+            </div>
+        </article>
+    </div>
+</section>

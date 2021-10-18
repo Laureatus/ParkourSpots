@@ -6,7 +6,7 @@ echo "        <div class='row'>";
 echo "           <div class='col-6'>";
 echo "                <ul>";
 echo "                   <li><a href='index.php'>Startseite</a></li>";
-echo "                    <li><a href='new-spot.php'>Neuer Spot</a></li>";
+echo "                    <li><a href='index.php?action=add'>Neuer Spot</a></li>";
 echo "               </ul>";
 echo "            </div>";
 echo "       </div>";
@@ -19,7 +19,7 @@ echo "                   <div id='mobile-nav-button'><span>&equiv;</span></div>"
 echo "                    <div id='mobile-nav-content' class='clearfix'>";
 echo "                       <ul>";
 echo "                            <li><a href='index.php'>Startseite</a></li>";
-echo "                           <li class='active'><a href='new-spot.php'>Neuer Spot</a></li>";
+echo "                           <li class='active'><a href='index.php?action=add'>Neuer Spot</a></li>";
 echo "                        </ul>";
 echo "                   </div>";
 echo "                </div>";
