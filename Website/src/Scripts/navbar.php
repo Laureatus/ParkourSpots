@@ -1,5 +1,4 @@
 <?php
-//Pseudoklassen auf Links
 echo "<nav id='header-nav'>";
 echo "   <div class='container' id='desktop-nav'>";
 echo "        <div class='row'>";

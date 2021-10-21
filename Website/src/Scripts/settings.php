@@ -1,6 +1,10 @@
 <?php
 //Database Credentials
-const USERNAME = "lorin";
-const HOSTNAME = "database";
-const DATABASE = "parkour";
-const PASSWORD = "db_P@ssw0rd";
+const DB_USERNAME = "lorin";
+const DB_HOSTNAME = "database";
+const DB_NAME = "parkour";
+const DB_PASSWORD = "db_P@ssw0rd";
+
+
+//Filepaths
+const TARGETDIR = "src/uploads/";

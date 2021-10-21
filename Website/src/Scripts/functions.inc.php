@@ -48,7 +48,7 @@ function get_all_cities($connection){
  * @return PDOStatement|false
  */
 function get_parkour_spots() {
-    $connection = connect(HOSTNAME,USERNAME, DATABASE, PASSWORD);
+    $connection = connect(DB_HOSTNAME,DB_USERNAME, DB_NAME, DB_PASSWORD);
     $query = "select spot_id, name, address, city, date_format(added_date, '%d-%m-%Y') as date, rating from spot inner join location using(city);";
     $q = $connection->query($query);
     $q->setFetchMode(PDO::FETCH_ASSOC);
@@ -65,7 +65,7 @@ function get_parkour_spots() {
  * @param null $city
  */
 function get_city_options($city = null){
-    $connection = connect(HOSTNAME,USERNAME, DATABASE, PASSWORD);
+    $connection = connect(DB_HOSTNAME,DB_USERNAME, DB_NAME, DB_PASSWORD);
     $statement = get_all_cities($connection);
     $count = $statement->rowCount();
 
@@ -95,7 +95,7 @@ function get_city_options($city = null){
  * @return bool
  */
 function insert_spot($name, $location, $city, $rating) {
-    $connection = connect(HOSTNAME,USERNAME, DATABASE, PASSWORD);
+    $connection = connect(DB_HOSTNAME,DB_USERNAME, DB_NAME, DB_PASSWORD);
     $statementSpot = "INSERT INTO spot (name,address,city,rating) VALUES (:name,:address,:city,:rating)";
     $insertSpot = $connection->prepare($statementSpot);
 
@@ -120,7 +120,7 @@ function insert_spot($name, $location, $city, $rating) {
  */
 function get_update_spot($spot_id){
     $query = "select spot_id, name, address, city, added_date, rating from spot inner join location using(city) where spot_id = $spot_id;";
-    $connection = connect(HOSTNAME,USERNAME, DATABASE, PASSWORD);
+    $connection = connect(DB_HOSTNAME,DB_USERNAME, DB_NAME, DB_PASSWORD);
     $q = $connection->query($query);
     $q->setFetchMode(PDO::FETCH_ASSOC);
     return $q;
@@ -134,7 +134,7 @@ function get_update_spot($spot_id){
  * @return array|false
  */
 function get_spot($spot_id) {
-    $connection = connect(HOSTNAME,USERNAME, DATABASE, PASSWORD);
+    $connection = connect(DB_HOSTNAME,DB_USERNAME, DB_NAME, DB_PASSWORD);
     $statement = $connection->prepare('SELECT spot_id, name, address, city, added_date, rating FROM spot INNER JOIN location USING(city) WHERE spot_id = ?');
 
     if ($statement->execute([$spot_id])) {
@@ -154,7 +154,7 @@ function get_spot($spot_id) {
  * @return bool
  */
 function update_spot($spot_id, $name, $address, $city, $rating){
-    $connection = connect(HOSTNAME,USERNAME, DATABASE, PASSWORD);
+    $connection = connect(DB_HOSTNAME,DB_USERNAME, DB_NAME, DB_PASSWORD);
     $editStatement = "update spot set name =  '$name', address = '$address', city = '$city', rating = '$rating' where spot_id = '$spot_id'";
     $editSpot = $connection->prepare($editStatement);
     return $editSpot->execute();
@@ -167,10 +167,13 @@ function update_spot($spot_id, $name, $address, $city, $rating){
  * @return bool
  */
 function delete_spot($spot_id) {
-    $connection = connect(HOSTNAME,USERNAME, DATABASE, PASSWORD);
-    $deleteStatement = "delete from spot where spot_id = $spot_id;";
-    $deleteSpot = $connection->prepare($deleteStatement);
-    return $deleteSpot->execute();
+    $connection = connect(DB_HOSTNAME,DB_USERNAME, DB_NAME, DB_PASSWORD);
+    $delete_fk = "delete from images where spot_id = $spot_id;";
+    $delete_pk = "delete from spot where spot_id = $spot_id;";
+    $prepare_fk = $connection->prepare($delete_fk);
+    $prepare_fk->execute();
+    $prepare_pk = $connection->prepare($delete_pk);
+    return $prepare_pk->execute();
 }
 
 /**
@@ -209,87 +212,80 @@ function remove_directory($spot_id){
     return true;
 }
 
-function edit_spot($spot_id) {
-
-
-    $q = get_update_spot($spot_id);
-//Fetch Data from $q
-    while ($row = $q->fetch()) {
-        $name = $row['name'];
-        $location = $row['address'];
-        $city = $row['city'];
-        $rating = $row['rating'];
-    }
-
-
-
-
-    if (isset($_POST['submit'])) {
-        $errors = [];
-        $name = htmlspecialchars($_POST['name']);
-        $location = htmlspecialchars($_POST['address']);
-        $array = array_values($_POST);
-        $city = $array[3];
-        $rating = htmlspecialchars($_POST['rating']);
-        $spot_id = $_POST['spot_id'];
-
-        if (($_FILES['my_file']['name']!=="")){
-            $dir = "src/uploads/$spot_id";
-            if (is_dir($dir)){
-                $target_dir = $dir;
-            } else {
-                mkdir($dir,0777,false, null);
-                $target_dir = $dir;
-                chmod($target_dir, 0777);
-            }
-
-            $file = $_FILES['my_file']['name'];
-            $path = pathinfo($file);
-            $filename = $path['filename'];
-            $ext = $path['extension'];
-            $temp_name = $_FILES['my_file']['tmp_name'];
-            $path_filename_ext = $target_dir."/".$filename.".".$ext;
-
-            if (file_exists($path_filename_ext)) {
-                $errors[] = 'Bild existiert bereits bitte wählen sie einen anderen Dateinamen';
-            }else{
-                move_uploaded_file($temp_name,$path_filename_ext);
-            }
-        }
-
-        if (empty($name)) {
-            $errors[] = 'Spot Name darf nicht leer sein';
-        }
-
-        if (empty($location)) {
-            $errors[] = 'Addresse darf nicht leer sein';
-        }
-
-        if (empty($city)) {
-            $errors[] = 'Stadt darf nicht leer sein';
-        }
-
-        if (empty($rating)) {
-            $errors[] = 'Bewertung darf nicht leer sein';
-        }
-
-
-        if (count($errors) > 0) {
-            echo '<h2>Ihr Formular ist nicht vollständig ausgefüllt</h2>';
-            echo '<p>Füllen Sie auch die folgenden Felder aus:<br>';
-            echo implode('<br>', $errors);
-            echo '</p>';
-        } else {
-            if (update_spot($spot_id,$name, $location, $city, $rating)) {
-                Message::setMessage("Änderungen wurden erfolgreich gespeichert");
-                header("Location: index.php");
-            }
-        }
-    }
-
-
-
-}
+//function edit_spot($spot_id) {
+//    $q = get_update_spot($spot_id);
+////Fetch Data from $q
+//    while ($row = $q->fetch()) {
+//        $name = $row['name'];
+//        $location = $row['address'];
+//        $city = $row['city'];
+//        $rating = $row['rating'];
+//    }
+//
+//
+//    if (isset($_POST['submit'])) {
+//        $errors = [];
+//        $name = htmlspecialchars($_POST['name']);
+//        $location = htmlspecialchars($_POST['address']);
+//        $array = array_values($_POST);
+//        $city = $array[3];
+//        $rating = htmlspecialchars($_POST['rating']);
+//        $spot_id = $_POST['spot_id'];
+//
+//        if (($_FILES['my_file']['name']!=="")){
+//            $dir = "src/uploads/$spot_id";
+//            if (is_dir($dir)){
+//                $target_dir = $dir;
+//            } else {
+//                mkdir($dir,0777,false, null);
+//                $target_dir = $dir;
+//                chmod($target_dir, 0777);
+//            }
+//
+//            $file = $_FILES['my_file']['name'];
+//            $path = pathinfo($file);
+//            $filename = $path['filename'];
+//            $ext = $path['extension'];
+//            $temp_name = $_FILES['my_file']['tmp_name'];
+//            $path_filename_ext = $target_dir."/".$filename.".".$ext;
+//
+//            if (file_exists($path_filename_ext)) {
+//                $errors[] = 'Bild existiert bereits bitte wählen sie einen anderen Dateinamen';
+//            }else{
+//                move_uploaded_file($temp_name,$path_filename_ext);
+//            }
+//        }
+//
+//        if (empty($name)) {
+//            $errors[] = 'Spot Name darf nicht leer sein';
+//        }
+//
+//        if (empty($location)) {
+//            $errors[] = 'Addresse darf nicht leer sein';
+//        }
+//
+//        if (empty($city)) {
+//            $errors[] = 'Stadt darf nicht leer sein';
+//        }
+//
+//        if (empty($rating)) {
+//            $errors[] = 'Bewertung darf nicht leer sein';
+//        }
+//
+//
+//        if (count($errors) > 0) {
+//            echo '<h2>Ihr Formular ist nicht vollständig ausgefüllt</h2>';
+//            echo '<p>Füllen Sie auch die folgenden Felder aus:<br>';
+//            echo implode('<br>', $errors);
+//            echo '</p>';
+//        } else {
+//            if (update_spot($spot_id,$name, $location, $city, $rating)) {
+//                Message::setMessage("Änderungen wurden erfolgreich gespeichert");
+//                header("Location: index.php");
+//            }
+//        }
+//    }
+//}
 
 
 function get_spot_form($spot_id = null, $values = [], $errors = []) {
@@ -307,6 +303,8 @@ function get_spot_form($spot_id = null, $values = [], $errors = []) {
     $rating = $spot['rating'] ?? '';
 
     $options = implode("\n", get_city_options($city));
+
+
 
     $form = <<<FORM
     <form enctype='multipart/form-data' action='index.php' method='post'>
@@ -334,7 +332,7 @@ FORM;
     return $form;
 }
 
-function render_spots_table() {
+function    render_spots_table() {
 
     $spots = get_parkour_spots();
 
@@ -343,14 +341,14 @@ function render_spots_table() {
         $table.= '<tr><th>Name</th><th>Location</th><th>City</th><th>Rating</th><th>Added Date</th><th>Delete</th><th>Edit</th><th>Images</th></tr>';
         foreach ($spots as $key => $spot) {
             $table .='<tr>';
-            $table .='<td>' . $spot['name'] .'</td>';
+            $table .='<td><a href="/index.php?spot_id=' . $spot['spot_id'] . '&action=detail_view">' . $spot['name'] .'</a></td>';
             $table .='<td>' . $spot['address'] . '</td>';
             $table .='<td>' . $spot['city'] . '</td>';
             $table .='<td>' . $spot['rating'] . '/10</td>';
             $table .='<td>' . $spot['date'] . '</td>';
             $table .='<td><a href="/index.php?spot_id=' . $spot['spot_id'] . '&action=delete">Delete</a></td>';
             $table .='<td><a href="/index.php?spot_id='. $spot['spot_id'] . '&action=edit">Edit</a></td>';
-            $table .='<td><a href="/images.php?spot_id='. $spot['spot_id']. '">Images</a></td>';
+            $table .='<td><a href="/index.php?spot_id='. $spot['spot_id']. '&action=images">Images</a></td>';
             $table .='</tr>';
         }
         $table .='</table>';
@@ -385,5 +383,135 @@ function validate_form_submission($form) {
         $errors[] = 'Bewertung darf nicht leer sein';
     }
 
+    Message::setMessage(implode("<br>",$errors));
     return $errors;
+
+}
+
+function render_images($spot_id) {
+
+    // SELECT * FROM images where spot_id=$spot_id;
+
+    $connection = connect(DB_HOSTNAME,DB_USERNAME, DB_NAME, DB_PASSWORD);
+    $query = "SELECT * FROM images WHERE spot_id=".$spot_id."." ;
+    $q = $connection->query($query);
+    $q->setFetchMode(PDO::FETCH_ASSOC);
+
+    $directory = TARGETDIR.$spot_id;
+
+    if (!is_dir($directory)) {
+        return "Couldn't find enclosing image folder:  " . $directory;
+    }
+
+    $handle = opendir($directory);
+    if (!$handle) {
+        return "Couldn't open $directory for reading.";
+    }
+
+    $images = '';
+    // Loop über SQL-Result -> id, path, name
+    foreach ($q as $key => $image) {
+        $images.= "<img src=\"".TARGETDIR.$image['path']."\"><a href=\"index.php?action=delete_image&image_id=".$image['image_id']."&spot_id=$spot_id\">Delete</a>";
+    }
+    closedir($handle);
+
+    return $images;
+}
+
+
+// $file = $_FILES['my_file']
+
+function upload_image($spot_id, $image) {
+    if ($image['name']!=="") {
+        $dir = TARGETDIR.$spot_id;
+        if (is_dir($dir)) {
+            $target_dir = $dir;
+        } else {
+            mkdir($dir,0777,false, null);
+            $target_dir = $dir;
+            chmod($target_dir, 0777);
+        }
+        $file = $image['name'];
+        $path = pathinfo($file);
+        $filename = $path['filename'];
+        $ext = $path['extension'];
+        $temp_name = $image['tmp_name'];
+        $path_filename_ext = $target_dir."/".$filename.".".$ext;
+        $db_path = "$spot_id/$filename.$ext";
+
+        if (file_exists($path_filename_ext)) {
+            throw new FileExistsException('Bild existiert bereits bitte wählen sie einen anderen Dateinamen');
+        }
+        else {
+            $connection = connect(DB_HOSTNAME,DB_USERNAME, DB_NAME, DB_PASSWORD);
+            $statementSpot = "INSERT INTO images (path, spot_id) VALUES (:db_path, :spot_id)";
+            $insertSpot = $connection->prepare($statementSpot);
+
+            $insertSpot->execute([
+                ':db_path' => $db_path,
+                ':spot_id' => $spot_id,
+            ]);
+           return move_uploaded_file($temp_name,$path_filename_ext);
+        }
+
+
+        return $errors;
+    }
+
+}
+
+function delete_image($image_id){
+    $connection = connect(DB_HOSTNAME,DB_USERNAME, DB_NAME, DB_PASSWORD);
+    $query = "SELECT * FROM images WHERE image_id=".$image_id.".";
+    $results = $connection->query($query);
+    $results->setFetchMode(PDO::FETCH_ASSOC);
+    foreach ($results as $key => $result) {
+        $filepath = TARGETDIR.$result['path'];
+        if (is_file($filepath)) {
+            unlink($filepath);
+        }
+        $connection->query('DELETE FROM images WHERE image_id=' . $image_id);
+    }
+}
+
+function check_dir($spot_id){
+    $connection = connect(DB_HOSTNAME,DB_USERNAME, DB_NAME, DB_PASSWORD);
+    $sql = "select count(*) from images where spot_id = $spot_id;";
+    $res = $connection->query($sql);
+    $count = $res->fetchColumn();
+    return $count;
+}
+
+function insert_description($spot_id){
+    $connection = connect(DB_HOSTNAME,DB_USERNAME, DB_NAME, DB_PASSWORD);
+    $statementSpot = "INSERT INTO images (path, spot_id) VALUES (:db_path, :spot_id)";
+    $insertSpot = $connection->prepare($statementSpot);
+
+    $insertSpot->execute([
+        ':db_path' => $db_path,
+        ':spot_id' => $spot_id,
+    ]);
+}
+
+function show_single_spot($spot_id){
+    $connection = connect(DB_HOSTNAME,DB_USERNAME, DB_NAME, DB_PASSWORD);
+    $query = "SELECT * FROM spot WHERE spot_id=".$spot_id."." ;
+    $spot = $connection->query($query);
+    $spot->setFetchMode(PDO::FETCH_ASSOC);
+
+
+        foreach ($spot as $key => $spot) {
+            $table = '<table>';
+            $table.= '<tr><th>Name</th><th>Location</th><th>City</th><th>Rating</th><th>Added Date</th></tr>';
+            $table .='<tr>';
+            $table .='<td>' . $spot['name'] .'</a></td>';
+            $table .='<td>' . $spot['address'] . '</td>';
+            $table .='<td>' . $spot['city'] . '</td>';
+            $table .='<td>' . $spot['rating'] . '/10</td>';
+            $table .='<td>' . $spot['added_date'] . '</td>';
+            $table .='</tr>';
+        }
+        $table .='</table>';
+        $table .=render_images($spot_id);
+        return $table;
 }

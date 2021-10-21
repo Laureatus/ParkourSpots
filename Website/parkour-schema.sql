@@ -9,9 +9,6 @@ CREATE TABLE location(
     PRIMARY KEY (city)
 );
 
-
-
-
 CREATE TABLE spot(
     spot_id int NOT NULL AUTO_INCREMENT,
     city varchar(255) NOT NULL,
@@ -21,6 +18,21 @@ CREATE TABLE spot(
     lng decimal(11,7) NULL,
     lat decimal(11,7) NULL,
     rating int NOT NULL,
+    description varchar(255),
     PRIMARY KEY (spot_id),
     FOREIGN KEY (city) REFERENCES location(city)
 );
+
+CREATE TABLE images(
+    image_id int NOT NULL AUTO_INCREMENT,
+    spot_id int NOT NULL,
+    path varchar(255),
+    name varchar(255),
+    size varchar(255),
+    PRIMARY KEY (image_id),
+    FOREIGN KEY (spot_id) REFERENCES spot(spot_id)
+);
+
+
+
+
