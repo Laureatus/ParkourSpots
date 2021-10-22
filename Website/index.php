@@ -6,7 +6,7 @@ include_once 'src/Exceptions/FileExistsException.php';
 
 $action = $_REQUEST['action'] ?? '';
 $spot_id = $_REQUEST['spot_id'] ?? null;
-
+$description_id = $_POST['description'] ?? null;
 $content = '';
 
 switch($action) {
@@ -60,8 +60,19 @@ switch($action) {
          $content = render_spots_table();
          break;
 
+    case 'submit_description':
+        insert_description($_POST['spot_id'], $description_id);
+
+
+
     case 'detail_view':
-        $content = show_single_spot($spot_id);
+        $content = show_detail_view($spot_id);
+        break;
+
+    case 'delete_description':
+        delete_description($_GET['description_id']);
+        $content = show_detail_view($spot_id);
+
         break;
 
     case 'delete_image':

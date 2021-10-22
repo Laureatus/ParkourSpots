@@ -1,6 +1,7 @@
 <?php
 
 include 'settings.php';
+include 'src/Scripts/head.php';
 
 /**
  * Connects to a mysql database.
@@ -98,14 +99,12 @@ function insert_spot($name, $location, $city, $rating) {
     $connection = connect(DB_HOSTNAME,DB_USERNAME, DB_NAME, DB_PASSWORD);
     $statementSpot = "INSERT INTO spot (name,address,city,rating) VALUES (:name,:address,:city,:rating)";
     $insertSpot = $connection->prepare($statementSpot);
-
     $result = $insertSpot->execute([
         ':name' => $name,
         ':address' => $location,
         ':city' => $city,
         ':rating' => $rating
     ]);
-
     if ($result === TRUE) {
         return $connection->lastInsertId();
     }
@@ -168,10 +167,13 @@ function update_spot($spot_id, $name, $address, $city, $rating){
  */
 function delete_spot($spot_id) {
     $connection = connect(DB_HOSTNAME,DB_USERNAME, DB_NAME, DB_PASSWORD);
-    $delete_fk = "delete from images where spot_id = $spot_id;";
+    $delete_image_fk = "delete from images where spot_id = $spot_id;";
+    $delete_description_fk = "delete from description where spot_id = $spot_id;";
     $delete_pk = "delete from spot where spot_id = $spot_id;";
-    $prepare_fk = $connection->prepare($delete_fk);
-    $prepare_fk->execute();
+    $prepare_image_fk = $connection->prepare($delete_image_fk);
+    $prepare_description_fk = $connection->prepare($delete_description_fk);
+    $prepare_image_fk->execute();
+    $prepare_description_fk->execute();
     $prepare_pk = $connection->prepare($delete_pk);
     return $prepare_pk->execute();
 }
@@ -323,9 +325,9 @@ function get_spot_form($spot_id = null, $values = [], $errors = []) {
     
         <label for='rating'>Rating 1-10:</label><br>
         <input type='number' id='rating' name='rating' min='1' max='10' value='$rating'><br>
-    
+        
         <input type='file' name='my_file'>
-        <input type='submit' name='submit' value='Submit'>
+        <input type='submit' value='Submit'>
     </form>
 FORM;
 
@@ -482,36 +484,84 @@ function check_dir($spot_id){
     return $count;
 }
 
-function insert_description($spot_id){
-    $connection = connect(DB_HOSTNAME,DB_USERNAME, DB_NAME, DB_PASSWORD);
-    $statementSpot = "INSERT INTO images (path, spot_id) VALUES (:db_path, :spot_id)";
-    $insertSpot = $connection->prepare($statementSpot);
 
-    $insertSpot->execute([
-        ':db_path' => $db_path,
-        ':spot_id' => $spot_id,
-    ]);
-}
 
-function show_single_spot($spot_id){
+function show_detail_view($spot_id){
     $connection = connect(DB_HOSTNAME,DB_USERNAME, DB_NAME, DB_PASSWORD);
     $query = "SELECT * FROM spot WHERE spot_id=".$spot_id."." ;
     $spot = $connection->query($query);
     $spot->setFetchMode(PDO::FETCH_ASSOC);
 
-
+    $query = "SELECT * FROM description WHERE spot_id=".$spot_id."." ;
+    $description = $connection->query($query);
+    $description->setFetchMode(PDO::FETCH_ASSOC);
         foreach ($spot as $key => $spot) {
             $table = '<table>';
-            $table.= '<tr><th>Name</th><th>Location</th><th>City</th><th>Rating</th><th>Added Date</th></tr>';
+            $table.= '<tr><th>Name</th><th>Location</th><th>City</th><th>Rating</th><th>Added Date</th><th>Add new Description</th></tr>';
             $table .='<tr>';
             $table .='<td>' . $spot['name'] .'</a></td>';
             $table .='<td>' . $spot['address'] . '</td>';
             $table .='<td>' . $spot['city'] . '</td>';
             $table .='<td>' . $spot['rating'] . '/10</td>';
             $table .='<td>' . $spot['added_date'] . '</td>';
+            $table .='<td rowspan="4" colspan="0.5">' . get_description_form($spot_id). '</td>';
             $table .='</tr>';
+            $table.= '<tr><th colspan="5">Description</th></tr>';
+            foreach ($description as $value => $description) {
+                $table .= '<tr><td colspan="4">' . $description['description'] . '</td>
+                <td><a href="/index.php?spot_id='.$spot['spot_id'].'&description_id=' . $description['description_id'] . '&action=delete_description">Delete</a></td></tr>';
+            }
         }
         $table .='</table>';
         $table .=render_images($spot_id);
         return $table;
 }
+
+function get_description_form($spot_id = null, $values = [], $errors = []) {
+
+    if (!empty($spot_id)) {
+        $spot = get_spot($spot_id);
+    }
+    elseif (!empty($values)) {
+        $spot = $values;
+    }
+
+    $description = $spot['description'] ?? '';
+
+
+    $form = <<<FORM
+    <form enctype='multipart/form-data' action='index.php' method='post'>
+        <input type='hidden' id='action' name='action' value='submit_description'><br>
+        <input type='hidden' id='spot_id' name='spot_id' value='$spot_id'><br>
+        <input type='hidden' id='description_id' name='description_id' value='description_id'><br>
+        <label for='name'>Description:</label><br>
+        <textarea style="resize: vertical; height: 250px; width: 300px; word-break: break-word;" maxlength="500" type='text' id='name' name='description' value='$description'></textarea>
+        <input type='submit' name='add' value='Submit'>
+    </form>
+FORM;
+
+    return $form;
+}
+
+function insert_description($spot_id, $description){
+        $connection = connect(DB_HOSTNAME,DB_USERNAME, DB_NAME, DB_PASSWORD);
+        $statementSpot = "INSERT INTO description (spot_id, description) VALUES (:spot_id, :description)";
+        $insertSpot = $connection->prepare($statementSpot);
+        $result = $insertSpot->execute([
+            ':spot_id' => $spot_id,
+            ':description' => $description
+        ]);
+        if ($result === TRUE) {
+            return $connection->lastInsertId();
+        }
+
+        return FALSE;
+}
+
+function delete_description($description_id){
+    $connection = connect(DB_HOSTNAME,DB_USERNAME, DB_NAME, DB_PASSWORD);
+    $query = "delete from description where description_id = $description_id;";
+    $prepare = $connection->prepare($query);
+    return $prepare->execute();
+}
+
