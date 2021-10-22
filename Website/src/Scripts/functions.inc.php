@@ -214,82 +214,6 @@ function remove_directory($spot_id){
     return true;
 }
 
-//function edit_spot($spot_id) {
-//    $q = get_update_spot($spot_id);
-////Fetch Data from $q
-//    while ($row = $q->fetch()) {
-//        $name = $row['name'];
-//        $location = $row['address'];
-//        $city = $row['city'];
-//        $rating = $row['rating'];
-//    }
-//
-//
-//    if (isset($_POST['submit'])) {
-//        $errors = [];
-//        $name = htmlspecialchars($_POST['name']);
-//        $location = htmlspecialchars($_POST['address']);
-//        $array = array_values($_POST);
-//        $city = $array[3];
-//        $rating = htmlspecialchars($_POST['rating']);
-//        $spot_id = $_POST['spot_id'];
-//
-//        if (($_FILES['my_file']['name']!=="")){
-//            $dir = "src/uploads/$spot_id";
-//            if (is_dir($dir)){
-//                $target_dir = $dir;
-//            } else {
-//                mkdir($dir,0777,false, null);
-//                $target_dir = $dir;
-//                chmod($target_dir, 0777);
-//            }
-//
-//            $file = $_FILES['my_file']['name'];
-//            $path = pathinfo($file);
-//            $filename = $path['filename'];
-//            $ext = $path['extension'];
-//            $temp_name = $_FILES['my_file']['tmp_name'];
-//            $path_filename_ext = $target_dir."/".$filename.".".$ext;
-//
-//            if (file_exists($path_filename_ext)) {
-//                $errors[] = 'Bild existiert bereits bitte wählen sie einen anderen Dateinamen';
-//            }else{
-//                move_uploaded_file($temp_name,$path_filename_ext);
-//            }
-//        }
-//
-//        if (empty($name)) {
-//            $errors[] = 'Spot Name darf nicht leer sein';
-//        }
-//
-//        if (empty($location)) {
-//            $errors[] = 'Addresse darf nicht leer sein';
-//        }
-//
-//        if (empty($city)) {
-//            $errors[] = 'Stadt darf nicht leer sein';
-//        }
-//
-//        if (empty($rating)) {
-//            $errors[] = 'Bewertung darf nicht leer sein';
-//        }
-//
-//
-//        if (count($errors) > 0) {
-//            echo '<h2>Ihr Formular ist nicht vollständig ausgefüllt</h2>';
-//            echo '<p>Füllen Sie auch die folgenden Felder aus:<br>';
-//            echo implode('<br>', $errors);
-//            echo '</p>';
-//        } else {
-//            if (update_spot($spot_id,$name, $location, $city, $rating)) {
-//                Message::setMessage("Änderungen wurden erfolgreich gespeichert");
-//                header("Location: index.php");
-//            }
-//        }
-//    }
-//}
-
-
 function get_spot_form($spot_id = null, $values = [], $errors = []) {
 
     if (!empty($spot_id)) {
@@ -511,8 +435,8 @@ function show_detail_view($spot_id){
                 $table .= '<tr><td colspan="4">' . $description['description'] . '</td>
                 <td><a href="/index.php?spot_id='.$spot['spot_id'].'&description_id=' . $description['description_id'] . '&action=delete_description">Delete</a></td></tr>';
             }
+            $table .='</table>';
         }
-        $table .='</table>';
         $table .=render_images($spot_id);
         return $table;
 }
