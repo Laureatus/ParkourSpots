@@ -1,8 +1,13 @@
 <?php
+
+include 'autoload.php';
 include 'src/Scripts/head.php';
 include_once 'src/Scripts/functions.inc.php';
 include_once 'src/Scripts/settings.php';
 include_once 'src/Exceptions/FileExistsException.php';
+
+use Parkour\Message;
+use Parkour\Spot;
 
 $action = $_REQUEST['action'] ?? '';
 $spot_id = $_REQUEST['spot_id'] ?? null;
@@ -35,12 +40,13 @@ switch($action) {
          $errors = validate_form_submission($_POST);
          if (empty($errors)) {
 
+             $spot = new Spot($_POST);
+             $spot->save();
+
              if (empty($spot_id)) {
-                 $spot_id = insert_spot($_POST['name'], $_POST['address'], $_POST['city'], $_POST['rating']);
                  Message::setMessage("Neuer Spot wurde erfolgreich hinzugefügt");
              }
              else {
-                 update_spot($spot_id, $_POST['name'], $_POST['address'], $_POST['city'], $_POST['rating']);
                  Message::setMessage("Änderungen wurden erfolgreich übernommen");
              }
 

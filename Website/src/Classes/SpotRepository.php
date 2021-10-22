@@ -1,0 +1,41 @@
+<?php
+
+namespace Parkour;
+
+use PDO;
+
+class SpotRepository {
+
+  /**
+   * @return \Parkour\Spot[]
+   */
+  public function getAllSpots() {
+    $connection = connect(DB_HOSTNAME,DB_USERNAME, DB_NAME, DB_PASSWORD);
+    $query = "select spot_id, name, address, city, date_format(added_date, '%d.%m.%Y') as added_date, rating from spot inner join location using(city);";
+    $q = $connection->query($query);
+    $q->setFetchMode(PDO::FETCH_ASSOC);
+
+    $spots = [];
+    while($spot = $q->fetch(PDO::FETCH_ASSOC)) {
+      $spots[] = new Spot($spot);
+    }
+    return $spots;
+  }
+
+  /**
+   * Get a single spot by id.
+   *
+   * @param int $spot_id
+   *
+   * @return \Parkour\Spot
+   */
+  public function getSpot($spot_id) {
+    $connection = connect(DB_HOSTNAME,DB_USERNAME, DB_NAME, DB_PASSWORD);
+    $statement = $connection->prepare('SELECT spot_id, name, address, city, added_date, rating FROM spot INNER JOIN location USING(city) WHERE spot_id = ?');
+
+    if ($statement->execute([$spot_id])) {
+      $array = $statement->fetch(PDO::FETCH_ASSOC);
+      return new Spot($array);
+    }
+  }
+}

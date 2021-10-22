@@ -3,6 +3,9 @@
 include 'settings.php';
 include 'src/Scripts/head.php';
 
+use Parkour\SpotRepository;
+use Parkour\Message;
+
 /**
  * Connects to a mysql database.
  *
@@ -87,79 +90,6 @@ function get_city_options($city = null){
 }
 
 /**
- * Adds new Spot to database
- *
- * @param $name
- * @param $location
- * @param $city
- * @param $rating
- * @return bool
- */
-function insert_spot($name, $location, $city, $rating) {
-    $connection = connect(DB_HOSTNAME,DB_USERNAME, DB_NAME, DB_PASSWORD);
-    $statementSpot = "INSERT INTO spot (name,address,city,rating) VALUES (:name,:address,:city,:rating)";
-    $insertSpot = $connection->prepare($statementSpot);
-    $result = $insertSpot->execute([
-        ':name' => $name,
-        ':address' => $location,
-        ':city' => $city,
-        ':rating' => $rating
-    ]);
-    if ($result === TRUE) {
-        return $connection->lastInsertId();
-    }
-
-    return FALSE;
-}
-
-/**
- * Get the spot that needs to be updated
- * @param $spot_id
- * @return false|PDOStatement
- */
-function get_update_spot($spot_id){
-    $query = "select spot_id, name, address, city, added_date, rating from spot inner join location using(city) where spot_id = $spot_id;";
-    $connection = connect(DB_HOSTNAME,DB_USERNAME, DB_NAME, DB_PASSWORD);
-    $q = $connection->query($query);
-    $q->setFetchMode(PDO::FETCH_ASSOC);
-    return $q;
-}
-
-/**
- * Returns a spot for a given spot_id.
- *
- * @param int $spot_id
- *      ID of the spot
- * @return array|false
- */
-function get_spot($spot_id) {
-    $connection = connect(DB_HOSTNAME,DB_USERNAME, DB_NAME, DB_PASSWORD);
-    $statement = $connection->prepare('SELECT spot_id, name, address, city, added_date, rating FROM spot INNER JOIN location USING(city) WHERE spot_id = ?');
-
-    if ($statement->execute([$spot_id])) {
-        return $statement->fetch(PDO::FETCH_ASSOC);
-    }
-
-    return false;
-}
-
-/**
- * Updates the spot Information
- * @param $spot_id
- * @param $name
- * @param $address
- * @param $city
- * @param $rating
- * @return bool
- */
-function update_spot($spot_id, $name, $address, $city, $rating){
-    $connection = connect(DB_HOSTNAME,DB_USERNAME, DB_NAME, DB_PASSWORD);
-    $editStatement = "update spot set name =  '$name', address = '$address', city = '$city', rating = '$rating' where spot_id = '$spot_id'";
-    $editSpot = $connection->prepare($editStatement);
-    return $editSpot->execute();
-}
-
-/**
  * Deletes a spot from the Database
  *
  * @param $spot_id
@@ -178,29 +108,7 @@ function delete_spot($spot_id) {
     return $prepare_pk->execute();
 }
 
-/**
- * Class Message
- */
-class Message {
 
-    /**
-     * @param $message
-     */
-    public static function setMessage($message) {
-        $_SESSION['message'] = $message;
-    }
-
-    /**
-     * @return mixed
-     */
-    public static function getMessage(){
-        if (isset($_SESSION['message'])) {
-            $message = $_SESSION['message'];
-            unset($_SESSION['message']);
-            return $message;
-        }
-    }
-}
 
 /**
  * @param $spot_id
@@ -216,65 +124,60 @@ function remove_directory($spot_id){
 
 function get_spot_form($spot_id = null, $values = [], $errors = []) {
 
+  $repository = new SpotRepository();
     if (!empty($spot_id)) {
-       $spot = get_spot($spot_id);
+       $spot = $repository->getSpot($spot_id);
     }
     elseif (!empty($values)) {
         $spot = $values;
     }
 
-    $name = $spot['name'] ?? '';
-    $address = $spot['address'] ?? '';
-    $city = $spot['city'] ?? '';
-    $rating = $spot['rating'] ?? '';
+    $options = implode("\n", get_city_options($spot->getCity()));
 
-    $options = implode("\n", get_city_options($city));
+    $form = '<form enctype="multipart/form-data" action="index.php" method="post">';
+    $form.= sprintf('<input type="hidden" id="spot_id" name="spot_id" value="%s"><br>', $spot->getSpotId());
+    $form.= '<input type="hidden" id="action" name="action" value="submit"><br>';
 
+    $form.= '<label for="name">Spot Name:</label><br>';
+    $form.= sprintf('<input type="text" id="name" name="name" value="%s"><br>', $spot->getName());
 
+    $form.= '<label for="address">Spot Location:</label><br>';
+    $form.= sprintf('<input type="text" id="address" name="address" value="%s"><br>', $spot->getAddress());
 
-    $form = <<<FORM
-    <form enctype='multipart/form-data' action='index.php' method='post'>
-        <input type='hidden' id='spot_id' name='spot_id' value='$spot_id'><br>
-        <input type='hidden' id='action' name='action' value='submit'><br>
-        <label for='name'>Spot Name:</label><br>
-        <input type='text' id='name' name='name' value='$name'><br>
-    
-        <label for='address'>Spot Location:</label><br>
-        <input type='text' id='address' name='address' value='$address'><br>
-    
-        <label for='city'>City</label><br>
-        <select name='city' id='city' value='$city'>
-        $options
-        </select><br>
-    
-        <label for='rating'>Rating 1-10:</label><br>
-        <input type='number' id='rating' name='rating' min='1' max='10' value='$rating'><br>
-        
-        <input type='file' name='my_file'>
-        <input type='submit' value='Submit'>
-    </form>
-FORM;
+    $form.= '<label for="city">City</label><br>';
+    $form.= '<select name="city" id="city">';
+    $form.= $options;
+    $form.= '</select><br>';
+
+    $form.= '<label for="rating">Rating 1-10:</label><br>';
+    $form.= sprintf('<input type="number" id="rating" name="rating" min="1" max="10" value="%d"><br>', $spot->getRating());
+
+    $form.= '<input type="file" name="my_file">';
+    $form.= '<input type="submit" value="Submit">';
+    $form.= '</form>';
 
     return $form;
 }
 
-function    render_spots_table() {
+function render_spots_table() {
 
-    $spots = get_parkour_spots();
+  $repository = new SpotRepository();
+  /** @var \Parkour\Spot[] $spots */
+  $spots = $repository->getAllSpots();
 
     if (count($spots) > 0) {
         $table = '<table>';
         $table.= '<tr><th>Name</th><th>Location</th><th>City</th><th>Rating</th><th>Added Date</th><th>Delete</th><th>Edit</th><th>Images</th></tr>';
         foreach ($spots as $key => $spot) {
             $table .='<tr>';
-            $table .='<td><a href="/index.php?spot_id=' . $spot['spot_id'] . '&action=detail_view">' . $spot['name'] .'</a></td>';
-            $table .='<td>' . $spot['address'] . '</td>';
-            $table .='<td>' . $spot['city'] . '</td>';
-            $table .='<td>' . $spot['rating'] . '/10</td>';
-            $table .='<td>' . $spot['date'] . '</td>';
-            $table .='<td><a href="/index.php?spot_id=' . $spot['spot_id'] . '&action=delete">Delete</a></td>';
-            $table .='<td><a href="/index.php?spot_id='. $spot['spot_id'] . '&action=edit">Edit</a></td>';
-            $table .='<td><a href="/index.php?spot_id='. $spot['spot_id']. '&action=images">Images</a></td>';
+            $table .='<td><a href="/index.php?spot_id=' . $spot->getSpotId() . '&action=detail_view">' . $spot->getName() .'</a></td>';
+            $table .='<td>' . $spot->getAddress() . '</td>';
+            $table .='<td>' . $spot->getCity() . '</td>';
+            $table .='<td>' . $spot->getRating() . '/10</td>';
+            $table .='<td>' . $spot->getAddedDate() . '</td>';
+            $table .='<td><a href="/index.php?spot_id=' . $spot->getSpotId() . '&action=delete">Delete</a></td>';
+            $table .='<td><a href="/index.php?spot_id='. $spot->getSpotId() . '&action=edit">Edit</a></td>';
+            $table .='<td><a href="/index.php?spot_id='. $spot->getSpotId(). '&action=images">Images</a></td>';
             $table .='</tr>';
         }
         $table .='</table>';
