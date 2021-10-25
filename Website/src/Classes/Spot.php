@@ -14,6 +14,11 @@ class Spot {
   private $rating;
 
   /**
+   * @var \Parkour\DescriptionRepository
+   */
+  private $description_repo;
+
+  /**
    * Spot constructor.
    *
    * @param array $data
@@ -27,6 +32,8 @@ class Spot {
     $this->lng = $data['lng'] ?? NULL;
     $this->lat = $data['lat'] ?? NULL;
     $this->rating = $data['rating'] ?? NULL;
+
+    $this->description_repo = new DescriptionRepository();
   }
 
   /**
@@ -142,14 +149,14 @@ class Spot {
   }
 
   public function save() {
-    $connection = connect(DB_HOSTNAME,DB_USERNAME, DB_NAME, DB_PASSWORD);
+    $connection = connection::connect();;
 
     if (empty($this->spot_id)) {
       $statementSpot = "INSERT INTO spot (name,address,city,rating) VALUES (:name,:address,:city,:rating)";
       $insertSpot = $connection->prepare($statementSpot);
       $result = $insertSpot->execute([
         ':name' => $this->name,
-        ':address' => $this->location,
+        ':address' => $this->address,
         ':city' => $this->city,
         ':rating' => $this->rating
       ]);
@@ -164,13 +171,21 @@ class Spot {
       return $editSpot->execute();
     }
 
-
-
-
-
     return FALSE;
   }
 
+  /**
+   *
+   * @return \Parkour\Description[]
+   */
+  public function getDescriptions() {
+
+    if (!$this->spot_id) {
+      return [];
+    }
+
+    return $this->description_repo->getDescriptions($this->spot_id);
+  }
 
   public function delete() {
     // ...

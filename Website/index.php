@@ -4,10 +4,12 @@ include 'autoload.php';
 include 'src/Scripts/head.php';
 include_once 'src/Scripts/functions.inc.php';
 include_once 'src/Scripts/settings.php';
-include_once 'src/Exceptions/FileExistsException.php';
 
+use Parkour\FileExistsException;
+use Parkour\Image;
 use Parkour\Message;
 use Parkour\Spot;
+use Parkour\Description;
 
 $action = $_REQUEST['action'] ?? '';
 $spot_id = $_REQUEST['spot_id'] ?? null;
@@ -32,7 +34,7 @@ switch($action) {
          break;
 
      case 'images':
-         $content = render_images($spot_id);
+         $content = Image::render_images($spot_id);
          break;
 
      case 'submit':
@@ -52,7 +54,7 @@ switch($action) {
 
              if (!empty($_FILES['my_file'])) {
                  try {
-                     upload_image($spot_id, $_FILES['my_file']);
+                     Image::upload_image($spot_id, $_FILES['my_file']);
                  }
                  catch(FileExistsException $e) {
                      Message::setMessage($e->getMessage());
@@ -67,8 +69,8 @@ switch($action) {
          break;
 
     case 'submit_description':
-        insert_description($_POST['spot_id'], $description_id);
-
+        Description::insert_description($_POST['spot_id'], $description_id);
+        break;
 
 
     case 'detail_view':
@@ -76,15 +78,15 @@ switch($action) {
         break;
 
     case 'delete_description':
-        delete_description($_GET['description_id']);
+        Description::loadById($_GET['description_id'])->delete();
         $content = show_detail_view($spot_id);
 
         break;
 
     case 'delete_image':
         $image_id = $_GET['image_id'];
-        delete_image($image_id);
-        $count = check_dir($spot_id);
+        Image::delete_image($image_id);
+        $count = Image::check_dir($spot_id);
         if ($count >= 1){
             header("Location: index.php?action=images&spot_id=".$spot_id."");
         }else {
