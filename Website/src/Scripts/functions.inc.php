@@ -54,7 +54,7 @@ function get_all_cities($connection){
  * @return PDOStatement|false
  */
 function get_parkour_spots() {
-    $connection = connection::connect();;
+    $connection = connection::connect();
     $query = "select spot_id, name, address, city, date_format(added_date, '%d-%m-%Y') as date, rating from spot inner join location using(city);";
     $q = $connection->query($query);
     $q->setFetchMode(PDO::FETCH_ASSOC);
@@ -98,7 +98,7 @@ function get_city_options($city = null){
  * @return bool
  */
 function delete_spot($spot_id) {
-    $connection = connection::connect();;
+    $connection = connection::connect();
     $delete_image_fk = "delete from images where spot_id = $spot_id;";
     $delete_description_fk = "delete from description where spot_id = $spot_id;";
     $delete_pk = "delete from spot where spot_id = $spot_id;";
@@ -139,7 +139,7 @@ function get_spot_form($spot_id = null, $values = [], $errors = []) {
 
     $options = implode("\n", get_city_options($spot->getCity()));
 
-    $form = '<form enctype="multipart/form-data" action="index.php" method="post">';
+    $form = '<form enctype="multipart/form-data" action="index.php" method="post" id="">';
     $form.= sprintf('<input type="hidden" id="spot_id" name="spot_id" value="%s"><br>', $spot->getSpotId());
     $form.= '<input type="hidden" id="action" name="action" value="submit"><br>';
 

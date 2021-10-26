@@ -149,7 +149,7 @@ class Spot {
   }
 
   public function save() {
-    $connection = connection::connect();;
+    $connection = connection::connect();
 
     if (empty($this->spot_id)) {
       $statementSpot = "INSERT INTO spot (name,address,city,rating) VALUES (:name,:address,:city,:rating)";

@@ -59,7 +59,7 @@ class Description {
   }
 
   public static function loadById($description_id) {
-      $connection = connection::connect();;
+      $connection = connection::connect();
 
       // Todo: Prepared Statement einfügen
       $statement = $connection->prepare("SELECT * FROM description WHERE description_id=?") ;
@@ -71,7 +71,7 @@ class Description {
 
   function delete() {
     if (!empty($this->description_id)) {
-      $connection = connection::connect();;
+      $connection = connection::connect();
       $query = "delete from description where description_id = ?";
       $prepare = $connection->prepare($query);
       return $prepare->execute([$this->description_id]);
@@ -81,12 +81,12 @@ class Description {
 
 
   function insert_description($spot_id, $description){
-    $connection = connection::connect();;
+    $connection = connection::connect();
     $statementSpot = "INSERT INTO description (spot_id, description) VALUES (:spot_id, :description)";
     $insertSpot = $connection->prepare($statementSpot);
     $result = $insertSpot->execute([
       ':spot_id' => $spot_id,
-      ':description' => $description
+      ':description' => htmlspecialchars($description)
     ]);
     if ($result === TRUE) {
       return $connection->lastInsertId();

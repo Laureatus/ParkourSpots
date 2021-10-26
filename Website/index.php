@@ -70,6 +70,7 @@ switch($action) {
 
     case 'submit_description':
         Description::insert_description($_POST['spot_id'], $description_id);
+        $content = show_detail_view($spot_id);
         break;
 
 
@@ -105,7 +106,6 @@ switch($action) {
 <html lang="de">
     <body>
         <?php include 'src/Scripts/navbar.php'; ?>
-
         <!-- PARKOUR SPOTS LISTE -->
         <section class="container" >
             <div class="col-6">

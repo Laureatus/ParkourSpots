@@ -30,7 +30,7 @@ class SpotRepository {
    * @return \Parkour\Spot
    */
   public static function getSpot($spot_id) {
-    $connection = connection::connect();;
+    $connection = connection::connect();
     $statement = $connection->prepare('SELECT spot_id, name, address, city, added_date, rating FROM spot INNER JOIN location USING(city) WHERE spot_id = ?');
 
     if ($statement->execute([$spot_id])) {

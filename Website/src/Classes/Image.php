@@ -18,7 +18,7 @@ class Image {
 
     // SELECT * FROM images where spot_id=$spot_id;
 
-    $connection = connection::connect();;
+    $connection = connection::connect();
     $query = "SELECT * FROM images WHERE spot_id=".$spot_id."." ;
     $q = $connection->query($query);
     $q->setFetchMode(PDO::FETCH_ASSOC);
@@ -68,7 +68,7 @@ class Image {
         throw new FileExistsException('Bild existiert bereits bitte wählen sie einen anderen Dateinamen');
       }
       else {
-        $connection = connection::connect();;
+        $connection = connection::connect();
         $statementSpot = "INSERT INTO images (path, spot_id) VALUES (:db_path, :spot_id)";
         $insertSpot = $connection->prepare($statementSpot);
 
@@ -86,7 +86,7 @@ class Image {
   }
 
   function delete_image($image_id){
-    $connection = connection::connect();;
+    $connection = connection::connect();
     $query = "SELECT * FROM images WHERE image_id=".$image_id.".";
     $results = $connection->query($query);
     $results->setFetchMode(PDO::FETCH_ASSOC);
@@ -100,7 +100,7 @@ class Image {
   }
 
   function check_dir($spot_id){
-    $connection = connection::connect();;
+    $connection = connection::connect();
     $sql = "select count(*) from images where spot_id = $spot_id;";
     $res = $connection->query($sql);
     $count = $res->fetchColumn();
