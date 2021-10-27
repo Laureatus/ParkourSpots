@@ -2,7 +2,7 @@
 
 namespace Parkour;
 use PDO;
-use Parkour\connection;
+use Parkour\Spot;
 
 class SpotRepository {
 
@@ -11,7 +11,7 @@ class SpotRepository {
    */
   public function getAllSpots() {
     $connection = connection::connect();
-    $query = "select spot_id, name, address, city, date_format(added_date, '%d.%m.%Y') as added_date, rating from spot inner join location using(city);";
+    $query = "select spot_id, name, address, city, date_format(added_date, '%d.%m.%Y') as added_date from spot inner join location using(city);";
     $q = $connection->query($query);
     $q->setFetchMode(PDO::FETCH_ASSOC);
 
@@ -31,7 +31,7 @@ class SpotRepository {
    */
   public static function getSpot($spot_id) {
     $connection = connection::connect();
-    $statement = $connection->prepare('SELECT spot_id, name, address, city, added_date, rating FROM spot INNER JOIN location USING(city) WHERE spot_id = ?');
+    $statement = $connection->prepare('SELECT spot_id, name, address, city, added_date FROM spot INNER JOIN location USING(city) WHERE spot_id = ?');
 
     if ($statement->execute([$spot_id])) {
       $array = $statement->fetch(PDO::FETCH_ASSOC);

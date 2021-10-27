@@ -21,9 +21,6 @@ use Parkour\ReviewRepository;
  * @return PDO
  *
  */
-function connect(string $hostname, string $username, string $database, string $password) : PDO {
-    return new PDO("mysql:host=$hostname;dbname=$database", $username, $password);
-}
 
 
 /**
@@ -101,10 +98,10 @@ function get_city_options($city = null){
 function delete_spot($spot_id) {
     $connection = connection::connect();
     $delete_image_fk = "delete from images where spot_id = $spot_id;";
-    $delete_description_fk = "delete from description where spot_id = $spot_id;";
+    $delete_review_fk = "delete from review where spot_id = $spot_id;";
     $delete_pk = "delete from spot where spot_id = $spot_id;";
     $prepare_image_fk = $connection->prepare($delete_image_fk);
-    $prepare_description_fk = $connection->prepare($delete_description_fk);
+    $prepare_description_fk = $connection->prepare($delete_review_fk);
     $prepare_image_fk->execute();
     $prepare_description_fk->execute();
     $prepare_pk = $connection->prepare($delete_pk);

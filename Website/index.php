@@ -45,7 +45,7 @@ switch($action) {
 
              $spot = new Spot($_POST);
              $spot->save();
-             $spot->getSpotId();
+
 
              if (empty($spot_id)) {
                  Message::setMessage("Neuer Spot wurde erfolgreich hinzugefügt");
@@ -56,7 +56,7 @@ switch($action) {
 
              if (!empty($_FILES['my_file'])) {
                  try {
-                     Image::upload_image($spot_id, $_FILES['my_file']);
+                     Image::upload_image($spot->getSpotId(), $_FILES['my_file']);
                  }
                  catch(FileExistsException $e) {
                      Message::setMessage($e->getMessage());

@@ -31,7 +31,6 @@ class Spot {
     $this->added_date = $data['added_date'] ?? NULL;
     $this->lng = $data['lng'] ?? NULL;
     $this->lat = $data['lat'] ?? NULL;
-    $this->rating = $data['rating'] ?? NULL;
 
     $this->description_repo = new ReviewRepository();
   }
@@ -152,7 +151,7 @@ class Spot {
     $connection = connection::connect();
 
     if (empty($this->spot_id)) {
-      $statementSpot = "INSERT INTO spot (name,address,city) VALUES (:name,:address,:city)";
+      $statementSpot = "INSERT INTO spot (name,address,city) VALUES (:name,:address,:city);";
       $insertSpot = $connection->prepare($statementSpot);
       $result = $insertSpot->execute([
         ':name' => $this->name,
@@ -165,7 +164,7 @@ class Spot {
       }
     }
     else {
-      $editStatement = "update spot set name =  '$this->name', address = '$this->address', city = '$this->city', rating = '$this->rating' where spot_id = '$this->spot_id'";
+      $editStatement = "update spot set name =  '$this->name', address = '$this->address', city = '$this->city' where spot_id = '$this->spot_id';";
       $editSpot = $connection->prepare($editStatement);
       return $editSpot->execute();
     }

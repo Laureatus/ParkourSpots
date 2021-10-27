@@ -17,7 +17,6 @@ CREATE TABLE spot(
     added_date datetime default CURRENT_TIMESTAMP,
     lng decimal(11,7) NULL,
     lat decimal(11,7) NULL,
-    rating int NOT NULL,
     PRIMARY KEY (spot_id),
     FOREIGN KEY (city) REFERENCES location(city)
 );
@@ -36,7 +35,7 @@ CREATE TABLE review(
     description_id int NOT NULL AUTO_INCREMENT,
     spot_id int NOT NULL,
     comment varchar(500) NOT NULL,
-    rating int(2) NOT NULL, --Enum?
+    rating int(2) NOT NULL,
     PRIMARY KEY (description_id),
     FOREIGN KEY (spot_id) REFERENCES spot(spot_id)
 );
