@@ -9,11 +9,12 @@ use Parkour\FileExistsException;
 use Parkour\Image;
 use Parkour\Message;
 use Parkour\Spot;
-use Parkour\Description;
+use Parkour\Review;
 
 $action = $_REQUEST['action'] ?? '';
 $spot_id = $_REQUEST['spot_id'] ?? null;
-$description_id = $_POST['description'] ?? null;
+$comment = $_POST['comment'] ?? null;
+$rating = $_POST['rating'] ?? null;
 $content = '';
 
 switch($action) {
@@ -44,6 +45,7 @@ switch($action) {
 
              $spot = new Spot($_POST);
              $spot->save();
+             $spot->getSpotId();
 
              if (empty($spot_id)) {
                  Message::setMessage("Neuer Spot wurde erfolgreich hinzugefügt");
@@ -69,7 +71,7 @@ switch($action) {
          break;
 
     case 'submit_description':
-        Description::insert_description($_POST['spot_id'], $description_id);
+        Review::insertDescription($_POST['spot_id'], $comment, $rating);
         $content = show_detail_view($spot_id);
         break;
 
@@ -79,7 +81,7 @@ switch($action) {
         break;
 
     case 'delete_description':
-        Description::loadById($_GET['description_id'])->delete();
+        Review::loadById($_GET['description_id'])->delete();
         $content = show_detail_view($spot_id);
 
         break;

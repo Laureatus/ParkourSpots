@@ -14,7 +14,7 @@ class Spot {
   private $rating;
 
   /**
-   * @var \Parkour\DescriptionRepository
+   * @var \Parkour\ReviewRepository
    */
   private $description_repo;
 
@@ -33,7 +33,7 @@ class Spot {
     $this->lat = $data['lat'] ?? NULL;
     $this->rating = $data['rating'] ?? NULL;
 
-    $this->description_repo = new DescriptionRepository();
+    $this->description_repo = new ReviewRepository();
   }
 
   /**
@@ -152,13 +152,12 @@ class Spot {
     $connection = connection::connect();
 
     if (empty($this->spot_id)) {
-      $statementSpot = "INSERT INTO spot (name,address,city,rating) VALUES (:name,:address,:city,:rating)";
+      $statementSpot = "INSERT INTO spot (name,address,city) VALUES (:name,:address,:city)";
       $insertSpot = $connection->prepare($statementSpot);
       $result = $insertSpot->execute([
         ':name' => $this->name,
         ':address' => $this->address,
-        ':city' => $this->city,
-        ':rating' => $this->rating
+        ':city' => $this->city
       ]);
       if ($result === TRUE) {
         $this->spot_id = $connection->lastInsertId();
@@ -176,7 +175,7 @@ class Spot {
 
   /**
    *
-   * @return \Parkour\Description[]
+   * @return \Parkour\review[]
    */
   public function getDescriptions() {
 

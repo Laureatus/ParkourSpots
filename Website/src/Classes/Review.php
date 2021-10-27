@@ -4,14 +4,14 @@
 namespace Parkour;
 use PDO;
 
-class Description {
+class Review {
 
   private $description_id;
   private $spot_id;
-  private $description;
+  private $comment;
 
   public function __construct(array $fields) {
-    $this->description = $fields['description'] ?? '';
+    $this->comment = $fields['comment'] ?? '';
     $this->description_id = $fields['description_id'] ?? '';
     $this->spot_id = $fields['spot_id'] ?? '';
   }
@@ -48,7 +48,7 @@ class Description {
    * @return mixed|string
    */
   public function getDescription(): string {
-    return $this->description;
+    return $this->comment;
   }
 
   /**
@@ -62,7 +62,7 @@ class Description {
       $connection = connection::connect();
 
       // Todo: Prepared Statement einfügen
-      $statement = $connection->prepare("SELECT * FROM description WHERE description_id=?") ;
+      $statement = $connection->prepare("SELECT * FROM review WHERE description_id=?") ;
       if ($statement->execute([$description_id])) {
         $array = $statement->fetch(PDO::FETCH_ASSOC);
         return new self($array);
@@ -72,7 +72,7 @@ class Description {
   function delete() {
     if (!empty($this->description_id)) {
       $connection = connection::connect();
-      $query = "delete from description where description_id = ?";
+      $query = "delete from review where description_id = ?";
       $prepare = $connection->prepare($query);
       return $prepare->execute([$this->description_id]);
     }
@@ -80,13 +80,14 @@ class Description {
 
 
 
-  function insert_description($spot_id, $description){
+  function insertDescription($spot_id, $comment, $rating){
     $connection = connection::connect();
-    $statementSpot = "INSERT INTO description (spot_id, description) VALUES (:spot_id, :description)";
+    $statementSpot = "INSERT INTO review (spot_id, comment, rating) VALUES (:spot_id, :comment, :rating);";
     $insertSpot = $connection->prepare($statementSpot);
     $result = $insertSpot->execute([
       ':spot_id' => $spot_id,
-      ':description' => htmlspecialchars($description)
+      ':comment' => htmlspecialchars($comment),
+      ':rating' => $rating
     ]);
     if ($result === TRUE) {
       return $connection->lastInsertId();

@@ -7,6 +7,7 @@ use Parkour\Image;
 use Parkour\SpotRepository;
 use Parkour\Message;
 use Parkour\connection;
+use Parkour\ReviewRepository;
 
 /**
  * Connects to a mysql database.
@@ -153,11 +154,7 @@ function get_spot_form($spot_id = null, $values = [], $errors = []) {
     $form.= '<select name="city" id="city">';
     $form.= $options;
     $form.= '</select><br>';
-
-    $form.= '<label for="rating">Rating 1-10:</label><br>';
-    $form.= sprintf('<input type="number" id="rating" name="rating" min="1" max="10" value="%d"><br>', $spot->getRating());
-
-    $form.= '<input type="file" name="my_file">';
+    $form.= '<br><input type="file" name="my_file">';
     $form.= '<input type="submit" value="Submit">';
     $form.= '</form>';
 
@@ -169,6 +166,7 @@ function render_spots_table() {
   $repository = new SpotRepository();
   /** @var \Parkour\Spot[] $spots */
   $spots = $repository->getAllSpots();
+  $review = new ReviewRepository();
 
     if (count($spots) > 0) {
         $table = '<table>';
@@ -178,7 +176,7 @@ function render_spots_table() {
             $table .='<td><a href="/index.php?spot_id=' . $spot->getSpotId() . '&action=detail_view">' . $spot->getName() .'</a></td>';
             $table .='<td>' . $spot->getAddress() . '</td>';
             $table .='<td>' . $spot->getCity() . '</td>';
-            $table .='<td>' . $spot->getRating() . '/10</td>';
+            $table .='<td>' .$review->SelectRatingAvg($spot->getSpotId())  .'/10'. '</td>';
             $table .='<td>' . $spot->getAddedDate() . '</td>';
             $table .='<td><a href="/index.php?spot_id=' . $spot->getSpotId() . '&action=delete">Delete</a></td>';
             $table .='<td><a href="/index.php?spot_id='. $spot->getSpotId() . '&action=edit">Edit</a></td>';
@@ -199,7 +197,6 @@ function validate_form_submission($form) {
     $location = $form['address'];
 
     $city = $form['city'];
-    $rating = $form['rating'];
 
     if (empty($name)) {
        $errors[] = 'Spot Name darf nicht leer sein';
@@ -211,10 +208,6 @@ function validate_form_submission($form) {
 
     if (empty($city)) {
         $errors[] = 'Stadt darf nicht leer sein';
-    }
-
-    if (empty($rating)) {
-        $errors[] = 'Bewertung darf nicht leer sein';
     }
 
     Message::setMessage(implode("<br>",$errors));
@@ -237,7 +230,7 @@ function show_detail_view($spot_id){
     $table .='<td>' . $spot->getCity() . '</td>';
     $table .='<td>' . $spot->getRating() . '/10</td>';
     $table .='<td>' . $spot->getAddedDate() . '</td>';
-    $table .='<td rowspan="4" colspan="0.5">' . \Parkour\DescriptionForm::render($spot_id). '</td>';
+    $table .='<td rowspan="4" colspan="0.5">' . \Parkour\ReviewForm::render($spot_id). '</td>';
     $table .='</tr>';
     $table.= '<tr><th colspan="5">Description</th></tr>';
     foreach ($spot->getDescriptions() as $key => $description) {

@@ -1,4 +1,4 @@
-source Website/src/Scripts/parkour-schema.sql;
+source Website/parkour-schema.sql;
 
 
 LOAD DATA LOCAL INFILE 'Website/src/Scripts/plz_light.csv'

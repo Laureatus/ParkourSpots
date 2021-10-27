@@ -38,4 +38,5 @@ class SpotRepository {
       return new Spot($array);
     }
   }
+
 }

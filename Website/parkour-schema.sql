@@ -32,14 +32,14 @@ CREATE TABLE images(
     FOREIGN KEY (spot_id) REFERENCES spot(spot_id)
 );
 
-CREATE TABLE description(
+CREATE TABLE review(
     description_id int NOT NULL AUTO_INCREMENT,
     spot_id int NOT NULL,
-    description varchar(500),
+    comment varchar(500) NOT NULL,
+    rating int(2) NOT NULL, --Enum?
     PRIMARY KEY (description_id),
     FOREIGN KEY (spot_id) REFERENCES spot(spot_id)
 );
-
 
 
 
