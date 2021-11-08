@@ -4,7 +4,7 @@
 namespace Parkour;
 include_once 'src/Scripts/settings.php';
 
-class connection {
+class Connection {
 
   private static $instance = null;
 
@@ -18,7 +18,7 @@ class connection {
 
   public static function getInstance(){
     if (self::$instance === null) {
-      self::$instance = new DebuggerEcho();
+      self::$instance = new self();
     }
     return self::$instance;
   }

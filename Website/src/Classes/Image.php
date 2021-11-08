@@ -6,11 +6,92 @@ use PDO;
 
 class Image {
 
+
+
   private $image_id;
   private $path;
   private $name;
   private $size;
   private $spot_id;
+
+
+  public function __construct(array $data) {
+    $this->name = $data['name'] ?? NULL;
+    $this->path = $data['path'] ?? NULL;
+    $this->size = $data['size'] ?? NULL;
+    $this->spot_id = $data['spot_id'] ?? NULL;
+    $this->image_id = $data['image_id'] ?? NULL;
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getImageId() {
+    return $this->image_id;
+  }
+
+  /**
+   * @param mixed $image_id
+   */
+  public function setImageId($image_id) {
+    $this->image_id = $image_id;
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getPath() {
+    return $this->path;
+  }
+
+  /**
+   * @param mixed $path
+   */
+  public function setPath($path) {
+    $this->path = $path;
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getName() {
+    return $this->name;
+  }
+
+  /**
+   * @param mixed $name
+   */
+  public function setName($name) {
+    $this->name = $name;
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getSize() {
+    return $this->size;
+  }
+
+  /**
+   * @param mixed $size
+   */
+  public function setSize($size) {
+    $this->size = $size;
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getSpotId() {
+    return $this->spot_id;
+  }
+
+  /**
+   * @param mixed $spot_id
+   */
+  public function setSpotId($spot_id) {
+    $this->spot_id = $spot_id;
+  }
 
 
 

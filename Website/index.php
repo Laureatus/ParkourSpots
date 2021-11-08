@@ -1,7 +1,7 @@
 <?php
 
 include 'autoload.php';
-include 'src/Scripts/head.php';
+require_once __DIR__.'/bootstrap.php';
 include_once 'src/Scripts/functions.inc.php';
 include_once 'src/Scripts/settings.php';
 
@@ -11,11 +11,15 @@ use Parkour\Message;
 use Parkour\Spot;
 use Parkour\Review;
 
+/** @var \Twig\Environment $twig */
+
+
 $action = $_REQUEST['action'] ?? '';
 $spot_id = $_REQUEST['spot_id'] ?? null;
 $comment = $_POST['comment'] ?? null;
 $rating = $_POST['rating'] ?? null;
 $content = '';
+
 
 switch($action) {
 
@@ -71,14 +75,24 @@ switch($action) {
          break;
 
     case 'submit_description':
-        Review::insertDescription($_POST['spot_id'], $comment, $rating);
-        $content = show_detail_view($spot_id);
+        Review::insertDescription($spot_id, $comment, $rating);
         break;
 
 
     case 'detail_view':
-        $content = show_detail_view($spot_id);
-        break;
+      $repository = new \Parkour\SpotRepository();
+      $spot = $repository->getSpot($spot_id);
+      $spot_id = $spot->getSpotId();
+      $template = $twig->load('detailView.html.twig');
+      $form = $twig->load('reviewform.html.twig');
+      $review = new \Parkour\ReviewRepository();
+      $content = $template->render([
+        'spot' => $spot,
+        'form' => $form,
+        'spot_id' => $spot_id,
+        'review' => $review,
+      ]);
+      break;
 
     case 'delete_description':
         Review::loadById($_GET['description_id'])->delete();
@@ -97,28 +111,18 @@ switch($action) {
         }
         break;
 
-     default:
-         $content = render_spots_table();
-         break;
+      default:
+        $repository = new \Parkour\SpotRepository();
+        /** @var \Parkour\Spot[] $spots */
+        $spots = $repository->getAllSpots();
+        $template = $twig->load('spots.html.twig');
+        $content = $template->render([
+         'title' => 'Alle Spots',
+         'spots' => $spots,
+         'review' => new \Parkour\ReviewRepository()
+        ]);
 }
 
-?>
+echo $content;
 
-<!DOCTYPE html>
-<html lang="de">
-    <body>
-        <?php include 'src/Scripts/navbar.php'; ?>
-        <!-- PARKOUR SPOTS LISTE -->
-        <section class="container" >
-            <div class="col-6">
-                <article class="leistungs-box leistung-box-empfohlen">
-                    <h1>Parkour Spots</h1>
-                    <div>
-                        <?php echo Message::getMessage(); ?>
-                        <?php echo $content; ?>
-                    </div>
-                </article>
-            </div>
-        </section>
-    </body>
-</html>
+

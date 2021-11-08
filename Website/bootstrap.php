@@ -1,0 +1,14 @@
+<?php
+
+// Load our autoloader
+require_once __DIR__.'/vendor/autoload.php';
+
+// Specify our Twig templates location
+
+$loader = new \Twig\Loader\FilesystemLoader(__DIR__.'/templates');
+$twig = new \Twig\Environment($loader, [
+  // 'cache' => __DIR__ . '/../.twig-cache',
+  'cache' => FALSE,
+  'debug' => TRUE,
+  // 'autoescape' => FALSE,
+]);

@@ -1,7 +1,7 @@
 <?php
 
 include 'settings.php';
-include 'src/Scripts/head.php';
+
 
 use Parkour\Image;
 use Parkour\SpotRepository;
@@ -173,7 +173,7 @@ function render_spots_table() {
             $table .='<td><a href="/index.php?spot_id=' . $spot->getSpotId() . '&action=detail_view">' . $spot->getName() .'</a></td>';
             $table .='<td>' . $spot->getAddress() . '</td>';
             $table .='<td>' . $spot->getCity() . '</td>';
-            $table .='<td>' .$review->SelectRatingAvg($spot->getSpotId())  .'/10'. '</td>';
+            $table .='<td>' .$review->selectRatingAvg($spot->getSpotId())  .'/10'. '</td>';
             $table .='<td>' . $spot->getAddedDate() . '</td>';
             $table .='<td><a href="/index.php?spot_id=' . $spot->getSpotId() . '&action=delete">Delete</a></td>';
             $table .='<td><a href="/index.php?spot_id='. $spot->getSpotId() . '&action=edit">Edit</a></td>';
@@ -217,26 +217,6 @@ function validate_form_submission($form) {
 
 
 function show_detail_view($spot_id){
-  $spot = SpotRepository::getSpot($spot_id);
 
-    $table = '<table>';
-    $table.= '<tr><th>Name</th><th>Location</th><th>City</th><th>Rating</th><th>Added Date</th><th>Add new Description</th></tr>';
-    $table .='<tr>';
-    $table .='<td>' . $spot->getName() .'</a></td>';
-    $table .='<td>' . $spot->getAddress() . '</td>';
-    $table .='<td>' . $spot->getCity() . '</td>';
-    $table .='<td>' . $spot->getRating() . '/10</td>';
-    $table .='<td>' . $spot->getAddedDate() . '</td>';
-    $table .='<td rowspan="4" colspan="0.5">' . \Parkour\ReviewForm::render($spot_id). '</td>';
-    $table .='</tr>';
-    $table.= '<tr><th colspan="5">Description</th></tr>';
-    foreach ($spot->getDescriptions() as $key => $description) {
-      $table .= '<tr><td colspan="4">' . $description->getDescription() . '</td>
-                <td><a href="/index.php?spot_id='.$spot->getSpotId().'&description_id=' . $description->getDescriptionId() . '&action=delete_description">Delete</a></td></tr>';
-    }
-    $table .='</table>';
-  $image = new Image();
-  $table .=$image->render_images($spot_id);
-  return $table;
 }
 

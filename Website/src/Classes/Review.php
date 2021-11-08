@@ -81,7 +81,7 @@ class Review {
 
 
   function insertDescription($spot_id, $comment, $rating){
-    $connection = connection::connect();
+    $connection = Connection::connect();
     $statementSpot = "INSERT INTO review (spot_id, comment, rating) VALUES (:spot_id, :comment, :rating);";
     $insertSpot = $connection->prepare($statementSpot);
     $result = $insertSpot->execute([

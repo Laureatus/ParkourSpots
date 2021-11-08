@@ -1,0 +1,41 @@
+{% extends "layout.html.twig" %}
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="gantry-theme://css/whoops.css" />
+{% endblock %}
+{% block content %}
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Location</th>
+        <th>City</th>
+        <th>Rating</th>
+        <th>Added Date</th>
+        <th>Add new Description</th>
+    </tr>
+    <tr>
+        <td>{{ spot.getName }}</a></td>
+        <td>{{ spot.getAddress }}</td>
+        <td>{{ spot.getCity }}</td>
+        <td>{{ spot.getRating }}/10</td>
+        <td>{{ spot.getAddedDate }}</td>
+        <td rowspan="4" colspan="0.5">{{ form.display }}</td>
+        </tr>
+    <tr>
+        <th colspan="5">Description</th>
+    </tr>
+    {% for result in spot.descriptions %}
+    <tr>
+        <td colspan="4">{{ result.description }}</td>
+        <td>
+            <a href="/index.php?spot_id={{ spot.getSpotId }}&description_id={{ review.getDescriptionId }}&action=delete_description">Delete</a>
+        </td>
+    </tr>
+    {% endfor %}
+    </table>
+    <div>
+        {% for image in spot.images %}
+            <img src="{{ constant('TARGETDIR') }}/{{ image.path }}"><a href="index.php?action=delete_image&image_id={{ image.imageId }}&spot_id={{ spot.spotId }}">Delete</a>
+        {% endfor %}
+    </div>
+
+{% endblock %}

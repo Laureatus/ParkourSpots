@@ -1,0 +1,24 @@
+{% extends "layout.html.twig" %}
+
+{% block content %}
+    {% if spots|length > 0 %}
+    <table>
+        <tr>
+            <th>Name</th><th>Location</th><th>City</th><th>Rating</th><th>Added Date</th><th>Delete</th><th>Edit</th><th>Images</th>
+        </tr>
+        {% for spot in spots %}
+        <tr>
+            <td><a href="/index.php?spot_id={{ spot.spotId }}&action=detail_view"> {{ spot.name }}</a></td>
+            <td> {{ spot.address }}</td>
+            <td>{{ spot.city }}</td>
+            <td>{{ review.selectRatingAvg(spot.spotId) }}/10</td>
+            <td>{{ spot.addedDate }}</td>
+            <td><a href="/index.php?spot_id={{ spot.spotId }}&action=delete">Delete</a></td>
+            <td><a href="/index.php?spot_id={{ spot.spotId }}&action=edit">Edit</a></td>
+            <td><a href="/index.php?spot_id={{ spot.spotId }}&action=images">Images</a></td>
+        </tr>
+    {% endfor %}
+    </table>
+    {% endif %}
+{% endblock %}
+
