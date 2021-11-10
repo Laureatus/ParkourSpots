@@ -9,11 +9,29 @@ class Review {
   private $description_id;
   private $spot_id;
   private $comment;
+  private $rating;
+
+
 
   public function __construct(array $fields) {
     $this->comment = $fields['comment'] ?? '';
     $this->description_id = $fields['description_id'] ?? '';
     $this->spot_id = $fields['spot_id'] ?? '';
+    $this->rating = $fields['rating'] ?? '';
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getRating() {
+    return $this->rating;
+  }
+
+  /**
+   * @param mixed $rating
+   */
+  public function setRating($rating): void {
+    $this->rating = $rating;
   }
 
   /**

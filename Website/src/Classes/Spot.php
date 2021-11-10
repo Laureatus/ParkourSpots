@@ -185,40 +185,30 @@ class Spot {
     return $this->description_repo->getDescriptions($this->spot_id);
   }
 
-  /**
-   *
-   */
+  public function getDescriptionIds() {
+    if (!$this->spot_id) {
+      return [];
+    }
+    return $this->description_repo->getDescriptionId($this->spot_id);
+  }
   public function getImages() {
     $connection = Connection::connect();
     $statement = $connection->prepare("SELECT * FROM images WHERE spot_id=?");
     $statement->setFetchMode(\PDO::FETCH_ASSOC);
     $statement->execute([$this->spot_id]);
-
+    $images = [];
     foreach ($statement as $key => $image) {
       $images[] = new Image($image);
 
-      // $images.= "<img src=\"".TARGETDIR.$image['path']."\"><a href=\"index.php?action=delete_image&image_id=".$image['image_id']."&spot_id=$spot_id\">Delete</a>";
     }
 
     return $images;
-
-    // $directory = TARGETDIR.$spot_id;
-    //
-    // if (!is_dir($directory)) {
-    //   return "Couldn't find enclosing image folder:  " . $directory;
-    // }
-    //
-    // $handle = opendir($directory);
-    // if (!$handle) {
-    //   return "Couldn't open $directory for reading.";
-    // }
-    //
-    // $images = '';
-    // // Loop über SQL-Result -> id, path, name
-    //
-    // closedir($handle);
-    //
-    // return $images;
   }
+
+
+  /**
+   *
+   */
+
 
 }

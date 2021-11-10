@@ -71,12 +71,13 @@ switch($action) {
          else {
              $content = get_spot_form($spot_id, $_POST, $errors);
          }
-         $content = render_spots_table();
+         $content = header("Location: ../../../index.php");
          break;
 
     case 'submit_description':
-        Review::insertDescription($spot_id, $comment, $rating);
-        break;
+      Review::insertDescription($spot_id, $comment, $rating);
+      header("Location: ../../../index.php?spot_id=$spot_id&action=detail_view");
+      break;
 
 
     case 'detail_view':
@@ -86,18 +87,21 @@ switch($action) {
       $template = $twig->load('detailView.html.twig');
       $form = $twig->load('reviewform.html.twig');
       $review = new \Parkour\ReviewRepository();
+      $avg = $review->selectRatingAvg($spot_id);
+
       $content = $template->render([
         'spot' => $spot,
         'form' => $form,
         'spot_id' => $spot_id,
         'review' => $review,
+        'avg' => $avg,
+        'rating' => $rating,
       ]);
       break;
 
     case 'delete_description':
         Review::loadById($_GET['description_id'])->delete();
-        $content = show_detail_view($spot_id);
-
+        header("Location: ../../../index.php?spot_id=$spot_id&action=detail_view");
         break;
 
     case 'delete_image':
