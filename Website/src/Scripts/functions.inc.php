@@ -9,88 +9,37 @@ use Parkour\Message;
 use Parkour\connection;
 use Parkour\ReviewRepository;
 
-/**
- * Connects to a mysql database.
- *
- * @param string $hostname
- *   The hostname to connect.
- * @param string $username
- * @param string $database
- * @param string $password
- *
- * @return PDO
- *
- */
-
 
 /**
- * Gets Information from the Database
+ * Get all cities.
  *
- * @param PDO $connection
- *      The database to connect to
- * @param $query
- *      The MySQL Query to get the spots Information
+ * @return array
+ *   List of all cities in an indexed array.
  *
- * @return PDOStatement|false
+ * @todo CityRepository & funktion löschen
  */
-function get_all_cities($connection){
-    $query = "select city from location;";
+function get_all_cities() : array {
+  $connection = connection::connect();
 
-    $q = $connection->query($query);
-    $q->setFetchMode(PDO::FETCH_ASSOC);
-    return $q;
-}
+  $query = "SELECT city FROM location;";
+  $statement = $connection->query($query);
+  $statement->setFetchMode(PDO::FETCH_ASSOC);
 
-/**
- * Gets Information from the Database
- *
- * @param PDO $connection
- *      The database to connect to
- * @param $query
- *      The MySQL Query to get the spots Information
- *
- * @return PDOStatement|false
- */
-function get_parkour_spots() {
-    $connection = connection::connect();
-    $query = "select spot_id, name, address, city, date_format(added_date, '%d-%m-%Y') as date, rating from spot inner join location using(city);";
-    $q = $connection->query($query);
-    $q->setFetchMode(PDO::FETCH_ASSOC);
+  $options = [];
 
-    $spots = [];
-    while($spot = $q->fetch(PDO::FETCH_ASSOC)) {
-        $spots[] = $spot;
+  if ($statement->rowCount() > 0) {
+    while ($rows = $statement->fetch()){
+      $options[] = $rows['city'];
     }
-    return $spots;
-}
+  }
 
-/**
- * Displays all Cities
- * @param null $city
- */
-function get_city_options($city = null){
-    $connection = connection::connect();
-    $statement = get_all_cities($connection);
-    $count = $statement->rowCount();
-
-    $options = [];
-
-    if ($count > 0) {
-        while ($rows = $statement->fetch()){
-
-            $selected = "";
-
-            if ($city === $rows['city']) {
-               $selected = 'selected="true"';
-            }
-            $options[] = "<option $selected value='". $rows['city'] . "'>" .$rows['city'] . "</option>";
-        }
-    }
-    return $options;
+  return $options;
 }
 
 /**
  * Deletes a spot from the Database
+ *
+ * @todo In Spot Objekt einfügen ($spot->delete()) inkl. remove_directory
  *
  * @param $spot_id
  * @return bool
@@ -108,8 +57,6 @@ function delete_spot($spot_id) {
     return $prepare_pk->execute();
 }
 
-
-
 /**
  * @param $spot_id
  */
@@ -122,71 +69,13 @@ function remove_directory($spot_id){
     return true;
 }
 
-function get_spot_form($spot_id = null, $values = [], $errors = []) {
-
-  $spot = new \Parkour\Spot($_REQUEST);
-
-  $repository = new SpotRepository();
-    if (!empty($spot_id)) {
-       $spot = $repository->getSpot($spot_id);
-    }
-    elseif (!empty($values)) {
-        $spot = $values;
-    }
-
-
-    $options = implode("\n", get_city_options($spot->getCity()));
-
-    $form = '<form enctype="multipart/form-data" action="index.php" method="post" id="">';
-    $form.= sprintf('<input type="hidden" id="spot_id" name="spot_id" value="%s"><br>', $spot->getSpotId());
-    $form.= '<input type="hidden" id="action" name="action" value="submit"><br>';
-
-    $form.= '<label for="name">Spot Name:</label><br>';
-    $form.= sprintf('<input type="text" id="name" name="name" value="%s"><br>', $spot->getName());
-
-    $form.= '<label for="address">Spot Location:</label><br>';
-    $form.= sprintf('<input type="text" id="address" name="address" value="%s"><br>', $spot->getAddress());
-
-    $form.= '<label for="city">City</label><br>';
-    $form.= '<select name="city" id="city">';
-    $form.= $options;
-    $form.= '</select><br>';
-    $form.= '<br><input type="file" name="my_file">';
-    $form.= '<input type="submit" value="Submit">';
-    $form.= '</form>';
-
-    return $form;
-}
-
-function render_spots_table() {
-
-  $repository = new SpotRepository();
-  /** @var \Parkour\Spot[] $spots */
-  $spots = $repository->getAllSpots();
-  $review = new ReviewRepository();
-
-    if (count($spots) > 0) {
-        $table = '<table>';
-        $table.= '<tr><th>Name</th><th>Location</th><th>City</th><th>Rating</th><th>Added Date</th><th>Delete</th><th>Edit</th><th>Images</th></tr>';
-        foreach ($spots as $key => $spot) {
-            $table .='<tr>';
-            $table .='<td><a href="/index.php?spot_id=' . $spot->getSpotId() . '&action=detail_view">' . $spot->getName() .'</a></td>';
-            $table .='<td>' . $spot->getAddress() . '</td>';
-            $table .='<td>' . $spot->getCity() . '</td>';
-            $table .='<td>' .$review->selectRatingAvg($spot->getSpotId())  .'/10'. '</td>';
-            $table .='<td>' . $spot->getAddedDate() . '</td>';
-            $table .='<td><a href="/index.php?spot_id=' . $spot->getSpotId() . '&action=delete">Delete</a></td>';
-            $table .='<td><a href="/index.php?spot_id='. $spot->getSpotId() . '&action=edit">Edit</a></td>';
-            $table .='<td><a href="/index.php?spot_id='. $spot->getSpotId(). '&action=images">Images</a></td>';
-            $table .='</tr>';
-        }
-        $table .='</table>';
-        return $table;
-    }
-
-    return '';
-}
-
+/**
+ * @todo Comment me :-)
+ *
+ * @param $form
+ *
+ * @return array
+ */
 function validate_form_submission($form) {
     $errors = [];
 
@@ -211,12 +100,3 @@ function validate_form_submission($form) {
     return $errors;
 
 }
-
-
-
-
-
-function show_detail_view($spot_id){
-
-}
-

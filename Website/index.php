@@ -10,6 +10,7 @@ use Parkour\Image;
 use Parkour\Message;
 use Parkour\Spot;
 use Parkour\Review;
+use Parkour\SpotRepository;
 
 /** @var \Twig\Environment $twig */
 
@@ -26,17 +27,41 @@ switch($action) {
      case 'delete':
          if (delete_spot($spot_id) && remove_directory($spot_id)) {
              Message::setMessage("Spot wurde erfolgreich gelöscht");
-             $content = render_spots_table();
+             $content = header("Location: ../../../index.php");
          }
          break;
 
      case 'edit':
-         $content = get_spot_form($spot_id);
+
+       $form = $twig->load('spotform.html.twig');
+       $repo = new \Parkour\SpotRepository();
+       $spot = $repo::getSpot($spot_id);
+       $content = $form->render([
+         'spot' => $spot,
+         'form' => $form,
+         'spot_id' => $spot_id,
+         'cities' => get_all_cities(),
+       ]);
          break;
 
      case 'add':
-         $content = get_spot_form();
-         break;
+       $spot = new \Parkour\Spot($_REQUEST);
+       $repository = new \Parkour\SpotRepository();
+       if (!empty($spot_id)) {
+         $spot = $repository::getSpot($spot_id);
+       }
+       elseif (!empty($values)) {
+         $spot = $values;
+       }
+       $form = $twig->load('spotform.html.twig');
+
+       $content = $form->render([
+         'spot' => $spot,
+         'form' => $form,
+         'spot_id' => $spot_id,
+         'cities' => get_all_cities(),
+       ]);
+       break;
 
      case 'images':
          $content = Image::render_images($spot_id);
@@ -66,12 +91,17 @@ switch($action) {
                      Message::setMessage($e->getMessage());
                  }
              }
-
+           $content = header("Location: ../../../index.php");
          }
          else {
-             $content = get_spot_form($spot_id, $_POST, $errors);
+           if (empty($spot_id)) {
+             $content =header("Location: index.php?action=add");
+           }
+           else {
+             $content = header("Location: index.php?spot_id=$spot_id&action=edit");
+           }
          }
-         $content = header("Location: ../../../index.php");
+
          break;
 
     case 'submit_description':
@@ -81,20 +111,17 @@ switch($action) {
 
 
     case 'detail_view':
-      $repository = new \Parkour\SpotRepository();
+      $repository = new SpotRepository();
+
       $spot = $repository->getSpot($spot_id);
-      $spot_id = $spot->getSpotId();
+
       $template = $twig->load('detailView.html.twig');
       $form = $twig->load('reviewform.html.twig');
-      $review = new \Parkour\ReviewRepository();
-      $avg = $review->selectRatingAvg($spot_id);
 
       $content = $template->render([
         'spot' => $spot,
         'form' => $form,
         'spot_id' => $spot_id,
-        'review' => $review,
-        'avg' => $avg,
         'rating' => $rating,
       ]);
       break;
@@ -106,7 +133,7 @@ switch($action) {
 
     case 'delete_image':
         $image_id = $_GET['image_id'];
-        Image::delete_image($image_id);
+        Image::deleteImage($image_id);
         $count = Image::check_dir($spot_id);
         if ($count >= 1){
             header("Location: index.php?action=images&spot_id=".$spot_id."");
@@ -116,7 +143,7 @@ switch($action) {
         break;
 
       default:
-        $repository = new \Parkour\SpotRepository();
+        $repository = new SpotRepository();
         /** @var \Parkour\Spot[] $spots */
         $spots = $repository->getAllSpots();
         $template = $twig->load('spots.html.twig');

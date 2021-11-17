@@ -176,21 +176,23 @@ class Spot {
    *
    * @return \Parkour\review[]
    */
-  public function getDescriptions() {
+  public function getReviews() {
 
     if (!$this->spot_id) {
       return [];
     }
 
-    return $this->description_repo->getDescriptions($this->spot_id);
+    return $this->description_repo->getReviews($this->spot_id);
   }
 
-  public function getDescriptionIds() {
+  public function getRatingAvg() {
     if (!$this->spot_id) {
-      return [];
+      return 0;
     }
-    return $this->description_repo->getDescriptionId($this->spot_id);
+
+    return $this->description_repo->getRatingAvg($this->spot_id);
   }
+
   public function getImages() {
     $connection = Connection::connect();
     $statement = $connection->prepare("SELECT * FROM images WHERE spot_id=?");
@@ -205,10 +207,6 @@ class Spot {
     return $images;
   }
 
-
-  /**
-   *
-   */
 
 
 }

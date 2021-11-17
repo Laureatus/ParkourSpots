@@ -3,15 +3,15 @@
 {% block content %}
     <div class="container">
         <div id="spotName" class="col-6">
-            <h1>{{ spot.getName }}</h1>
+            <h1 id="Name">{{ spot.getName }}</h1>
         </div>
         <div id="spotInfo">
-            <p>Hinzugefügt am {{ spot.getAddedDate }} durch Lorin</p>
+            <p id="added_date">Hinzugefügt am {{ spot.getAddedDate }} durch Lorin</p>
             <br>
             <p class="Info">{{ spot.getAddress }} <br> {{ spot.getCity }}</p>
         </div>
         <div id="Rating">
-            {{ include('rating.html.twig', {avg: avg},with_context = false) }}
+            {{ include('rating.html.twig', {avg: spot.ratingAvg}, with_context = false) }}
         </div>
         <div id="wrapper">
             <div id="maps" class="col-2">
@@ -88,7 +88,7 @@
             <div id="reviews" class="col-3" style="width: 100%">
                 <h3>Reviews</h3>
                 <table style="width: 100%">
-                    {% for result in spot.descriptions %}
+                    {% for result in spot.reviews %}
                         <tr style="background-color: #f5f5f5">
                             <td>
                                 <img src="https://www.senertec.de/wp-content/uploads/2020/04/blank-profile-picture-973460_1280.png" alt="Profilepicture" style="height: 50px; width: 50px;">
@@ -107,12 +107,6 @@
 
             </div>
         </div>
-    </div>
-
-
-
-    </table>
-    <div>
     </div>
 {% endblock %}
 

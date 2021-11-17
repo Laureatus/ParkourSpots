@@ -295,7 +295,7 @@ td {
 
 tr:hover {
   background-color: #E5E5E5;
-  color: #FFF;
+  color: black;
 }
 
 
@@ -310,8 +310,22 @@ tr:hover {
   display: flex;
 }
 
+#Name {
+  font-size: 40px;
+  font-weight: bolder;
+}
+
 #spotName {
   border-bottom: 3px solid red;
+  font-size: 40px;
+  font-weight: bolder;
+  padding-left: 0px;
+  height: 75px;
+  margin-bottom: 10px;
+}
+
+#added_date {
+  color: #969696;
 }
 
 .Info {
@@ -356,13 +370,8 @@ tr:hover {
 
 #text {
   height: 100px; width: 300px;
-  transition:all 2s;
-  -webkit-transition:all 2s;
 }
 
-#text:focus {
-  height: 150px; width: 500px;
-}
 
 .button {
   -webkit-transition:all 0.2s;
@@ -408,4 +417,9 @@ tr:hover {
 #next:hover {
   box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
 }
+
+a:visited {
+  color: black;
+}
+
 /*# sourceMappingURL=styles.css.map */

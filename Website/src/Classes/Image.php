@@ -166,7 +166,7 @@ class Image {
 
   }
 
-  function delete_image($image_id){
+  function deleteImage($image_id){
     $connection = connection::connect();
     $query = "SELECT * FROM images WHERE image_id=".$image_id.".";
     $results = $connection->query($query);
