@@ -11,6 +11,8 @@ use Parkour\Message;
 use Parkour\Spot;
 use Parkour\Review;
 use Parkour\SpotRepository;
+use Parkour\UserRepository;
+Use Parkour\user;
 
 /** @var \Twig\Environment $twig */
 
@@ -141,6 +143,29 @@ switch($action) {
             header("Location: index.php");
         }
         break;
+
+    case 'register':
+      $template = $twig->load('registration.html.twig');
+      $content = $template->render([
+
+      ]);
+      break;
+
+    case 'submitRegistration':
+
+      $errors = validate_registration($_POST);
+      if (empty($errors)) {
+        $user = new user($_POST);
+        $user->save();
+        mail('lorin.fankhauser@unic.com','Mailhog test', 'Hello from Mailhog');
+        header("Location: index.php");
+      } else {
+          header("Location: index.php?action=register");
+          Message::setMessage(implode("<br>",$errors));
+      }
+
+      break;
+
 
       default:
         $repository = new SpotRepository();

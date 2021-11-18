@@ -100,3 +100,25 @@ function validate_form_submission($form) {
     return $errors;
 
 }
+
+function validate_registration($form) {
+  $username = $form['username'];
+  $email = $form['email'];
+  $password = $form['password'];
+
+  $errors = [];
+
+  if(empty($username)) {
+    $errors[] = 'username darf nicht leer sein';
+  }
+
+  if(empty($email)) {
+    $errors[] = 'Email darf nicht leer sein';
+  }
+
+  if(empty($password)) {
+    $errors[] = 'Passwort darf nicht leer sein';
+  }
+  return $errors;
+
+}
