@@ -105,20 +105,75 @@ function validate_registration($form) {
   $username = $form['username'];
   $email = $form['email'];
   $password = $form['password'];
-
   $errors = [];
 
-  if(empty($username)) {
+  $emailQuery = "select email from users;";
+  $connection = connection::connect();
+  $q = $connection->query($emailQuery);
+  $q->setFetchMode(PDO::FETCH_ASSOC);
+
+
+  if (empty($username)) {
     $errors[] = 'username darf nicht leer sein';
   }
 
-  if(empty($email)) {
-    $errors[] = 'Email darf nicht leer sein';
-  }
+    if (empty($email)) {
+      $errors[] = 'Email darf nicht leer sein';
+    }
+    else {
+      while ($user = $q->fetch(PDO::FETCH_COLUMN)) {
+        if ($email = $user) {
+          $error[] = "Email wird bereits verwendet.";
+        }
+      }
+    }
 
-  if(empty($password)) {
-    $errors[] = 'Passwort darf nicht leer sein';
-  }
+    if (empty($password)) {
+      $errors[] = 'Passwort darf nicht leer sein';
+    }
   return $errors;
+  }
 
+
+
+function mailing($form) {
+  $email = $form['email'];
+  $username = $form['username'];
+  $emailQuery = "select auth_token from users where username = '$username';";
+  $connection = connection::connect();
+  $q = $connection->query($emailQuery);
+  $q->setFetchMode(PDO::FETCH_ASSOC);
+  while ($auth_token = $q->fetch(PDO::FETCH_COLUMN)) {
+    $token = $auth_token;
+    }
+
+  $to = $email;
+  $subject = "Authenthifiziere deinen account";
+
+  $message = "
+              <html>
+              <head>
+              <title>Authenthifiziere deinen account</title> 
+              </head>
+              <body>
+              <p>Hallo $username</p>
+              <br>
+              <p>Bitte schliesse deine Registrierung für parkour.lndo.site ab inden du auf den untenstehenden Link klickst</p>
+              <br>
+              <p>https://parkour.lndo.site/index.php?action=verify&username=".$username."&auth_token=".$token."</p>
+              </body>
+              </html>
+              ";
+
+  // It is mandatory to set the content-type when sending HTML email
+  $headers = "MIME-Version: 1.0" . "\r\n";
+  $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+
+  // More headers. From is required, rest other headers are optional
+  $headers .= 'From: <noreply@parkour.com>' . "\r\n";
+
+  mail($to,$subject,$message,$headers);
 }
+
+
+

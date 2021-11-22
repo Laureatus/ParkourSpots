@@ -18,12 +18,12 @@ services:
       user: lorin
       password: db_P@ssw0rd
       database: parkour
-
   smtp:
     type: mailhog:v1.0.0
-    portforward: false
+    portforward: true
     hogfrom:
       - appserver
+
 tooling:
   xdebug-on:
     service: appserver

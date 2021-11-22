@@ -145,6 +145,7 @@ switch($action) {
         break;
 
     case 'register':
+      //mailing();
       $template = $twig->load('registration.html.twig');
       $content = $template->render([
 
@@ -152,31 +153,61 @@ switch($action) {
       break;
 
     case 'submitRegistration':
-
       $errors = validate_registration($_POST);
       if (empty($errors)) {
-        $user = new user($_POST);
+        $user = new User($_POST);
         $user->save();
-        mail('lorin.fankhauser@unic.com','Mailhog test', 'Hello from Mailhog');
+        mailing($_POST);
         header("Location: index.php");
       } else {
-          header("Location: index.php?action=register");
-          Message::setMessage(implode("<br>",$errors));
+          $message= Message::getMessage(implode("<br>",$errors));
+          $template = $twig->load('registration.html.twig');
+          $content = $template->render([
+            'message' => $message
+        ]);
       }
-
       break;
 
+    case 'login':
+      $template = $twig->load('loginform.html.twig');
+      $content = $template->render([
 
-      default:
-        $repository = new SpotRepository();
-        /** @var \Parkour\Spot[] $spots */
-        $spots = $repository->getAllSpots();
-        $template = $twig->load('spots.html.twig');
-        $content = $template->render([
-         'title' => 'Alle Spots',
-         'spots' => $spots,
-         'review' => new \Parkour\ReviewRepository()
-        ]);
+      ]);
+      break;
+
+    case 'submitLogin':
+      $username = $_POST['username'];
+      $repo = new UserRepository();
+      $user = $repo->getUserByName($username);
+      $user->authenticate();
+
+
+    break;
+
+    case 'verify':
+      $username = $_GET['username'];
+      $repo = new UserRepository();
+      $user = $repo->getUserByName($username);
+      $user->setUserActive();
+      $user->save();
+      $template = $twig->load('verify.html.twig');
+      $content = $template->render([
+
+      ]);
+      break;
+
+    default:
+      $repository = new SpotRepository();
+      /** @var \Parkour\Spot[] $spots */
+      $spots = $repository->getAllSpots();
+      $template = $twig->load('spots.html.twig');
+      $content = $template->render([
+       'title' => 'Alle Spots',
+       'spots' => $spots,
+       'review' => new \Parkour\ReviewRepository()
+      ]);
+
+
 }
 
 echo $content;

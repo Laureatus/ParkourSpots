@@ -21,7 +21,7 @@ CREATE TABLE users (
    email varchar(255) NOT NULL UNIQUE,
    password varchar(255) NOT NULL,
    added_time datetime NOT NULL default CURRENT_TIMESTAMP,
-   active int NOT NULL default 0,
+   state ENUM("UNCONFIRMED", "ACTIVE", "BLOCKED"),
    permission_status int default 2,
    auth_token int NULL,
    PRIMARY KEY (user_id),

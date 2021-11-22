@@ -38,20 +38,13 @@ class UserRepository {
     }
   }
 
-  public function banUser($user_id) {
-    $connection = connection::connect();
-    $statement = $connection->prepare('UPDATE users SET active = 0 WHERE user_id = ?');
-    return $statement->execute([$user_id]);
-  }
-
-  public function isActive() {
-    $connection = connection::connect();
-    $statement = $connection->prepare('select user_id, username, email, password, added_time, permission_status, auth_token from users where active = 1;');
-    if ($statement->execute()) {
+  public function getUserByName($username) {
+    $statement = $this->connection->prepare('select user_id, username, email, password, added_time, permission_status, auth_token from users WHERE username = ?');
+    if ($statement->execute([$username])) {
       $array = $statement->fetch(PDO::FETCH_ASSOC);
-      return $array;
+      return new user($array);
     }
-
   }
+
 
 }

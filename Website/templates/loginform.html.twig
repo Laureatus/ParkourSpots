@@ -15,15 +15,14 @@
 </script>
 
 <form enctype="multipart/form-data" action="index.php" method="post" id="">
-    <input type="hidden" id="action" name="action" value="submitRegistration"><br>
+    <input type="hidden" id="action" name="action" value="submitLogin"><br>
     <input type="hidden" name="active" value="0">
     <label for="username">Username:</label><br>
     <input type="text" id="username" name="username" value=""><br>
-    <label for="email">E-Mail:</label><br>
-    <input type="email" id="email" name="email" value=""><br>
     <label for="password">Password</label><br>
     <input type="password" id="password" name="password" value=""><br>
     <input type="checkbox" onclick="myFunction()">Show Password<br><br>
-    <input type="submit" value="Register">
+    <input type="submit" value="Login">
 </form>
+<p>Du hast noch keinen Account? <br> Dann registriere dich <a href="index.php?action=register">HIER</a></p>
 {% endblock %}
