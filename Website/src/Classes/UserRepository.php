@@ -30,7 +30,7 @@ class UserRepository {
 
 
   public function getUser($user_id) {
-    $statement = $this->connection->prepare('select username, email, password, added_time, active, permission_status, auth_token from users WHERE user_id = ?');
+    $statement = $this->connection->prepare('select user_id, username, email, password, added_time, state, permission_status, auth_token from users WHERE user_id = ?');
 
     if ($statement->execute([$user_id])) {
       $array = $statement->fetch(PDO::FETCH_ASSOC);
@@ -39,7 +39,7 @@ class UserRepository {
   }
 
   public function getUserByName($username) {
-    $statement = $this->connection->prepare('select user_id, username, email, password, added_time, permission_status, auth_token from users WHERE username = ?');
+    $statement = $this->connection->prepare('select user_id, username, email, password, added_time, state, permission_status, auth_token from users WHERE username = ?');
     if ($statement->execute([$username])) {
       $array = $statement->fetch(PDO::FETCH_ASSOC);
       return new user($array);

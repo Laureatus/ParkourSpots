@@ -31,7 +31,7 @@ class SpotRepository {
    */
   public static function getSpot($spot_id) {
     $connection = connection::connect();
-    $statement = $connection->prepare('SELECT spot_id, name, address, city, added_date FROM spot INNER JOIN location USING(city) WHERE spot_id = ?');
+    $statement = $connection->prepare('SELECT spot_id, user_id, name, address, city, added_date FROM spot INNER JOIN location USING(city) WHERE spot_id = ?');
 
     if ($statement->execute([$spot_id])) {
       $array = $statement->fetch(PDO::FETCH_ASSOC);

@@ -118,7 +118,7 @@ class Image {
     $images = '';
     // Loop über SQL-Result -> id, path, name
     foreach ($q as $key => $image) {
-      $images.= "<img src=\"".TARGETDIR.$image['path']."\"><a href=\"index.php?action=delete_image&image_id=".$image['image_id']."&spot_id=$spot_id\">Delete</a>";
+      $images.= "<img alt='spot-image' src=\"".TARGETDIR.$image['path']."\"><a href=\"index.php?action=delete_image&image_id=".$image['image_id']."&spot_id=$spot_id\">Delete</a>";
     }
     closedir($handle);
 

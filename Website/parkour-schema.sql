@@ -55,10 +55,12 @@ CREATE TABLE images(
 CREATE TABLE review(
     description_id int NOT NULL AUTO_INCREMENT,
     spot_id int NOT NULL,
+    username varchar(20) NOT NULL,
     comment varchar(500) NOT NULL,
     rating int(2) NOT NULL,
     PRIMARY KEY (description_id),
-    FOREIGN KEY (spot_id) REFERENCES spot(spot_id)
+    FOREIGN KEY (spot_id) REFERENCES spot(spot_id),
+    FOREIGN KEY (username) REFERENCES users(username)
 );
 
 

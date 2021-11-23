@@ -8,17 +8,34 @@ class Review {
 
   private $description_id;
   private $spot_id;
+  private $username;
   private $comment;
   private $rating;
 
 
 
   public function __construct(array $fields) {
+    $this->username = $fields['username'] ?? '';
     $this->comment = $fields['comment'] ?? '';
     $this->description_id = $fields['description_id'] ?? '';
     $this->spot_id = $fields['spot_id'] ?? '';
     $this->rating = $fields['rating'] ?? '';
   }
+
+  /**
+   * @return mixed
+   */
+  public function getUsername() {
+    return $this->username;
+  }
+
+  /**
+   * @param mixed $rating
+   */
+  public function setUsername($username): void {
+    $this->username = $username;
+  }
+
 
   /**
    * @return mixed
@@ -98,12 +115,13 @@ class Review {
 
 
 
-  function insertDescription($spot_id, $comment, $rating){
+  function insertDescription($spot_id, $username, $comment, $rating){
     $connection = Connection::connect();
-    $statementSpot = "INSERT INTO review (spot_id, comment, rating) VALUES (:spot_id, :comment, :rating);";
+    $statementSpot = "INSERT INTO review (spot_id, username, comment, rating) VALUES (:spot_id, :username, :comment, :rating);";
     $insertSpot = $connection->prepare($statementSpot);
     $result = $insertSpot->execute([
       ':spot_id' => $spot_id,
+      ':username' => $username,
       ':comment' => htmlspecialchars($comment),
       ':rating' => $rating
     ]);

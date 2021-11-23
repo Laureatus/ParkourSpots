@@ -5,6 +5,7 @@ require_once __DIR__.'/bootstrap.php';
 include_once 'src/Scripts/functions.inc.php';
 include_once 'src/Scripts/settings.php';
 
+
 use Parkour\FileExistsException;
 use Parkour\Image;
 use Parkour\Message;
@@ -12,7 +13,8 @@ use Parkour\Spot;
 use Parkour\Review;
 use Parkour\SpotRepository;
 use Parkour\UserRepository;
-Use Parkour\user;
+use Parkour\User;
+use Parkour\UserStorage;
 
 /** @var \Twig\Environment $twig */
 
@@ -23,6 +25,14 @@ $comment = $_POST['comment'] ?? null;
 $rating = $_POST['rating'] ?? null;
 $content = '';
 
+
+if (isset($_SESSION['user_id'])){
+  $repo = new UserRepository();
+  $user = $repo->getUser($_SESSION['user_id']);
+  if ($user instanceof User) {
+    UserStorage::setLoggedInUser($user);
+  }
+}
 
 switch($action) {
 
@@ -107,24 +117,25 @@ switch($action) {
          break;
 
     case 'submit_description':
-      Review::insertDescription($spot_id, $comment, $rating);
+      $username = UserStorage::getLoggedInUser()->getUsername();
+      Review::insertDescription($spot_id, $username, $comment, $rating);
       header("Location: ../../../index.php?spot_id=$spot_id&action=detail_view");
       break;
 
 
     case 'detail_view':
       $repository = new SpotRepository();
-
       $spot = $repository->getSpot($spot_id);
-
+      $debug = $spot->getUsername();
+      $username = UserStorage::getLoggedInUser()->getUsername();
+      $user_id = UserStorage::getLoggedInUser()->getUserId();
       $template = $twig->load('detailView.html.twig');
-      $form = $twig->load('reviewform.html.twig');
-
       $content = $template->render([
         'spot' => $spot,
-        'form' => $form,
         'spot_id' => $spot_id,
         'rating' => $rating,
+        'username' => $username,
+        'user_id' => $user_id,
       ]);
       break;
 
@@ -145,7 +156,6 @@ switch($action) {
         break;
 
     case 'register':
-      //mailing();
       $template = $twig->load('registration.html.twig');
       $content = $template->render([
 
@@ -175,12 +185,23 @@ switch($action) {
       ]);
       break;
 
+    case 'logout':
+      unset($_SESSION['user_id'], $_SESSION['username']);
+      $template = $twig->load('loginform.html.twig');
+      $content = $template->render([
+
+      ]);
+      break;
+
     case 'submitLogin':
       $username = $_POST['username'];
+      $pwinput = $_POST['password'];
       $repo = new UserRepository();
       $user = $repo->getUserByName($username);
-      $user->authenticate();
-
+      if ($user->authenticate($pwinput) === TRUE) {
+        $user->login();
+      }
+      header('Location:index.php');
 
     break;
 
@@ -199,12 +220,14 @@ switch($action) {
     default:
       $repository = new SpotRepository();
       /** @var \Parkour\Spot[] $spots */
+      $username = UserStorage::getLoggedInUser()->getUsername();
       $spots = $repository->getAllSpots();
       $template = $twig->load('spots.html.twig');
       $content = $template->render([
        'title' => 'Alle Spots',
        'spots' => $spots,
-       'review' => new \Parkour\ReviewRepository()
+       'review' => new \Parkour\ReviewRepository(),
+       'username' => $username,
       ]);
 
 

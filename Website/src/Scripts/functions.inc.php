@@ -151,18 +151,13 @@ function mailing($form) {
   $subject = "Authenthifiziere deinen account";
 
   $message = "
-              <html>
-              <head>
-              <title>Authenthifiziere deinen account</title> 
-              </head>
-              <body>
-              <p>Hallo $username</p>
-              <br>
-              <p>Bitte schliesse deine Registrierung für parkour.lndo.site ab inden du auf den untenstehenden Link klickst</p>
-              <br>
-              <p>https://parkour.lndo.site/index.php?action=verify&username=".$username."&auth_token=".$token."</p>
-              </body>
-              </html>
+
+              Hallo $username
+
+              Bitte schliesse deine Registrierung für parkour.lndo.site ab inden du auf den untenstehenden Link klickst
+
+              https://parkour.lndo.site/index.php?action=verify&username=".$username."&auth_token=".$token."
+
               ";
 
   // It is mandatory to set the content-type when sending HTML email

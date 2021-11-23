@@ -1,6 +1,7 @@
 <?php
 
 namespace Parkour;
+use PDO;
 
 class Spot {
 
@@ -12,6 +13,7 @@ class Spot {
   private $lng;
   private $lat;
   private $rating;
+  private $user_id;
 
   /**
    * @var \Parkour\ReviewRepository
@@ -25,6 +27,7 @@ class Spot {
    */
   public function __construct(array $data) {
     $this->spot_id = $data['spot_id'] ?? NULL;
+    $this->user_id = $data['user_id'] ?? NULL;
     $this->city = $data['city'] ?? NULL;
     $this->name = $data['name'] ?? NULL;
     $this->address = $data['address'] ?? NULL;
@@ -147,13 +150,28 @@ class Spot {
     $this->rating = $rating;
   }
 
+  /**
+   * @return mixed|null
+   */
+  public function getUserId() {
+    return $this->user_id;
+  }
+
+  /**
+   * @param mixed|null $user_id
+   */
+  public function setUserId($user_id): void {
+    $this->user_id = $user_id;
+  }
+
   public function save() {
     $connection = connection::connect();
 
     if (empty($this->spot_id)) {
-      $statementSpot = "INSERT INTO spot (name,address,city) VALUES (:name,:address,:city);";
+      $statementSpot = "INSERT INTO spot (user_id,name,address,city) VALUES (:user_id, :name,:address,:city);";
       $insertSpot = $connection->prepare($statementSpot);
       $result = $insertSpot->execute([
+        ':user_id' => UserStorage::getLoggedInUser()->getUserId(),
         ':name' => $this->name,
         ':address' => $this->address,
         ':city' => $this->city
@@ -205,6 +223,18 @@ class Spot {
     }
 
     return $images;
+  }
+
+  public function getUsername() {
+    $username = "";
+    $query = "SELECT username FROM spot INNER JOIN users USING(user_id) WHERE spot_id = ".$this->spot_id.";";
+    $connection = connection::connect();
+    $q = $connection->query($query);
+    $q->setFetchMode(PDO::FETCH_ASSOC);
+    while ($user = $q->fetch(PDO::FETCH_COLUMN)) {
+      $username = $user;
+    }
+    return $username;
   }
 
 

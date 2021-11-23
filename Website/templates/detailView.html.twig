@@ -6,8 +6,13 @@
             <h1 id="Name">{{ spot.getName }}</h1>
         </div>
         <div id="spotInfo">
-            <p id="added_date">Hinzugefügt am {{ spot.getAddedDate }} durch Lorin</p>
+            <p id="added_date">Hinzugefügt am {{ spot.AddedDate }} durch {{ spot.getUsername }}</p>
             <br>
+            {% if  spot.userId == user_id %}
+                <a href="/index.php?spot_id={{ spot.spotId }}&action=delete">Delete</a>
+                <a href="/index.php?spot_id={{ spot.spotId }}&action=edit">Edit</a>
+            {% endif %}
+
             <p class="Info">{{ spot.getAddress }} <br> {{ spot.getCity }}</p>
         </div>
         <div id="Rating">
@@ -22,7 +27,7 @@
                 <h3>Galerie</h3>
                 <div class="images">
                     {% for image in spot.images %}
-                        <img class="mySlides" src="{{ constant('TARGETDIR') }}/{{ image.path }}" style="width: 100%"><a href="index.php?action=delete_image&image_id={{ image.imageId }}&spot_id={{ spot.spotId }}" style="width:100%"></a>
+                        <img class="mySlides" alt="spot-Image" src="{{ constant('TARGETDIR') }}/{{ image.path }}" style="width: 100%"><a href="index.php?action=delete_image&image_id={{ image.imageId }}&spot_id={{ spot.spotId }}" style="width:100%"></a>
                         {% else %}
                         <p>Es sind keine Bilder verfügbar</p>
                     {% endfor %}
@@ -93,14 +98,21 @@
                             <td>
                                 <img src="https://www.senertec.de/wp-content/uploads/2020/04/blank-profile-picture-973460_1280.png" alt="Profilepicture" style="height: 50px; width: 50px;">
                             </td>
-                            <td>Lorin</td>
+                            <td>{{ result.username }}</td>
                             <td>
                                 {{ include('rating.html.twig', {avg: result.rating },with_context = false) }}
                             </td>
                             <td style="max-width: 810px">{{ result.description }}</td>
-                            <td>
-                                <a href="/index.php?spot_id={{ spot.getSpotId }}&description_id={{ result.DescriptionId }}&action=delete_description">Delete</a>
-                            </td>
+                            {% if result.username == username %}
+                                <td>
+                                    <a href="/index.php?spot_id={{ spot.getSpotId }}&description_id={{ result.DescriptionId }}&action=delete_description">Delete</a>
+                                </td>
+                            {% else %}
+                                <td>
+                                </td>
+                            {% endif %}
+
+
                         </tr>
                     {% endfor %}
                 </table>

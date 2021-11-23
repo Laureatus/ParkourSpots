@@ -16,7 +16,6 @@ class User {
   private $password;
   private $permissionStatus;
   private $addedDate;
-  private $active;
   private $authToken;
   private $state;
 
@@ -36,6 +35,7 @@ class User {
     $this->email = $userdata['email'] ?? NULL;
     $this->password = $userdata['password'] ?? NULL;
     $this->permissionStatus = 2 ?? NULL;
+    $this->state = $userdata['state'] ?? NULL;
     $this->addedDate = $userdata['added_date'] ?? NULL;
     $this->authToken = rand(10000, 99999) ?? NULL;
   }
@@ -82,7 +82,7 @@ class User {
       'username' => $this->username,
       'email' => $this->email,
       // 'password',
-      // 'active' => $this->active,
+      //'active' => $this->active,
       'permission_status' => $this->permissionStatus,
       'auth_token' => $this->authToken,
     ];
@@ -117,19 +117,25 @@ class User {
     return empty($this->user_id) ? $this->insert() : $this->update();
   }
 
-  public function authenticate() {
-    $username = $this->username;
+  public function authenticate($pwinput) {
     $password = $this->password;
-    $query = 'select password from users where username = "$username";';
+    $query = 'select password from users where username = "$this->username";';
     $connection = connection::connect();
     $q = $connection->query($query);
     $q->setFetchMode(PDO::FETCH_ASSOC);
     while ($hash = $q->fetch(PDO::FETCH_COLUMN)) {
       $pwhash = $hash;
     }
-    if (password_verify($hash, $password) === TRUE){
-      echo "True";
+    if (password_verify($pwinput, $password) === TRUE && $this->state === self::STATE_ACTIVE){
+      return TRUE;
+    } else {
+      return FALSE;
     }
+  }
+
+  public function login(){
+    $_SESSION['user_id'] = $this->user_id;
+    $_SESSION['username'] = $this->username;
   }
 
   /**

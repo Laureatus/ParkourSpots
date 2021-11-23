@@ -2,10 +2,16 @@
     <div id="desktop-nav" class="container">
         <div class="row">
             <div class="col-6">
-                <ul>
+                <ul style="width: 100%">
                     <li><a href="index.php">Startseite</a></li>
-                    <li><a href="index.php?action=add">Neuer Spot</a></li>
-                    <li><a href="index.php?action=login">Login</a></li>
+                    {% if username != null %}
+                        <li><a href="index.php?action=add">Neuer Spot</a></li>
+                        <li><a href="index.php?action=logout">Logout</a></li>
+                        <li style="float: right; color: #FFF"><a href="">Hallo {{ username }}</a></li>
+                        {% else %}
+                            <li><a href="index.php?action=login">Login</a></li>
+                    {% endif %}
+
                 </ul>
             </div>
         </div>
