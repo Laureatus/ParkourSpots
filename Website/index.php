@@ -127,8 +127,12 @@ switch($action) {
       $repository = new SpotRepository();
       $spot = $repository->getSpot($spot_id);
       $debug = $spot->getUsername();
-      $username = UserStorage::getLoggedInUser()->getUsername();
-      $user_id = UserStorage::getLoggedInUser()->getUserId();
+      if (($user = UserStorage::getLoggedInUser())) {
+        $username = $user->getUsername();
+      }
+      if (($user = UserStorage::getLoggedInUser())) {
+        $user_id = $user->getUserId();
+      }
       $template = $twig->load('detailView.html.twig');
       $content = $template->render([
         'spot' => $spot,
@@ -218,9 +222,13 @@ switch($action) {
       break;
 
     default:
+      $username = "";
       $repository = new SpotRepository();
       /** @var \Parkour\Spot[] $spots */
-      $username = UserStorage::getLoggedInUser()->getUsername();
+      if (($user = UserStorage::getLoggedInUser())) {
+        $username = $user->getUsername();
+      }
+
       $spots = $repository->getAllSpots();
       $template = $twig->load('spots.html.twig');
       $content = $template->render([
