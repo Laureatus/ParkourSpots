@@ -6,14 +6,14 @@ config:
 services:
   appserver:
     overrides:
-      environment:
-        XDEBUG_MODE:
+      image: mschnauss/landophp:7.4-fpm-2
     config:
       php: .lando/php.ini
       vhosts: .lando/nginx-vhost.conf
   database:
     type: mysql:5.7
-    portforward: false
+    #Set static Port for Codeception testing
+    portforward: 60196
     creds:
       user: lorin
       password: db_P@ssw0rd
@@ -27,15 +27,16 @@ services:
 tooling:
   xdebug-on:
     service: appserver
-    description: Enable xdebug for Apache.
-    cmd: docker-php-ext-enable xdebug && /etc/init.d/apache2 reload && echo "Enabling xdebug"
+    description: Enable xdebug for nginx.
+    cmd: docker-php-ext-enable xdebug && pkill -o -USR2 php-fpm
     user: root
-
   xdebug-off:
     service: appserver
-    description: Disable xdebug for Apache.
-    cmd: rm /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && /etc/init.d/apache2 reload && echo "Disabling xdebug"
+    description: Disable xdebug for nginx.
+    cmd: rm /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && pkill -o -USR2 php-fpm
     user: root
+
+
 
 
 

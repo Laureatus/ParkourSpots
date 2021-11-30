@@ -1,0 +1,18 @@
+# Codeception Test Suite Configuration
+#
+# Suite for acceptance tests.
+# Perform tests in browser using the WebDriver or PhpBrowser.
+# If you need both WebDriver and PHPBrowser tests - create a separate suite.
+
+actor: AcceptanceTester
+modules:
+    enabled:
+        - PhpBrowser:
+            url: https://parkour.lndo.site/
+        - \Helper\Acceptance
+        - Db:
+              dsn: 'mysql:host=database;port=3306;dbname=parkour'
+              user: 'lorin'
+              password: 'db_P@ssw0rd'
+              dump: 'tests/_data/dump.sql'
+step_decorators: ~

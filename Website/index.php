@@ -127,6 +127,8 @@ switch($action) {
       $repository = new SpotRepository();
       $spot = $repository->getSpot($spot_id);
       $debug = $spot->getUsername();
+      $username = "";
+      $user_id = "";
       if (($user = UserStorage::getLoggedInUser())) {
         $username = $user->getUsername();
       }
@@ -204,8 +206,12 @@ switch($action) {
       $user = $repo->getUserByName($username);
       if ($user->authenticate($pwinput) === TRUE) {
         $user->login();
+        header('Location:index.php');
+      } else {
+        $template = $twig->load('loginform.html.twig');
+        $content = $template->render();
       }
-      header('Location:index.php');
+
 
     break;
 

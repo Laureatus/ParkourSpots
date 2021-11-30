@@ -2,3 +2,7 @@
 /Website/src/Styles/styles.css.map
 .idea
 /Website/vendor/
+/tests/_output/
+/tests/_data/
+/vendor/
+/tests/_support/
