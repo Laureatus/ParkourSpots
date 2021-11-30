@@ -1,5 +1,5 @@
 <?php
-
+include_once 'tests/settings.php';
 use Codeception\Lib\Driver\Db;
 
 
@@ -41,9 +41,9 @@ class LoginCest
     // tests
   public function login(AcceptanceTester $I)
   {
-    $username = 'Lorin';
-    $user_id = '1';
-    $password = 'Lorin';
+    $username = USERNAME;
+    $user_id = USER_ID;
+    $password = PASSWORD;
     $I->wantTo('Login with User');
     $I->amOnPage('index.php?action=login');
     $I->seeInCurrentUrl('index.php?action=login');

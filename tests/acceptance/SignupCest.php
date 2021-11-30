@@ -1,5 +1,6 @@
 <?php
 
+include_once 'tests/settings.php';
 class SignupCest
 {
     public function _before(AcceptanceTester $I)
@@ -10,9 +11,9 @@ class SignupCest
     {
       $I->wantTo("Signup a new User");
       $I->amOnPage('index.php?action=register');
-      $I->fillField('username', 'Lorin');
-      $I->fillField('email', 'Lorin');
-      $I->fillField('password', 'Lorin');
+      $I->fillField('username', USERNAME);
+      $I->fillField('email', EMAIL);
+      $I->fillField('password', PASSWORD);
       $I->click('Register');
       $I->see('Name');
     }
