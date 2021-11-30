@@ -11,24 +11,16 @@ class NewSpotCest
 
   public function _before(AcceptanceTester $I)
   {
+
   }
 
-  /**
-   * @depends login
-   */
+
   public function tryToTest(AcceptanceTester $I)
   {
-    
+    $login = new \LoginCest();
+    $login->login($I);
     $I->wantTo("Add A New Spot");
-    $I->amOnPage('index.php');
-    $user_id = $I->getUserId("Lorin");
-
-    $_SESSION['user_id'] = 1;
-    $_SESSION['username'] = "Lorin";
-
-
-
-    $I->click("Neuer Spot");
+    $I->amOnPage('index.php?action=add');
     $I->see("Spot Name:");
     $I->fillField('name', 'Test123');
     $I->fillField('address', 'Musterstrasse');

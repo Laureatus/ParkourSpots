@@ -13,5 +13,7 @@ class ViewSpotCest {
     $I->amOnPage('index.php');
     $I->click("Spielplatz");
     $I->dontSee("Notice:");
+    $I->dontSee('Edit');
+    $I->dontSee('Delete');
   }
 }

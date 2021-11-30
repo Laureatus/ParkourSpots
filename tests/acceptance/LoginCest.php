@@ -9,6 +9,35 @@ class LoginCest
 
   private $username = null;
   private $user_id = null;
+
+  /**
+   * @return null
+   */
+  public function getUsername() {
+    return $this->username;
+  }
+
+  /**
+   * @param null $username
+   */
+  public function setUsername($username): void {
+    $this->username = $username;
+  }
+
+  /**
+   * @return null
+   */
+  public function getUserId() {
+    return $this->user_id;
+  }
+
+  /**
+   * @param null $user_id
+   */
+  public function setUserId($user_id): void {
+    $this->user_id = $user_id;
+  }
+
     // tests
   public function login(AcceptanceTester $I)
   {
@@ -21,8 +50,10 @@ class LoginCest
     $I->fillField('username', $username);
     $I->fillField('password', $password);
     $I->click('input[type=submit]');
-    $this->username = $I->setCookie('user_name', $username);
-    $this->user_id = $I->setCookie('user_id', $user_id);
     $I->dontSeeInCurrentUrl('action=login');
+    $this->user_id = $user_id;
+    $this->username = $username;
   }
+
+
 }
