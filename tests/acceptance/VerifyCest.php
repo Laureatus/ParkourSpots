@@ -1,6 +1,7 @@
 <?php
 
 include_once 'tests/settings.php';
+
 class VerifyCest
 {
   public function _before(AcceptanceTester $I)

@@ -6,9 +6,6 @@ use Parkour\Spot;
 class NewSpotCest
 {
 
-
-
-
   public function _before(AcceptanceTester $I)
   {
 
@@ -26,20 +23,16 @@ class NewSpotCest
     $I->fillField('address', ADDRESS);
     $I->selectOption('form select[name=city]', CITY);
     $I->click('Submit');
-    $I->see(SPOT_NAME);
+    $I->dontSeeInCurrentUrl('?action=add');
+    $I->see('Neuer Spot wurde erfolgreich hinzugefügt');
     $I->seeInDatabase('spot', ['name' => SPOT_NAME]);
 
 
 
     //$I->seeInDatabase('spot', ['user_id' => $user_id, 'name' => $name, 'address' => $address, 'city' => $city,]);
 
-
-
-
-
-
-
-
-
   }
+  
+
+
 }

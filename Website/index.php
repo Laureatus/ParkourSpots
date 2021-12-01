@@ -242,6 +242,7 @@ switch($action) {
        'spots' => $spots,
        'review' => new \Parkour\ReviewRepository(),
        'username' => $username,
+        'message' => Message::getMessage()
       ]);
 
 
