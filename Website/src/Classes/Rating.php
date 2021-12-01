@@ -1,10 +1,12 @@
 <?php
 
-
 namespace Parkour;
 
-
-
+/**
+ * Class Rating
+ *
+ * @package Parkour
+ */
 class Rating {
 
   private $rating_id;
@@ -53,14 +55,22 @@ class Rating {
     $this->spot_id = $spot_id;
   }
 
-  function insert_rating($spot_id, $description_id, $rating){
+
+  /**
+   * @param $spot_id
+   * @param $description_id
+   * @param $rating
+   *
+   * @return false|string
+   */
+  public function insert_rating($spot_id, $description_id, $rating) {
     $connection = connection::connect();
     $statementSpot = "INSERT INTO rating (spot_id, description_id, rating) VALUES (:spot_id, :description_id, :rating)";
     $insertSpot = $connection->prepare($statementSpot);
     $result = $insertSpot->execute([
       ':spot_id' => $spot_id,
       ':description_id' => $description_id,
-      ':rating' => $rating
+      ':rating' => $rating,
     ]);
     if ($result === TRUE) {
       return $connection->lastInsertId();

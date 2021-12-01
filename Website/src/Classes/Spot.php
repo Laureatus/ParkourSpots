@@ -1,8 +1,12 @@
 <?php
 
 namespace Parkour;
-use PDO;
 
+/**
+ * Class Spot
+ *
+ * @package Parkour
+ */
 class Spot {
 
   private $spot_id;
@@ -164,6 +168,9 @@ class Spot {
     $this->user_id = $user_id;
   }
 
+  /**
+   * @return bool|string
+   */
   public function save() {
     $connection = connection::connect();
 
@@ -174,7 +181,7 @@ class Spot {
         ':user_id' => UserStorage::getLoggedInUser()->getUserId(),
         ':name' => $this->name,
         ':address' => $this->address,
-        ':city' => $this->city
+        ':city' => $this->city,
       ]);
       if ($result === TRUE) {
         $this->spot_id = $connection->lastInsertId();
@@ -203,6 +210,9 @@ class Spot {
     return $this->description_repo->getReviews($this->spot_id);
   }
 
+  /**
+   * @return int|mixed
+   */
   public function getRatingAvg() {
     if (!$this->spot_id) {
       return 0;
@@ -211,6 +221,9 @@ class Spot {
     return $this->description_repo->getRatingAvg($this->spot_id);
   }
 
+  /**
+   * @return array
+   */
   public function getImages() {
     $connection = Connection::connect();
     $statement = $connection->prepare("SELECT * FROM images WHERE spot_id=?");
@@ -225,18 +238,19 @@ class Spot {
     return $images;
   }
 
+  /**
+   * @return mixed|string
+   */
   public function getUsername() {
     $username = "";
-    $query = "SELECT username FROM spot INNER JOIN users USING(user_id) WHERE spot_id = ".$this->spot_id.";";
+    $query = "SELECT username FROM spot INNER JOIN users USING(user_id) WHERE spot_id = " . $this->spot_id . ";";
     $connection = connection::connect();
     $q = $connection->query($query);
-    $q->setFetchMode(PDO::FETCH_ASSOC);
-    while ($user = $q->fetch(PDO::FETCH_COLUMN)) {
+    $q->setFetchMode(\PDO::FETCH_ASSOC);
+    while ($user = $q->fetch(\PDO::FETCH_COLUMN)) {
       $username = $user;
     }
     return $username;
   }
-
-
 
 }

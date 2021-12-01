@@ -1,11 +1,21 @@
 <?php
 
-
 namespace Parkour;
 
+/**
+ * Class ReviewForm
+ *
+ * @package Parkour
+ */
 class ReviewForm {
+
+  /**
+   * @param $spot_id
+   *
+   * @return string
+   */
   public static function render($spot_id) {
-     return <<<FORM
+    return <<<FORM
     <form enctype='multipart/form-data' action='index.php' method='post'>
         <input type='hidden' id='action' name='action' value='submit_description'><br>
         <input type='hidden' id='spot_id' name='spot_id' value='$spot_id'><br>
@@ -17,4 +27,5 @@ class ReviewForm {
     </form>
 FORM;
   }
+
 }

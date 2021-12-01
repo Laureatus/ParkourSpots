@@ -1,10 +1,9 @@
 <?php
 
-
 namespace Parkour;
 
 /**
- * Class Message
+ * Class Message.
  */
 class Message {
 
@@ -18,11 +17,12 @@ class Message {
   /**
    * @return mixed
    */
-  public static function getMessage(){
+  public static function getMessage() {
     if (isset($_SESSION['message'])) {
       $message = $_SESSION['message'];
       unset($_SESSION['message']);
       return $message;
     }
   }
+
 }

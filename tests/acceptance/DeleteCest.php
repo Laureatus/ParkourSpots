@@ -1,13 +1,22 @@
 <?php
+
 include 'tests/settings.php';
+
+/**
+ * Class DeleteCest
+ */
 class DeleteCest {
-  public function _before(AcceptanceTester $I)
-  {
+
+  /**
+   * @param \AcceptanceTester $I
+   */
+  public function _before(AcceptanceTester $I) {
   }
 
-  // tests
-  public function delete(AcceptanceTester $I)
-  {
+  /**
+   * Tests.
+   */
+  public function delete(AcceptanceTester $I) {
     $spot = SPOT_NAME;
     $user = new LoginCest();
     $user->login($I);
@@ -22,10 +31,14 @@ class DeleteCest {
     $I->dontSeeInDatabase('spot', ['name' => 'Spielplatz']);
   }
 
-  public function deletePermissions(AcceptanceTester $I){
+  /**
+   * @param \AcceptanceTester $I
+   */
+  public function deletePermissions(AcceptanceTester $I) {
     $I->wantTo('Restrict Guest USers from Deleting a Spot');
     $I->amOnPage('index.php?spot_id=25&action=delete');
     $I->dontSee("Spot wurde erfolgreich gelöscht");
     $I->see("Sie müssen angemeldet sein um diesen Spot löschen zu können");
   }
+
 }

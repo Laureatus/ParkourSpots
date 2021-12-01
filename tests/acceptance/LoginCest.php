@@ -1,14 +1,14 @@
 <?php
+
 include_once 'tests/settings.php';
-use Codeception\Lib\Driver\Db;
 
+/**
+ * Class LoginCest
+ */
+class LoginCest {
 
-class LoginCest
-
-{
-
-  private $username = null;
-  private $user_id = null;
+  private $username = NULL;
+  private $user_id = NULL;
 
   /**
    * @return null
@@ -38,9 +38,10 @@ class LoginCest
     $this->user_id = $user_id;
   }
 
-    // tests
-  public function login(AcceptanceTester $I)
-  {
+  /**
+   * Tests.
+   */
+  public function login(AcceptanceTester $I) {
     $username = USERNAME;
     $user_id = USER_ID;
     $password = PASSWORD;
@@ -54,6 +55,5 @@ class LoginCest
     $this->user_id = $user_id;
     $this->username = $username;
   }
-
 
 }

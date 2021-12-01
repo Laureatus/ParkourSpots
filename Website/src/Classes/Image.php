@@ -1,40 +1,74 @@
 <?php
 
-
 namespace Parkour;
-use PDO;
 
+/**
+ * Class Image.
+ *
+ * @package Parkour
+ */
 class Image {
 
+  /**
+   * Stores ImageId.
+   *
+   * @var mixed|null
+   */
+  private $imageId;
 
-
-  private $image_id;
+  /**
+   * Stores Path to Spot Images Folder.
+   *
+   * @var mixed|null
+   */
   private $path;
+
+  /**
+   * Name of the Image.
+   *
+   * @var mixed|null
+   */
   private $name;
+
+  /**
+   * Stores the image filesize.
+   *
+   * @var mixed|null
+   */
   private $size;
-  private $spot_id;
 
+  /**
+   * Stores the spotId.
+   *
+   * @var mixed|null
+   */
+  private $spotId;
 
+  /**
+   * Image constructor.
+   *
+   * @param array $data
+   */
   public function __construct(array $data) {
     $this->name = $data['name'] ?? NULL;
     $this->path = $data['path'] ?? NULL;
     $this->size = $data['size'] ?? NULL;
-    $this->spot_id = $data['spot_id'] ?? NULL;
-    $this->image_id = $data['image_id'] ?? NULL;
+    $this->spotId = $data['spot_id'] ?? NULL;
+    $this->imageId = $data['image_id'] ?? NULL;
   }
 
   /**
-   * @return mixed
+   * @return mixed|null
    */
   public function getImageId() {
-    return $this->image_id;
+    return $this->imageId;
   }
 
   /**
-   * @param mixed $image_id
+   * @param mixed $imageId
    */
-  public function setImageId($image_id) {
-    $this->image_id = $image_id;
+  public function setImageId($imageId) {
+    $this->imageId = $imageId;
   }
 
   /**
@@ -83,28 +117,28 @@ class Image {
    * @return mixed
    */
   public function getSpotId() {
-    return $this->spot_id;
+    return $this->spotId;
   }
 
   /**
-   * @param mixed $spot_id
+   * @param mixed $spotId
    */
-  public function setSpotId($spot_id) {
-    $this->spot_id = $spot_id;
+  public function setSpotId($spotId) {
+    $this->spotId = $spotId;
   }
 
+  /**
+   *
+   */
+  public function render_images($spot_id) {
 
-
-  function render_images($spot_id) {
-
-    // SELECT * FROM images where spot_id=$spot_id;
-
+    // SELECT * FROM images where spot_id=$spot_id;.
     $connection = connection::connect();
-    $query = "SELECT * FROM images WHERE spot_id=".$spot_id."." ;
+    $query = "SELECT * FROM images WHERE spot_id=" . $spot_id . ".";
     $q = $connection->query($query);
-    $q->setFetchMode(PDO::FETCH_ASSOC);
+    $q->setFetchMode(\PDO::FETCH_ASSOC);
 
-    $directory = TARGETDIR.$spot_id;
+    $directory = TARGETDIR . $spot_id;
 
     if (!is_dir($directory)) {
       return "Couldn't find enclosing image folder:  " . $directory;
@@ -116,24 +150,26 @@ class Image {
     }
 
     $images = '';
-    // Loop über SQL-Result -> id, path, name
+    // Loop über SQL-Result -> id, path, name.
     foreach ($q as $key => $image) {
-      $images.= "<img alt='spot-image' src=\"".TARGETDIR.$image['path']."\"><a href=\"index.php?action=delete_image&image_id=".$image['image_id']."&spot_id=$spot_id\">Delete</a>";
+      $images .= "<img alt='spot-image' src=\"" . TARGETDIR . $image['path'] . "\"><a href=\"index.php?action=delete_image&image_id=" . $image['image_id'] . "&spot_id=$spot_id\">Delete</a>";
     }
     closedir($handle);
 
     return $images;
   }
 
-  // $file = $_FILES['my_file']
-
-  function upload_image($spot_id, $image) {
-    if ($image['name']!=="") {
-      $dir = TARGETDIR.$spot_id;
+  /**
+   * $file = $_FILES['my_file']
+   */
+  public function upload_image($spot_id, $image) {
+    if ($image['name'] !== "") {
+      $dir = TARGETDIR . $spot_id;
       if (is_dir($dir)) {
         $target_dir = $dir;
-      } else {
-        mkdir($dir,0777,false, null);
+      }
+      else {
+        mkdir($dir, 0777, FALSE, NULL);
         $target_dir = $dir;
         chmod($target_dir, 0777);
       }
@@ -142,7 +178,7 @@ class Image {
       $filename = $path['filename'];
       $ext = $path['extension'];
       $temp_name = $image['tmp_name'];
-      $path_filename_ext = $target_dir."/".$filename.".".$ext;
+      $path_filename_ext = $target_dir . "/" . $filename . "." . $ext;
       $db_path = "$spot_id/$filename.$ext";
 
       if (file_exists($path_filename_ext)) {
@@ -157,22 +193,24 @@ class Image {
           ':db_path' => $db_path,
           ':spot_id' => $spot_id,
         ]);
-        return move_uploaded_file($temp_name,$path_filename_ext);
+        return move_uploaded_file($temp_name, $path_filename_ext);
       }
-
 
       return $errors;
     }
 
   }
 
-  function deleteImage($image_id){
+  /**
+   *
+   */
+  public function deleteImage($image_id) {
     $connection = connection::connect();
-    $query = "SELECT * FROM images WHERE image_id=".$image_id.".";
+    $query = "SELECT * FROM images WHERE image_id=" . $image_id . ".";
     $results = $connection->query($query);
-    $results->setFetchMode(PDO::FETCH_ASSOC);
+    $results->setFetchMode(\PDO::FETCH_ASSOC);
     foreach ($results as $key => $result) {
-      $filepath = TARGETDIR.$result['path'];
+      $filepath = TARGETDIR . $result['path'];
       if (is_file($filepath)) {
         unlink($filepath);
       }
@@ -180,11 +218,15 @@ class Image {
     }
   }
 
-  function check_dir($spot_id){
+  /**
+   *
+   */
+  public function check_dir($spot_id) {
     $connection = connection::connect();
     $sql = "select count(*) from images where spot_id = $spot_id;";
     $res = $connection->query($sql);
     $count = $res->fetchColumn();
     return $count;
   }
+
 }

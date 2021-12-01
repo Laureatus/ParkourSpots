@@ -1,16 +1,17 @@
 <?php
 
-
 namespace Parkour;
-use PDO;
 
+/**
+ *
+ */
 class User {
 
   const STATE_UNCONFIRMED = 'UNCONFIRMED';
   const STATE_ACTIVE = 'ACTIVE';
   const STATE_BLOCKED = 'BLOCKED';
 
-  private $user_id;
+  private $userId;
   private $username;
   private $email;
   private $password;
@@ -24,13 +25,14 @@ class User {
    */
   private $connection;
 
-
+  /**
+   *
+   */
   public function __construct(array $userdata) {
 
     $this->connection = connection::connect();
 
-
-    $this->user_id = $userdata['user_id'] ?? NULL;
+    $this->userId = $userdata['user_id'] ?? NULL;
     $this->username = $userdata['username'] ?? NULL;
     $this->email = $userdata['email'] ?? NULL;
     $this->password = $userdata['password'] ?? NULL;
@@ -40,14 +42,23 @@ class User {
     $this->authToken = rand(10000, 99999) ?? NULL;
   }
 
+  /**
+   *
+   */
   public function setUserActive() {
     $this->state = self::STATE_ACTIVE;
   }
 
+  /**
+   *
+   */
   public function setUserBlocked() {
     $this->state = self::STATE_BLOCKED;
   }
 
+  /**
+   *
+   */
   private function insert() {
 
     $fields = [
@@ -76,13 +87,16 @@ class User {
     return $result;
   }
 
+  /**
+   *
+   */
   private function update() {
 
     $fields = [
       'username' => $this->username,
       'email' => $this->email,
       // 'password',
-      //'active' => $this->active,
+      // 'active' => $this->active,
       'permission_status' => $this->permissionStatus,
       'auth_token' => $this->authToken,
     ];
@@ -93,7 +107,7 @@ class User {
 
     $updates = [];
     foreach (array_keys($fields) as $field) {
-       $updates[] = sprintf('%s=:%s', $field, $field);
+      $updates[] = sprintf('%s=:%s', $field, $field);
     }
 
     $update_string = implode(', ', $updates);
@@ -101,40 +115,50 @@ class User {
     $statementUser = sprintf('UPDATE users SET %s WHERE user_id=:user_id;', $update_string);
     $updateUser = $this->connection->prepare($statementUser);
 
-
-    $fields['user_id'] = $this->user_id;
+    $fields['user_id'] = $this->userId;
 
     $params = [];
     foreach ($fields as $key => $value) {
-      $params[sprintf(":%s",$key)] = $value;
+      $params[sprintf(":%s", $key)] = $value;
     }
 
     $result = $updateUser->execute($params);
     return $result;
   }
 
+  /**
+   *
+   */
   public function save() {
-    return empty($this->user_id) ? $this->insert() : $this->update();
+    return empty($this->userId) ? $this->insert() : $this->update();
   }
 
+  /**
+   *
+   */
   public function authenticate($pwinput) {
     $password = $this->password;
     $query = 'select password from users where username = "$this->username";';
     $connection = connection::connect();
     $q = $connection->query($query);
-    $q->setFetchMode(PDO::FETCH_ASSOC);
-    while ($hash = $q->fetch(PDO::FETCH_COLUMN)) {
+    $q->setFetchMode(\PDO::FETCH_ASSOC);
+    while ($hash = $q->fetch(\PDO::FETCH_COLUMN)) {
       $pwhash = $hash;
     }
-    if (password_verify($pwinput, $password) === TRUE && $this->state === self::STATE_ACTIVE){
+    if (password_verify($pwinput, $password) === TRUE && $this->state === self::STATE_ACTIVE) {
       return TRUE;
-    } else {
+    }
+    else {
       return FALSE;
     }
   }
 
-  public function login(){
-    $_SESSION['user_id'] = $this->user_id;
+
+  /**
+   * Set username and UserId as Session variables
+   */
+  public function login() {
+    $_SESSION['user_id'] = $this->userId;
     $_SESSION['username'] = $this->username;
   }
 
@@ -142,14 +166,14 @@ class User {
    * @return mixed
    */
   public function getUserId() {
-    return $this->user_id;
+    return $this->userId;
   }
 
   /**
-   * @param mixed $user_id
+   * @param mixed $userId
    */
-  public function setUserId($user_id) {
-    $this->user_id = $user_id;
+  public function setUserId($userId) {
+    $this->userId = $userId;
   }
 
   /**

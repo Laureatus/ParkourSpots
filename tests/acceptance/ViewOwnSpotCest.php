@@ -1,14 +1,22 @@
 <?php
 
 include_once 'tests/settings.php';
+
+/**
+ * Class ViewOwnSpotCest
+ */
 class ViewOwnSpotCest {
-  public function _before(AcceptanceTester $I)
-  {
+
+  /**
+   * @param \AcceptanceTester $I
+   */
+  public function _before(AcceptanceTester $I) {
   }
 
-  // tests
-  public function viewOwnSpot(AcceptanceTester $I)
-  {
+  /**
+   * Tests.
+   */
+  public function viewOwnSpot(AcceptanceTester $I) {
     $spot = SPOT_NAME;
     $user = new LoginCest();
     $user->login($I);
@@ -19,4 +27,5 @@ class ViewOwnSpotCest {
     $I->see('Delete');
     $I->see('Edit');
   }
+
 }

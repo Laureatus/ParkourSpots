@@ -6,3 +6,5 @@
 /tests/_data/
 /vendor/
 /tests/_support/
+/.idea/inspectionProfiles/Project_Default.xml
+/.idea/php.xml

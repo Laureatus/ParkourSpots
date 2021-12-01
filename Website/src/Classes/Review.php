@@ -1,9 +1,12 @@
 <?php
 
-
 namespace Parkour;
-use PDO;
 
+/**
+ * Class Review
+ *
+ * @package Parkour
+ */
 class Review {
 
   private $description_id;
@@ -12,8 +15,11 @@ class Review {
   private $comment;
   private $rating;
 
-
-
+  /**
+   * Review constructor.
+   *
+   * @param array $fields
+   */
   public function __construct(array $fields) {
     $this->username = $fields['username'] ?? '';
     $this->comment = $fields['comment'] ?? '';
@@ -35,7 +41,6 @@ class Review {
   public function setUsername($username): void {
     $this->username = $username;
   }
-
 
   /**
    * @return mixed
@@ -93,18 +98,26 @@ class Review {
     $this->description = $description;
   }
 
+  /**
+   * @param $description_id
+   *
+   * @return \Parkour\Review
+   */
   public static function loadById($description_id) {
-      $connection = connection::connect();
+    $connection = connection::connect();
 
-      // Todo: Prepared Statement einfügen
-      $statement = $connection->prepare("SELECT * FROM review WHERE description_id=?") ;
-      if ($statement->execute([$description_id])) {
-        $array = $statement->fetch(PDO::FETCH_ASSOC);
-        return new self($array);
-      }
+    // @todo Prepared Statement einfügen
+    $statement = $connection->prepare("SELECT * FROM review WHERE description_id=?");
+    if ($statement->execute([$description_id])) {
+      $array = $statement->fetch(\PDO::FETCH_ASSOC);
+      return new self($array);
+    }
   }
 
-  function delete() {
+  /**
+   * @return bool
+   */
+  public function delete() {
     if (!empty($this->description_id)) {
       $connection = connection::connect();
       $query = "delete from review where description_id = ?";
@@ -113,18 +126,24 @@ class Review {
     }
   }
 
-
-
-  function insertDescription($spot_id, $username, $comment, $rating){
+  /**
+   * @param $spot_id
+   * @param $username
+   * @param $comment
+   * @param $rating
+   *
+   * @return false|string
+   */
+  public function insertDescription($spot_id, $username, $comment, $rating) {
     $connection = Connection::connect();
-    if($rating <= 10 && $rating > 0){
+    if ($rating <= 10 && $rating > 0) {
       $statementSpot = "INSERT INTO review (spot_id, username, comment, rating) VALUES (:spot_id, :username, :comment, :rating);";
       $insertSpot = $connection->prepare($statementSpot);
       $result = $insertSpot->execute([
         ':spot_id' => $spot_id,
         ':username' => $username,
         ':comment' => htmlspecialchars($comment),
-        ':rating' => $rating
+        ':rating' => $rating,
       ]);
       if ($result === TRUE) {
         return $connection->lastInsertId();

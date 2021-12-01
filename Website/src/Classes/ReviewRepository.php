@@ -1,11 +1,13 @@
 <?php
 
-
 namespace Parkour;
-use Parkour\connection;
 
+/**
+ * Class ReviewRepository
+ *
+ * @package Parkour
+ */
 class ReviewRepository {
-
 
   /**
    * Gets all reviews for a given spot id.
@@ -14,10 +16,10 @@ class ReviewRepository {
    *
    * @return \Parkour\Review[]
    */
-  public function getReviews($spot_id){
+  public function getReviews($spot_id) {
     $connection = connection::connect();
-    // Todo: Prepared Statement einfügen
-    $query = "SELECT * FROM review WHERE spot_id=$spot_id" ;
+    // @todo Prepared Statement einfügen
+    $query = "SELECT * FROM review WHERE spot_id=$spot_id";
     $description = $connection->query($query);
     $description->setFetchMode(\PDO::FETCH_ASSOC);
     $description->execute();
@@ -29,13 +31,18 @@ class ReviewRepository {
     return $descriptions;
   }
 
-  public function getRatingAvg($spot_id){
+  /**
+   * @param $spot_id
+   *
+   * @return int|mixed
+   */
+  public function getRatingAvg($spot_id) {
     $connection = connection::connect();
-    // Todo: Prepared Statement einfügen
+    // @todo Prepared Statement einfügen
     $query = $connection->prepare("SELECT CAST(AVG(rating) AS DECIMAL(10,0)) FROM review WHERE spot_id=$spot_id;");
     $query->execute();
     $result = $query->fetchColumn();
-    if ($result !== NULL){
+    if ($result !== NULL) {
       return $result;
     }
     else {
