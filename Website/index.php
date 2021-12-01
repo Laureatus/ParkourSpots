@@ -36,12 +36,24 @@ if (isset($_SESSION['user_id'])){
 
 switch($action) {
 
-     case 'delete':
-         if (delete_spot($spot_id) && remove_directory($spot_id)) {
-             Message::setMessage("Spot wurde erfolgreich gelöscht");
-             $content = header("Location: ../../../index.php");
-         }
-         break;
+  case 'delete':
+    if (isset($_SESSION['user_id']) && isset($_SESSION['username']) ){
+      $user_id = UserStorage::getLoggedInUser()->getUserId();
+      $repo = new SpotRepository();
+      $spot = $repo::getSpot($spot_id);
+      $spotOwner = $spot->getUserId();
+      if ($spotOwner === $user_id) {
+        delete_spot($spot_id);
+        remove_directory($spot_id);
+        Message::setMessage("Spot wurde erfolgreich gelöscht");
+        $content = header("Location: index.php");
+      }
+    }
+    else {
+      Message::setMessage("Sie müssen angemeldet sein um diesen Spot löschen zu können");
+      $content = header("Location: index.php");
+    }
+    break;
 
      case 'edit':
 
@@ -59,11 +71,16 @@ switch($action) {
      case 'add':
        $spot = new \Parkour\Spot($_REQUEST);
        $repository = new \Parkour\SpotRepository();
+       $authorized = TRUE;
        if (!empty($spot_id)) {
          $spot = $repository::getSpot($spot_id);
        }
        elseif (!empty($values)) {
          $spot = $values;
+       }
+
+       if (!isset($_SESSION['user_id']) && !isset($_SESSION['username'])){
+         $authorized = FALSE;
        }
        $form = $twig->load('spotform.html.twig');
 
@@ -72,6 +89,7 @@ switch($action) {
          'form' => $form,
          'spot_id' => $spot_id,
          'cities' => get_all_cities(),
+         'authorized' => $authorized,
        ]);
        break;
 

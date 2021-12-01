@@ -21,4 +21,11 @@ class DeleteCest {
     $I->dontSeeInCurrentUrl('&action=detail_view');
     $I->dontSeeInDatabase('spot', ['name' => 'Spielplatz']);
   }
+
+  public function deletePermissions(AcceptanceTester $I){
+    $I->wantTo('Restrict Guest USers from Deleting a Spot');
+    $I->amOnPage('index.php?spot_id=25&action=delete');
+    $I->dontSee("Spot wurde erfolgreich gelöscht");
+    $I->see("Sie müssen angemeldet sein um diesen Spot löschen zu können");
+  }
 }

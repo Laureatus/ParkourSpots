@@ -59,6 +59,7 @@ function delete_spot($spot_id) {
 
 /**
  * @param $spot_id
+ * @return bool
  */
 function remove_directory($spot_id){
     $dir = "src/uploads/$spot_id";

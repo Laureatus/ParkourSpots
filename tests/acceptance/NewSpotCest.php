@@ -6,12 +6,6 @@ use Parkour\Spot;
 class NewSpotCest
 {
 
-  public function _before(AcceptanceTester $I)
-  {
-
-  }
-
-
   public function newSpot(AcceptanceTester $I)
   {
     $login = new \LoginCest();
@@ -26,13 +20,15 @@ class NewSpotCest
     $I->dontSeeInCurrentUrl('?action=add');
     $I->see('Neuer Spot wurde erfolgreich hinzugefügt');
     $I->seeInDatabase('spot', ['name' => SPOT_NAME]);
-
-
-
-    //$I->seeInDatabase('spot', ['user_id' => $user_id, 'name' => $name, 'address' => $address, 'city' => $city,]);
-
   }
-  
+
+  public function newSpotDenied(AcceptanceTester $I)
+  {
+    $I->wantTo("Restrict access to Form for unregistered Users");
+    $I->amOnPage('index.php?action=add');
+    $I->see("Sie müssen angemeldet sein um diese Seite sehen zu können");
+  }
+
 
 
 }
