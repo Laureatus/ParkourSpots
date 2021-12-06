@@ -3,7 +3,7 @@
 namespace Parkour;
 
 /**
- * Class UserRepository
+ * Class UserRepository.
  *
  * @package Parkour
  */
@@ -34,13 +34,11 @@ class UserRepository {
     return $users;
   }
 
-
   /**
    * @param $user_id
    *
    * @return \Parkour\user
    */
-
   public function getUser($user_id) {
     $statement = $this->connection->prepare('select user_id, username, email, password, added_time, state, permission_status, auth_token from users WHERE user_id = ?');
 

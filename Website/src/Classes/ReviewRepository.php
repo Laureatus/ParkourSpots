@@ -3,7 +3,7 @@
 namespace Parkour;
 
 /**
- * Class ReviewRepository
+ * Class ReviewRepository.
  *
  * @package Parkour
  */

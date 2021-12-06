@@ -3,7 +3,7 @@
 namespace Parkour;
 
 /**
- * Class Rating
+ * Class Rating.
  *
  * @package Parkour
  */
@@ -54,7 +54,6 @@ class Rating {
   public function setSpotId($spot_id) {
     $this->spot_id = $spot_id;
   }
-
 
   /**
    * @param $spot_id

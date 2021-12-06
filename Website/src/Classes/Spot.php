@@ -3,7 +3,7 @@
 namespace Parkour;
 
 /**
- * Class Spot
+ * Class Spot.
  *
  * @package Parkour
  */

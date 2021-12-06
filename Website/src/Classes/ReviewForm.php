@@ -3,7 +3,7 @@
 namespace Parkour;
 
 /**
- * Class ReviewForm
+ * Class ReviewForm.
  *
  * @package Parkour
  */

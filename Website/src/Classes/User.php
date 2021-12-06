@@ -153,9 +153,8 @@ class User {
     }
   }
 
-
   /**
-   * Set username and UserId as Session variables
+   * Set username and UserId as Session variables.
    */
   public function login() {
     $_SESSION['user_id'] = $this->userId;
