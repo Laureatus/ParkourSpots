@@ -8,7 +8,7 @@ namespace Parkour;
 class Message {
 
   /**
-   * @param $message
+   * @param string $message
    */
   public static function setMessage($message) {
     $_SESSION['message'] = $message;

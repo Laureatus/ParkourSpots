@@ -7,7 +7,7 @@ include_once 'src/Scripts/settings.php';
 /**
  * Creates a single instance of Connection.
  *
- * @param $instance
+ * @param mixed $instance
  *
  * @package Parkour
  */

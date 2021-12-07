@@ -16,7 +16,7 @@ class SpotRepository {
    *   Return Spots Array.
    */
   public function getAllSpots() {
-    $connection = connection::connect();
+    $connection = Connection::connect();
     $query = "select spot_id, name, address, city, date_format(added_date, '%d.%m.%Y') as added_date from spot inner join location using(city);";
     $q = $connection->query($query);
     $q->setFetchMode(\PDO::FETCH_ASSOC);
@@ -38,7 +38,7 @@ class SpotRepository {
    *   Return new Spot Object.
    */
   public static function getSpot($spot_id) {
-    $connection = connection::connect();
+    $connection = Connection::connect();
     $statement = $connection->prepare('SELECT spot_id, user_id, name, address, city, added_date FROM spot INNER JOIN location USING(city) WHERE spot_id = ?');
 
     if ($statement->execute([$spot_id])) {

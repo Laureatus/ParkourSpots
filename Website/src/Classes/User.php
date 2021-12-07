@@ -30,16 +30,16 @@ class User {
    */
   public function __construct(array $userdata) {
 
-    $this->connection = connection::connect();
+    $this->connection = Connection::connect();
 
     $this->userId = $userdata['user_id'] ?? NULL;
     $this->username = $userdata['username'] ?? NULL;
     $this->email = $userdata['email'] ?? NULL;
     $this->password = $userdata['password'] ?? NULL;
-    $this->permissionStatus = 2 ?? NULL;
+    $this->permissionStatus = 2;
     $this->state = $userdata['state'] ?? NULL;
     $this->addedDate = $userdata['added_date'] ?? NULL;
-    $this->authToken = rand(10000, 99999) ?? NULL;
+    $this->authToken = rand(10000, 99999);
   }
 
   /**
@@ -139,7 +139,7 @@ class User {
   public function authenticate($pwinput) {
     $password = $this->password;
     $query = 'select password from users where username = "$this->username";';
-    $connection = connection::connect();
+    $connection = Connection::connect();
     $q = $connection->query($query);
     $q->setFetchMode(\PDO::FETCH_ASSOC);
     while ($hash = $q->fetch(\PDO::FETCH_COLUMN)) {

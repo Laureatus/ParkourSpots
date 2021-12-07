@@ -285,7 +285,7 @@ class Spot {
    *   Return SpotID or a PDO execute() statement.
    */
   public function save() {
-    $connection = connection::connect();
+    $connection = Connection::connect();
 
     if (empty($this->spotId)) {
       $statementSpot = "INSERT INTO spot (user_id,name,address,city) VALUES (:user_id, :name,:address,:city);";
@@ -368,7 +368,7 @@ class Spot {
   public function getUsername() {
     $username = "";
     $query = "SELECT username FROM spot INNER JOIN users USING(user_id) WHERE spot_id = " . $this->spotId . ";";
-    $connection = connection::connect();
+    $connection = Connection::connect();
     $q = $connection->query($query);
     $q->setFetchMode(\PDO::FETCH_ASSOC);
     while ($user = $q->fetch(\PDO::FETCH_COLUMN)) {

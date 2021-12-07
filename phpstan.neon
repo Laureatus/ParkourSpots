@@ -1,8 +1,11 @@
 parameters:
-	level: 1
+	level: 4
+	bootstrapFiles:
+	    - Website/src/Scripts/settings.php
 	paths:
 		- Website
 	excludePaths:
 	    analyse:
 	        - vendor
 	        - Website/vendor
+	        - Website/autoload.php

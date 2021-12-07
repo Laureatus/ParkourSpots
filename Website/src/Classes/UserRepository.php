@@ -15,7 +15,7 @@ class UserRepository {
    * UserRepository constructor.
    */
   public function __construct() {
-    $this->connection = connection::connect();
+    $this->connection = Connection::connect();
   }
 
   /**
@@ -29,7 +29,7 @@ class UserRepository {
 
     $users = [];
     while ($user = $q->fetch(\PDO::FETCH_ASSOC)) {
-      $users[] = new user($user);
+      $users[] = new User($user);
     }
     return $users;
   }
@@ -37,27 +37,27 @@ class UserRepository {
   /**
    * @param $user_id
    *
-   * @return \Parkour\user
+   * @return \Parkour\User
    */
   public function getUser($user_id) {
     $statement = $this->connection->prepare('select user_id, username, email, password, added_time, state, permission_status, auth_token from users WHERE user_id = ?');
 
     if ($statement->execute([$user_id])) {
       $array = $statement->fetch(\PDO::FETCH_ASSOC);
-      return new user($array);
+      return new User($array);
     }
   }
 
   /**
    * @param $username
    *
-   * @return \Parkour\user
+   * @return \Parkour\User
    */
   public function getUserByName($username) {
     $statement = $this->connection->prepare('select user_id, username, email, password, added_time, state, permission_status, auth_token from users WHERE username = ?');
     if ($statement->execute([$username])) {
       $array = $statement->fetch(\PDO::FETCH_ASSOC);
-      return new user($array);
+      return new User($array);
     }
   }
 

@@ -77,7 +77,7 @@ class Review {
    * @param mixed $username
    *   set Username.
    */
-  public function setUsername($username): void {
+  public function setUsername($username) {
     $this->username = $username;
   }
 
@@ -97,67 +97,67 @@ class Review {
    * @param mixed $rating
    *   Return Rating.
    */
-  public function setRating($rating): void {
+  public function setRating($rating) {
     $this->rating = $rating;
   }
 
   /**
    * Get the Description ID of the Review.
    *
-   * @return mixed|string
+   * @return int
    *   Return DescriptionId
    */
-  public function getDescriptionId(): string {
+  public function getDescriptionId() {
     return $this->descriptionId;
   }
 
   /**
    * Set a new Description ID for the Review.
    *
-   * @param mixed|string $descriptionId
+   * @param int $descriptionId
    *   Set new Description ID.
    */
-  public function setDescriptionId(string $descriptionId) {
+  public function setDescriptionId($descriptionId) {
     $this->descriptionId = $descriptionId;
   }
 
   /**
    * Get the ID of the Spot in which the Review was written.
    *
-   * @return mixed|string
+   * @return int
    *   Return spotId.
    */
-  public function getSpotId(): string {
+  public function getSpotId() {
     return $this->spotId;
   }
 
   /**
    * Assign the Review to a new Spot.
    *
-   * @param mixed|string $spotId
+   * @param int $spotId
    *   Set new spotId.
    */
-  public function setSpotId(string $spotId) {
+  public function setSpotId($spotId) {
     $this->spotId = $spotId;
   }
 
   /**
    * Get the Description written in the Review.
    *
-   * @return mixed|string
+   * @return string
    *   Return the Description.
    */
-  public function getComment(): string {
+  public function getComment() {
     return $this->comment;
   }
 
   /**
    * Set a new Description for the Review.
    *
-   * @param mixed|string $comment
+   * @param string $comment
    *   Set new Description.
    */
-  public function setComment(string $comment) {
+  public function setComment($comment) {
     $this->comment = $comment;
   }
 
@@ -171,7 +171,7 @@ class Review {
    *   Return a description.
    */
   public static function loadById($description_id) {
-    $connection = connection::connect();
+    $connection = Connection::connect();
 
     // @todo Prepared Statement einfügen
     $statement = $connection->prepare("SELECT * FROM review WHERE description_id=?");
@@ -189,7 +189,7 @@ class Review {
    */
   public function delete() {
     if (!empty($this->descriptionId)) {
-      $connection = connection::connect();
+      $connection = Connection::connect();
       $query = "delete from review where description_id = ?";
       $prepare = $connection->prepare($query);
       return $prepare->execute([$this->descriptionId]);
@@ -197,10 +197,10 @@ class Review {
   }
 
   /**
-   * @param $spot_id
-   * @param $username
-   * @param $comment
-   * @param $rating
+   * @param int $spot_id
+   * @param string $username
+   * @param string $comment
+   * @param int $rating
    *
    * @return false|string
    */

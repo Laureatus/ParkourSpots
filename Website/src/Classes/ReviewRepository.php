@@ -2,6 +2,8 @@
 
 namespace Parkour;
 
+use phpDocumentor\Reflection\Types\Mixed_;
+
 /**
  * Class ReviewRepository.
  *
@@ -12,14 +14,14 @@ class ReviewRepository {
   /**
    * Gets all reviews for a given spot id.
    *
-   * @param $spot_id
+   * @param int $spotId
    *
    * @return \Parkour\Review[]
    */
-  public function getReviews($spot_id) {
-    $connection = connection::connect();
+  public function getReviews(int $spotId): array {
+    $connection = Connection::connect();
     // @todo Prepared Statement einfügen
-    $query = "SELECT * FROM review WHERE spot_id=$spot_id";
+    $query = "SELECT * FROM review WHERE spot_id=$spotId";
     $description = $connection->query($query);
     $description->setFetchMode(\PDO::FETCH_ASSOC);
     $description->execute();
@@ -32,14 +34,14 @@ class ReviewRepository {
   }
 
   /**
-   * @param $spot_id
+   * @param int $spotId
    *
-   * @return int|mixed
+   * @return int
    */
-  public function getRatingAvg($spot_id) {
-    $connection = connection::connect();
+  public function getRatingAvg(int $spotId): int {
+    $connection = Connection::connect();
     // @todo Prepared Statement einfügen
-    $query = $connection->prepare("SELECT CAST(AVG(rating) AS DECIMAL(10,0)) FROM review WHERE spot_id=$spot_id;");
+    $query = $connection->prepare("SELECT CAST(AVG(rating) AS DECIMAL(10,0)) FROM review WHERE spot_id=$spotId;");
     $query->execute();
     $result = $query->fetchColumn();
     if ($result !== NULL) {

@@ -8,7 +8,7 @@ include 'settings.php';
 
 
 use Parkour\Message;
-use Parkour\connection;
+use Parkour\Connection;
 
 /**
  * Get all cities.
@@ -19,7 +19,7 @@ use Parkour\connection;
  * @todo CityRepository & funktion löschen
  */
 function get_all_cities() : array {
-  $connection = connection::connect();
+  $connection = Connection::connect();
 
   $query = "SELECT city FROM location;";
   $statement = $connection->query($query);
@@ -46,7 +46,7 @@ function get_all_cities() : array {
  * @return bool
  */
 function delete_spot($spot_id) {
-  $connection = connection::connect();
+  $connection = Connection::connect();
   $delete_image_fk = "delete from images where spot_id = $spot_id;";
   $delete_review_fk = "delete from review where spot_id = $spot_id;";
   $delete_pk = "delete from spot where spot_id = $spot_id;";
@@ -113,7 +113,7 @@ function validate_registration($form) {
   $errors = [];
 
   $emailQuery = "select email from users;";
-  $connection = connection::connect();
+  $connection = Connection::connect();
   $q = $connection->query($emailQuery);
   $q->setFetchMode(PDO::FETCH_ASSOC);
 
@@ -145,7 +145,7 @@ function mailing($form) {
   $email = $form['email'];
   $username = $form['username'];
   $emailQuery = "select auth_token from users where username = '$username';";
-  $connection = connection::connect();
+  $connection = Connection::connect();
   $q = $connection->query($emailQuery);
   $q->setFetchMode(PDO::FETCH_ASSOC);
   while ($auth_token = $q->fetch(PDO::FETCH_COLUMN)) {

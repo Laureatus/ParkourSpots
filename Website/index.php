@@ -21,6 +21,7 @@ use Parkour\UserRepository;
 use Parkour\User;
 use Parkour\UserStorage;
 use Parkour\ReviewRepository;
+use Parkour\ImageRepository;
 
 /**
  * Twig declaration.
@@ -107,7 +108,8 @@ switch ($action) {
     break;
 
   case 'images':
-    $content = Image::renderImages($spotId);
+    $repo = new ImageRepository();
+    $content = $repo->renderImages($spotId);
     break;
 
   case 'submit':
@@ -123,7 +125,8 @@ switch ($action) {
       }
       if (!empty($_FILES['my_file'])) {
         try {
-          Image::uploadImage($spot->getSpotId(), $_FILES['my_file']);
+          $repo = new ImageRepository();
+          $repo->uploadImage($spot->getSpotId(), $_FILES['my_file']);
         }
         catch (FileExistsException $e) {
           Message::setMessage($e->getMessage());
@@ -201,7 +204,7 @@ switch ($action) {
       header("Location: index.php");
     }
     else {
-      $message = Message::getMessage(implode("<br>", $errors));
+      $message = Message::setMessage(implode("<br>", $errors));
       $template = $twig->load('registration.html.twig');
       $content = $template->render([
         'message' => $message,
