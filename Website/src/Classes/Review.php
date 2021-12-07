@@ -1,5 +1,8 @@
 <?php
 
+//@Todo Change the Variables naming so it matches better with the Database Table review and its columns.
+
+
 namespace Parkour;
 
 /**
@@ -9,99 +12,163 @@ namespace Parkour;
  */
 class Review {
 
-  private $description_id;
-  private $spot_id;
+  /**
+   * ID of the description.
+   *
+   * @var mixed|string
+   */
+  private $descriptionId;
+
+  /**
+   * ID of the Spot.
+   *
+   * @var mixed|string
+   */
+  private $spotId;
+
+  /**
+   * Username of the User that wrote the Review.
+   *
+   * @var mixed|string
+   */
   private $username;
+
+  /**
+   * Comment wrote inside the Review text input field.
+   *
+   * @var mixed|string
+   */
   private $comment;
+
+  /**
+   * Rating from 1-10.
+   *
+   * @var mixed|string
+   */
   private $rating;
 
   /**
    * Review constructor.
    *
    * @param array $fields
+   *   Array of values containing all infos of the Review.
    */
   public function __construct(array $fields) {
     $this->username = $fields['username'] ?? '';
     $this->comment = $fields['comment'] ?? '';
-    $this->description_id = $fields['description_id'] ?? '';
-    $this->spot_id = $fields['spot_id'] ?? '';
+    $this->descriptionId = $fields['description_id'] ?? '';
+    $this->spotId = $fields['spot_id'] ?? '';
     $this->rating = $fields['rating'] ?? '';
   }
 
   /**
+   * Get the Username of the User that wrote the Review.
+   *
    * @return mixed
+   *   Return Username
    */
   public function getUsername() {
     return $this->username;
   }
 
   /**
-   * @param mixed $rating
+   * Set a new Username for the Review.
+   *
+   * @param mixed $username
+   *   set Username.
    */
   public function setUsername($username): void {
     $this->username = $username;
   }
 
   /**
-   * @return mixed
+   * Get the Rating from the Review.
+   *
+   * @return mixed|string
+   *   Return Rating
    */
   public function getRating() {
     return $this->rating;
   }
 
   /**
+   * Set a New rating for the Review.
+   *
    * @param mixed $rating
+   *   Return Rating.
    */
   public function setRating($rating): void {
     $this->rating = $rating;
   }
 
   /**
+   * Get the Description ID of the Review.
+   *
    * @return mixed|string
+   *   Return DescriptionId
    */
   public function getDescriptionId(): string {
-    return $this->description_id;
+    return $this->descriptionId;
   }
 
   /**
-   * @param mixed|string $description_id
+   * Set a new Description ID for the Review.
+   *
+   * @param mixed|string $descriptionId
+   *   Set new Description ID.
    */
-  public function setDescriptionId(string $description_id) {
-    $this->description_id = $description_id;
+  public function setDescriptionId(string $descriptionId) {
+    $this->descriptionId = $descriptionId;
   }
 
   /**
+   * Get the ID of the Spot in which the Review was written.
+   *
    * @return mixed|string
+   *   Return spotId.
    */
   public function getSpotId(): string {
-    return $this->spot_id;
+    return $this->spotId;
   }
 
   /**
-   * @param mixed|string $spot_id
+   * Assign the Review to a new Spot.
+   *
+   * @param mixed|string $spotId
+   *   Set new spotId.
    */
-  public function setSpotId(string $spot_id) {
-    $this->spot_id = $spot_id;
+  public function setSpotId(string $spotId) {
+    $this->spotId = $spotId;
   }
 
   /**
+   * Get the Description written in the Review.
+   *
    * @return mixed|string
+   *   Return the Description.
    */
-  public function getDescription(): string {
+  public function getComment(): string {
     return $this->comment;
   }
 
   /**
-   * @param mixed|string $description
+   * Set a new Description for the Review.
+   *
+   * @param mixed|string $comment
+   *   Set new Description.
    */
-  public function setDescription(string $description) {
-    $this->description = $description;
+  public function setComment(string $comment) {
+    $this->comment = $comment;
   }
 
   /**
-   * @param $description_id
+   * Get the Description ID.
+   *
+   * @param int $description_id
+   *   The ID of the description.
    *
    * @return \Parkour\Review
+   *   Return a description.
    */
   public static function loadById($description_id) {
     $connection = connection::connect();
@@ -115,14 +182,17 @@ class Review {
   }
 
   /**
+   * Delete a Review.
+   *
    * @return bool
+   *   Return TRUE on success and FALSE on failure
    */
   public function delete() {
-    if (!empty($this->description_id)) {
+    if (!empty($this->descriptionId)) {
       $connection = connection::connect();
       $query = "delete from review where description_id = ?";
       $prepare = $connection->prepare($query);
-      return $prepare->execute([$this->description_id]);
+      return $prepare->execute([$this->descriptionId]);
     }
   }
 

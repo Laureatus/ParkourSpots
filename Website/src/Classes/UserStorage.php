@@ -3,7 +3,7 @@
 namespace Parkour;
 
 /**
- * Class UserStorage.
+ * Get the Logged in User or set a User to get Logged in.
  *
  * @package Parkour
  */

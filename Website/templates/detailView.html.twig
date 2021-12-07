@@ -102,7 +102,7 @@
                             <td>
                                 {{ include('rating.html.twig', {avg: result.rating },with_context = false) }}
                             </td>
-                            <td style="max-width: 810px">{{ result.description }}</td>
+                            <td style="max-width: 810px">{{ result.comment }}</td>
                             {% if result.username == username %}
                                 <td>
                                     <a href="/index.php?spot_id={{ spot.getSpotId }}&description_id={{ result.DescriptionId }}&action=delete_description">Delete</a>

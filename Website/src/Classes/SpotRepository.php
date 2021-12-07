@@ -3,14 +3,17 @@
 namespace Parkour;
 
 /**
- * Class SpotRepository.
+ * Get All Spots or get a Single Spot by spotID.
  *
  * @package Parkour
  */
 class SpotRepository {
 
   /**
+   * Get all Spots in the Database.
+   *
    * @return \Parkour\Spot[]
+   *   Return Spots Array.
    */
   public function getAllSpots() {
     $connection = connection::connect();
@@ -29,8 +32,10 @@ class SpotRepository {
    * Get a single spot by id.
    *
    * @param int $spot_id
+   *   The ID of the Spot you are looking for.
    *
    * @return \Parkour\Spot
+   *   Return new Spot Object.
    */
   public static function getSpot($spot_id) {
     $connection = connection::connect();

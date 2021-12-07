@@ -3,178 +3,291 @@
 namespace Parkour;
 
 /**
- * Class Spot.
+ * Creates a Spot Object.
  *
  * @package Parkour
  */
 class Spot {
 
-  private $spot_id;
-  private $city;
-  private $name;
-  private $address;
-  private $added_date;
-  private $lng;
-  private $lat;
-  private $rating;
-  private $user_id;
+  /**
+   * Id of the Spot.
+   *
+   * @var mixed|null
+   */
+  private $spotId;
 
   /**
+   * City where the Spot is located.
+   *
+   * @var mixed|null
+   */
+  private $city;
+
+  /**
+   * Name of the Spot.
+   *
+   * @var mixed|null
+   */
+  private $name;
+
+  /**
+   * Exact address of the Spot.
+   *
+   * @var mixed|null
+   */
+  private $address;
+
+  /**
+   * Date when the Spot was added to the Database.
+   *
+   * @var mixed|null
+   */
+  private $addedDate;
+
+  /**
+   * Longitude of the Spot.
+   *
+   * @var mixed|null
+   */
+  private $lng;
+
+  /**
+   * Lattitude of the Spot.
+   *
+   * @var mixed|null
+   */
+  private $lat;
+
+  /**
+   * Rating of the Spot.
+   *
+   * @var mixed|null
+   */
+  private $rating;
+
+  /**
+   * ID of the user that created the Spot.
+   *
+   * @var mixed|null
+   */
+  private $userId;
+
+  /**
+   * Stores a Review Repository.
+   *
    * @var \Parkour\ReviewRepository
    */
-  private $description_repo;
+  private $reviewRepository;
 
   /**
    * Spot constructor.
    *
    * @param array $data
+   *   Array with data from SpotRepository.
    */
   public function __construct(array $data) {
-    $this->spot_id = $data['spot_id'] ?? NULL;
-    $this->user_id = $data['user_id'] ?? NULL;
+    $this->spotId = $data['spot_id'] ?? NULL;
+    $this->userId = $data['user_id'] ?? NULL;
     $this->city = $data['city'] ?? NULL;
     $this->name = $data['name'] ?? NULL;
     $this->address = $data['address'] ?? NULL;
-    $this->added_date = $data['added_date'] ?? NULL;
+    $this->addedDate = $data['added_date'] ?? NULL;
     $this->lng = $data['lng'] ?? NULL;
     $this->lat = $data['lat'] ?? NULL;
 
-    $this->description_repo = new ReviewRepository();
+    $this->reviewRepository = new ReviewRepository();
   }
 
   /**
+   * Gets the SpotId.
+   *
    * @return mixed
+   *   Return the SpotId.
    */
   public function getSpotId() {
-    return $this->spot_id;
+    return $this->spotId;
   }
 
   /**
-   * @param mixed $spot_id
+   * Set a new ID for the Spot.
+   *
+   * @param mixed $spotId
+   *   Set SpotId.
    */
-  public function setSpotId($spot_id) {
-    $this->spot_id = $spot_id;
+  public function setSpotId($spotId) {
+    $this->spotId = $spotId;
   }
 
   /**
+   * Get the city where the Spot is located in.
+   *
    * @return mixed
+   *   Return the city of the spot.
    */
   public function getCity() {
     return $this->city;
   }
 
   /**
+   * Set a new City for the Spot.
+   *
    * @param mixed $city
+   *   Set the city of the Spot.
    */
   public function setCity($city) {
     $this->city = $city;
   }
 
   /**
+   * Get the Name of the Spot.
+   *
    * @return mixed
+   *   Return the Name of the Spot.
    */
   public function getName() {
     return $this->name;
   }
 
   /**
+   * Set a new Name for the Spot.
+   *
    * @param mixed $name
+   *   Set the Name of the Spot.
    */
   public function setName($name) {
     $this->name = $name;
   }
 
   /**
+   * Get the exact address where the spot is located.
+   *
    * @return mixed
+   *   Return the Address of the Spot.
    */
   public function getAddress() {
     return $this->address;
   }
 
   /**
+   * Set a new address for the Spot.
+   *
    * @param mixed $address
+   *   Set the Address of the Spot.
    */
   public function setAddress($address) {
     $this->address = $address;
   }
 
   /**
+   * Get the Date when the Spot was added to the Database.
+   *
    * @return mixed
+   *   Return the addedDate
    */
   public function getAddedDate() {
-    return $this->added_date;
+    return $this->addedDate;
   }
 
   /**
-   * @param mixed $added_date
+   * Set a new addedDate for the Spot.
+   *
+   * @param mixed $addedDate
+   *   Set addedDate.
    */
-  public function setAddedDate($added_date) {
-    $this->added_date = $added_date;
+  public function setAddedDate($addedDate) {
+    $this->addedDate = $addedDate;
   }
 
   /**
+   * Get the Longitude of the Spot.
+   *
    * @return mixed
+   *   return the longitude.
    */
   public function getLng() {
     return $this->lng;
   }
 
   /**
+   * Set a new Longitude for the Spot.
+   *
    * @param mixed $lng
+   *   Set Longitude.
    */
   public function setLng($lng) {
     $this->lng = $lng;
   }
 
   /**
+   * Get the Lattitude of the Spot.
+   *
    * @return mixed
+   *   Return the Lattitude.
    */
   public function getLat() {
     return $this->lat;
   }
 
   /**
+   * Set a new Lattitude for the Spot.
+   *
    * @param mixed $lat
+   *   Set new Lattitude.
    */
   public function setLat($lat) {
     $this->lat = $lat;
   }
 
   /**
+   * Get the Rating of the Spot.
+   *
    * @return mixed
+   *   Return Rating.
    */
   public function getRating() {
     return $this->rating;
   }
 
   /**
+   * Set a new Rating for the Spot.
+   *
    * @param mixed $rating
+   *   Set new Rating.
    */
   public function setRating($rating) {
     $this->rating = $rating;
   }
 
   /**
+   * Get the ID of the user that created the Spot.
+   *
    * @return mixed|null
+   *   Return UserID
    */
   public function getUserId() {
-    return $this->user_id;
+    return $this->userId;
   }
 
   /**
-   * @param mixed|null $user_id
+   * Set new UserID for the current Spot.
+   *
+   * @param mixed|null $userId
+   *   Set UserID.
    */
-  public function setUserId($user_id): void {
-    $this->user_id = $user_id;
+  public function setUserId($userId): void {
+    $this->userId = $userId;
   }
 
   /**
+   * Save the values for Spot if it already exists otherwise create a new Spot.
+   *
    * @return bool|string
+   *   Return SpotID or a PDO execute() statement.
    */
   public function save() {
     $connection = connection::connect();
 
-    if (empty($this->spot_id)) {
+    if (empty($this->spotId)) {
       $statementSpot = "INSERT INTO spot (user_id,name,address,city) VALUES (:user_id, :name,:address,:city);";
       $insertSpot = $connection->prepare($statementSpot);
       $result = $insertSpot->execute([
@@ -184,12 +297,12 @@ class Spot {
         ':city' => $this->city,
       ]);
       if ($result === TRUE) {
-        $this->spot_id = $connection->lastInsertId();
-        return $this->spot_id;
+        $this->spotId = $connection->lastInsertId();
+        return $this->spotId;
       }
     }
     else {
-      $editStatement = "update spot set name =  '$this->name', address = '$this->address', city = '$this->city' where spot_id = '$this->spot_id';";
+      $editStatement = "update spot set name =  '$this->name', address = '$this->address', city = '$this->city' where spot_id = '$this->spotId';";
       $editSpot = $connection->prepare($editStatement);
       return $editSpot->execute();
     }
@@ -198,37 +311,45 @@ class Spot {
   }
 
   /**
+   * Get all Reviews from the selected Spot.
    *
    * @return \Parkour\review[]
+   *   Return Reviews by spotID
    */
   public function getReviews() {
 
-    if (!$this->spot_id) {
+    if (!$this->spotId) {
       return [];
     }
 
-    return $this->description_repo->getReviews($this->spot_id);
+    return $this->reviewRepository->getReviews($this->spotId);
   }
 
   /**
+   * Get the Average Rating of a Spot.
+   *
    * @return int|mixed
+   *   Return the avg Rating from getRatingAvg.
    */
   public function getRatingAvg() {
-    if (!$this->spot_id) {
+    if (!$this->spotId) {
       return 0;
     }
 
-    return $this->description_repo->getRatingAvg($this->spot_id);
+    return $this->reviewRepository->getRatingAvg($this->spotId);
   }
 
   /**
+   * Return all Images of the Spot.
+   *
    * @return array
+   *   Return Image Array
    */
   public function getImages() {
     $connection = Connection::connect();
     $statement = $connection->prepare("SELECT * FROM images WHERE spot_id=?");
     $statement->setFetchMode(\PDO::FETCH_ASSOC);
-    $statement->execute([$this->spot_id]);
+    $statement->execute([$this->spotId]);
     $images = [];
     foreach ($statement as $key => $image) {
       $images[] = new Image($image);
@@ -239,11 +360,14 @@ class Spot {
   }
 
   /**
+   * Get the Username of the User that created the Spot.
+   *
    * @return mixed|string
+   *   Return Username
    */
   public function getUsername() {
     $username = "";
-    $query = "SELECT username FROM spot INNER JOIN users USING(user_id) WHERE spot_id = " . $this->spot_id . ";";
+    $query = "SELECT username FROM spot INNER JOIN users USING(user_id) WHERE spot_id = " . $this->spotId . ";";
     $connection = connection::connect();
     $q = $connection->query($query);
     $q->setFetchMode(\PDO::FETCH_ASSOC);

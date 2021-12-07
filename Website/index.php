@@ -30,7 +30,7 @@ use Parkour\ReviewRepository;
 
 
 $action = $_REQUEST['action'] ?? '';
-$spot_id = $_REQUEST['spot_id'] ?? NULL;
+$spotId = $_REQUEST['spot_id'] ?? NULL;
 $comment = $_POST['comment'] ?? NULL;
 $rating = $_POST['rating'] ?? NULL;
 $content = '';
@@ -48,13 +48,13 @@ switch ($action) {
 
   case 'delete':
     if (isset($_SESSION['user_id'], $_SESSION['username'])) {
-      $user_id = UserStorage::getLoggedInUser()->getUserId();
+      $userId = UserStorage::getLoggedInUser()->getUserId();
       $repo = new SpotRepository();
-      $spot = $repo::getSpot($spot_id);
+      $spot = $repo::getSpot($spotId);
       $spotOwner = $spot->getUserId();
-      if ($spotOwner === $user_id) {
-        delete_spot($spot_id);
-        remove_directory($spot_id);
+      if ($spotOwner === $userId) {
+        delete_spot($spotId);
+        remove_directory($spotId);
         Message::setMessage("Spot wurde erfolgreich gelöscht");
         $content = header("Location: index.php");
       }
@@ -66,15 +66,19 @@ switch ($action) {
     break;
 
   case 'edit':
-
+    $authorized = TRUE;
+    if (!isset($_SESSION['user_id']) && !isset($_SESSION['username'])) {
+      $authorized = FALSE;
+    }
     $form = $twig->load('spotform.html.twig');
     $repo = new SpotRepository();
-    $spot = $repo::getSpot($spot_id);
+    $spot = $repo::getSpot($spotId);
     $content = $form->render([
       'spot' => $spot,
       'form' => $form,
-      'spot_id' => $spot_id,
+      'spot_id' => $spotId,
       'cities' => get_all_cities(),
+      'authorized' => $authorized,
     ]);
     break;
 
@@ -82,8 +86,8 @@ switch ($action) {
     $spot = new Spot($_REQUEST);
     $repository = new SpotRepository();
     $authorized = TRUE;
-    if (!empty($spot_id)) {
-      $spot = $repository::getSpot($spot_id);
+    if (!empty($spotId)) {
+      $spot = $repository::getSpot($spotId);
     }
     elseif (!empty($values)) {
       $spot = $values;
@@ -96,14 +100,14 @@ switch ($action) {
     $content = $form->render([
       'spot' => $spot,
       'form' => $form,
-      'spot_id' => $spot_id,
+      'spot_id' => $spotId,
       'cities' => get_all_cities(),
       'authorized' => $authorized,
     ]);
     break;
 
   case 'images':
-    $content = Image::render_images($spot_id);
+    $content = Image::renderImages($spotId);
     break;
 
   case 'submit':
@@ -111,7 +115,7 @@ switch ($action) {
     if (empty($errors)) {
       $spot = new Spot($_POST);
       $spot->save();
-      if (empty($spot_id)) {
+      if (empty($spotId)) {
         Message::setMessage("Neuer Spot wurde erfolgreich hinzugefügt");
       }
       else {
@@ -119,7 +123,7 @@ switch ($action) {
       }
       if (!empty($_FILES['my_file'])) {
         try {
-          Image::upload_image($spot->getSpotId(), $_FILES['my_file']);
+          Image::uploadImage($spot->getSpotId(), $_FILES['my_file']);
         }
         catch (FileExistsException $e) {
           Message::setMessage($e->getMessage());
@@ -128,11 +132,11 @@ switch ($action) {
       $content = header("Location: ../../../index.php");
     }
     else {
-      if (empty($spot_id)) {
+      if (empty($spotId)) {
         $content = header("Location: index.php?action=add");
       }
       else {
-        $content = header("Location: index.php?spot_id=$spot_id&action=edit");
+        $content = header("Location: index.php?spot_id=$spotId&action=edit");
       }
     }
 
@@ -140,43 +144,43 @@ switch ($action) {
 
   case 'submit_description':
     $username = UserStorage::getLoggedInUser()->getUsername();
-    Review::insertDescription($spot_id, $username, $comment, $rating);
-    header("Location: ../../../index.php?spot_id=$spot_id&action=detail_view");
+    Review::insertDescription($spotId, $username, $comment, $rating);
+    header("Location: ../../../index.php?spot_id=$spotId&action=detail_view");
     break;
 
   case 'detail_view':
     $repository = new SpotRepository();
-    $spot = $repository->getSpot($spot_id);
+    $spot = $repository->getSpot($spotId);
     $debug = $spot->getUsername();
     $username = "";
-    $user_id = "";
+    $userId = "";
     if (($user = UserStorage::getLoggedInUser())) {
       $username = $user->getUsername();
     }
     if (($user = UserStorage::getLoggedInUser())) {
-      $user_id = $user->getUserId();
+      $userId = $user->getUserId();
     }
     $template = $twig->load('detailView.html.twig');
     $content = $template->render([
       'spot' => $spot,
-      'spot_id' => $spot_id,
+      'spot_id' => $spotId,
       'rating' => $rating,
       'username' => $username,
-      'user_id' => $user_id,
+      'user_id' => $userId,
     ]);
     break;
 
   case 'delete_description':
     Review::loadById($_GET['description_id'])->delete();
-    header("Location: ../../../index.php?spot_id=$spot_id&action=detail_view");
+    header("Location: ../../../index.php?spot_id=$spotId&action=detail_view");
     break;
 
   case 'delete_image':
     $image_id = $_GET['image_id'];
     Image::deleteImage($image_id);
-    $count = Image::check_dir($spot_id);
+    $count = Image::checkDir($spotId);
     if ($count >= 1) {
-      header("Location: index.php?action=images&spot_id=" . $spot_id . "");
+      header("Location: index.php?action=images&spot_id=" . $spotId . "");
     }
     else {
       header("Location: index.php");

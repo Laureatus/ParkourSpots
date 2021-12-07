@@ -130,15 +130,15 @@ class Image {
   /**
    *
    */
-  public function render_images($spot_id) {
+  public function renderImages($spotId) {
 
     // SELECT * FROM images where spot_id=$spot_id;.
     $connection = connection::connect();
-    $query = "SELECT * FROM images WHERE spot_id=" . $spot_id . ".";
+    $query = "SELECT * FROM images WHERE spot_id=" . $spotId . ".";
     $q = $connection->query($query);
     $q->setFetchMode(\PDO::FETCH_ASSOC);
 
-    $directory = TARGETDIR . $spot_id;
+    $directory = TARGETDIR . $spotId;
 
     if (!is_dir($directory)) {
       return "Couldn't find enclosing image folder:  " . $directory;
@@ -152,7 +152,7 @@ class Image {
     $images = '';
     // Loop über SQL-Result -> id, path, name.
     foreach ($q as $key => $image) {
-      $images .= "<img alt='spot-image' src=\"" . TARGETDIR . $image['path'] . "\"><a href=\"index.php?action=delete_image&image_id=" . $image['image_id'] . "&spot_id=$spot_id\">Delete</a>";
+      $images .= "<img alt='spot-image' src=\"" . TARGETDIR . $image['path'] . "\"><a href=\"index.php?action=delete_image&image_id=" . $image['image_id'] . "&spot_id=$spotId\">Delete</a>";
     }
     closedir($handle);
 
@@ -162,9 +162,9 @@ class Image {
   /**
    * $file = $_FILES['my_file']
    */
-  public function upload_image($spot_id, $image) {
+  public function uploadImage($spotId, $image) {
     if ($image['name'] !== "") {
-      $dir = TARGETDIR . $spot_id;
+      $dir = TARGETDIR . $spotId;
       if (is_dir($dir)) {
         $target_dir = $dir;
       }
@@ -179,7 +179,7 @@ class Image {
       $ext = $path['extension'];
       $temp_name = $image['tmp_name'];
       $path_filename_ext = $target_dir . "/" . $filename . "." . $ext;
-      $db_path = "$spot_id/$filename.$ext";
+      $db_path = "$spotId/$filename.$ext";
 
       if (file_exists($path_filename_ext)) {
         throw new FileExistsException('Bild existiert bereits bitte wählen sie einen anderen Dateinamen');
@@ -191,7 +191,7 @@ class Image {
 
         $insertSpot->execute([
           ':db_path' => $db_path,
-          ':spot_id' => $spot_id,
+          ':spot_id' => $spotId,
         ]);
         return move_uploaded_file($temp_name, $path_filename_ext);
       }
@@ -221,9 +221,9 @@ class Image {
   /**
    *
    */
-  public function check_dir($spot_id) {
+  public function checkDir($spotId) {
     $connection = connection::connect();
-    $sql = "select count(*) from images where spot_id = $spot_id;";
+    $sql = "select count(*) from images where spot_id = $spotId;";
     $res = $connection->query($sql);
     $count = $res->fetchColumn();
     return $count;
