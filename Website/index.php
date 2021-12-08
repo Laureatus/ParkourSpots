@@ -57,12 +57,12 @@ switch ($action) {
         delete_spot($spotId);
         remove_directory($spotId);
         Message::setMessage("Spot wurde erfolgreich gelöscht");
-        $content = header("Location: index.php");
+        header("Location: index.php");
       }
     }
     else {
       Message::setMessage("Sie müssen angemeldet sein um diesen Spot löschen zu können");
-      $content = header("Location: index.php");
+      header("Location: index.php");
     }
     break;
 
@@ -132,14 +132,14 @@ switch ($action) {
           Message::setMessage($e->getMessage());
         }
       }
-      $content = header("Location: ../../../index.php");
+      header("Location: ../../../index.php");
     }
     else {
       if (empty($spotId)) {
-        $content = header("Location: index.php?action=add");
+        header("Location: index.php?action=add");
       }
       else {
-        $content = header("Location: index.php?spot_id=$spotId&action=edit");
+        header("Location: index.php?spot_id=$spotId&action=edit");
       }
     }
 
@@ -147,7 +147,8 @@ switch ($action) {
 
   case 'submit_description':
     $username = UserStorage::getLoggedInUser()->getUsername();
-    Review::insertDescription($spotId, $username, $comment, $rating);
+    $repo = new ReviewRepository();
+    $repo->insertDescription($spotId, $username, $comment, $rating);
     header("Location: ../../../index.php?spot_id=$spotId&action=detail_view");
     break;
 
@@ -157,12 +158,12 @@ switch ($action) {
     $debug = $spot->getUsername();
     $username = "";
     $userId = "";
-    if (($user = UserStorage::getLoggedInUser())) {
+    $user = UserStorage::getLoggedInUser();
+    if ($user instanceof User) {
       $username = $user->getUsername();
-    }
-    if (($user = UserStorage::getLoggedInUser())) {
       $userId = $user->getUserId();
     }
+
     $template = $twig->load('detailView.html.twig');
     $content = $template->render([
       'spot' => $spot,
@@ -180,7 +181,9 @@ switch ($action) {
 
   case 'delete_image':
     $image_id = $_GET['image_id'];
-    Image::deleteImage($image_id);
+    $repo = new ImageRepository();
+    $image = $repo->getImage($image_id);
+    $image->deleteImage();
     $count = Image::checkDir($spotId);
     if ($count >= 1) {
       header("Location: index.php?action=images&spot_id=" . $spotId . "");

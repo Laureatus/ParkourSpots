@@ -53,4 +53,30 @@ class ReviewRepository {
 
   }
 
+  /**
+   * @param int $spot_id
+   * @param string $username
+   * @param string $comment
+   * @param int $rating
+   *
+   * @return false|string
+   */
+  public function insertDescription($spot_id, $username, $comment, $rating) {
+    $connection = Connection::connect();
+    if ($rating <= 10 && $rating > 0) {
+      $statementSpot = "INSERT INTO review (spot_id, username, comment, rating) VALUES (:spot_id, :username, :comment, :rating);";
+      $insertSpot = $connection->prepare($statementSpot);
+      $result = $insertSpot->execute([
+        ':spot_id' => $spot_id,
+        ':username' => $username,
+        ':comment' => htmlspecialchars($comment),
+        ':rating' => $rating,
+      ]);
+      if ($result === TRUE) {
+        return $connection->lastInsertId();
+      }
+    }
+    return FALSE;
+  }
+
 }

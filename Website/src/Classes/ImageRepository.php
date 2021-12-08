@@ -6,12 +6,16 @@ namespace Parkour;
 
 class ImageRepository {
 
+  private $connection;
+
+  public function __construct() {
+    $this->connection = Connection::connect();
+  }
+
   public function renderImages($spotId) {
 
-    // SELECT * FROM images where spot_id=$spot_id;.
-    $connection = Connection::connect();
     $query = "SELECT * FROM images WHERE spot_id=" . $spotId . ".";
-    $q = $connection->query($query);
+    $q = $this->connection->query($query);
     $q->setFetchMode(\PDO::FETCH_ASSOC);
 
     $directory = TARGETDIR . $spotId;
@@ -58,9 +62,8 @@ class ImageRepository {
         throw new FileExistsException('Bild existiert bereits bitte wählen sie einen anderen Dateinamen');
       }
       else {
-        $connection = Connection::connect();
         $statementSpot = "INSERT INTO images (path, spot_id) VALUES (:db_path, :spot_id)";
-        $insertSpot = $connection->prepare($statementSpot);
+        $insertSpot = $this->connection->prepare($statementSpot);
 
         $insertSpot->execute([
           ':db_path' => $db_path,
@@ -71,5 +74,19 @@ class ImageRepository {
     }
 
   }
+
+  public function getImage(int $imageId) {
+    // @todo Prepared Statement einfügen
+    $query = "SELECT * FROM images WHERE image_id=$imageId";
+    $description = $this->connection->query($query);
+    $description->setFetchMode(\PDO::FETCH_ASSOC);
+    $description->execute();
+
+    $images = [];
+    foreach ($images as $result) {
+      return new Image($result);
+    }
+  }
+
 
 }

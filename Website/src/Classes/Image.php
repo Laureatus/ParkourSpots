@@ -127,14 +127,6 @@ class Image {
     $this->spotId = $spotId;
   }
 
-  /**
-   *
-   */
-
-  /**
-   * $file = $_FILES['my_file']
-   */
-
 
   /**
    *
