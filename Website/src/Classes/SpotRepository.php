@@ -34,7 +34,7 @@ class SpotRepository {
    * @param int $spot_id
    *   The ID of the Spot you are looking for.
    *
-   * @return \Parkour\Spot
+   * @return \Parkour\Spot|void
    *   Return new Spot Object.
    */
   public static function getSpot($spot_id) {

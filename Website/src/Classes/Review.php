@@ -167,12 +167,11 @@ class Review {
    * @param int $description_id
    *   The ID of the description.
    *
-   * @return \Parkour\Review
+   * @return self|void
    *   Return a description.
    */
   public static function loadById($description_id) {
     $connection = Connection::connect();
-
     // @todo Prepared Statement einfügen
     $statement = $connection->prepare("SELECT * FROM review WHERE description_id=?");
     if ($statement->execute([$description_id])) {
@@ -184,7 +183,7 @@ class Review {
   /**
    * Delete a Review.
    *
-   * @return bool
+   * @return bool|void
    *   Return TRUE on success and FALSE on failure
    */
   public function delete() {

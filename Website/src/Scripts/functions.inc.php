@@ -41,7 +41,7 @@ function get_all_cities() : array {
  *
  * @todo In Spot Objekt einfügen ($spot->delete()) inkl. remove_directory
  *
- * @param $spot_id
+ * @param int $spot_id
  *
  * @return bool
  */
@@ -59,7 +59,7 @@ function delete_spot($spot_id) {
 }
 
 /**
- * @param $spot_id
+ * @param int $spot_id
  * @return bool
  */
 function remove_directory($spot_id) {
@@ -74,7 +74,7 @@ function remove_directory($spot_id) {
 /**
  * @todo Comment me :-)
  *
- * @param $form
+ * @param array $form
  *
  * @return array
  */
@@ -126,7 +126,7 @@ function validate_registration($form) {
   }
   else {
     while ($user = $q->fetch(PDO::FETCH_COLUMN)) {
-      if ($email = $user) {
+      if ($email == $user) {
         $error[] = "Email wird bereits verwendet.";
       }
     }
@@ -144,6 +144,7 @@ function validate_registration($form) {
 function mailing($form) {
   $email = $form['email'];
   $username = $form['username'];
+  $token = "";
   $emailQuery = "select auth_token from users where username = '$username';";
   $connection = Connection::connect();
   $q = $connection->query($emailQuery);

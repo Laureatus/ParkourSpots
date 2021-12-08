@@ -11,13 +11,44 @@ class User {
   const STATE_ACTIVE = 'ACTIVE';
   const STATE_BLOCKED = 'BLOCKED';
 
+  /**
+   * @var int
+   */
   private $userId;
+
+  /**
+   * @var string
+   */
   private $username;
+
+  /**
+   * @var string
+   */
   private $email;
+
+  /**
+   * @var string
+   */
   private $password;
+
+  /**
+   * @var int
+   */
   private $permissionStatus;
+
+  /**
+   * @var mixed|null
+   */
   private $addedDate;
+
+  /**
+   * @var int
+   */
   private $authToken;
+
+  /**
+   * @var mixed|null
+   */
   private $state;
 
   /**
@@ -26,7 +57,9 @@ class User {
   private $connection;
 
   /**
+   * User constructor.
    *
+   * @param array $userdata
    */
   public function __construct(array $userdata) {
 
@@ -43,21 +76,21 @@ class User {
   }
 
   /**
-   *
+   * @return void
    */
   public function setUserActive() {
     $this->state = self::STATE_ACTIVE;
   }
 
   /**
-   *
+   * @return void
    */
   public function setUserBlocked() {
     $this->state = self::STATE_BLOCKED;
   }
 
   /**
-   *
+   * @return bool
    */
   private function insert() {
 
@@ -88,7 +121,7 @@ class User {
   }
 
   /**
-   *
+   * @return bool
    */
   private function update() {
 
@@ -127,14 +160,16 @@ class User {
   }
 
   /**
-   *
+   * @return bool
    */
   public function save() {
     return empty($this->userId) ? $this->insert() : $this->update();
   }
 
   /**
+   * @param string $pwinput
    *
+   * @return bool
    */
   public function authenticate($pwinput) {
     $password = $this->password;
@@ -170,6 +205,8 @@ class User {
 
   /**
    * @param mixed $userId
+   *
+   * @return void
    */
   public function setUserId($userId) {
     $this->userId = $userId;
@@ -184,6 +221,8 @@ class User {
 
   /**
    * @param mixed $username
+   *
+   * @return void
    */
   public function setUsername($username) {
     $this->username = $username;
@@ -198,6 +237,8 @@ class User {
 
   /**
    * @param mixed $email
+   *
+   * @return void
    */
   public function setEmail($email) {
     $this->email = $email;
@@ -212,6 +253,8 @@ class User {
 
   /**
    * @param mixed $password
+   *
+   * @return void
    */
   public function setPassword($password) {
     $this->password = $password;
@@ -226,6 +269,8 @@ class User {
 
   /**
    * @param mixed $permissionStatus
+   *
+   * @return void
    */
   public function setPermissionStatus($permissionStatus) {
     $this->permissionStatus = $permissionStatus;
@@ -240,6 +285,8 @@ class User {
 
   /**
    * @param mixed $addedDate
+   *
+   * @return void
    */
   public function setAddedDate($addedDate) {
     $this->addedDate = $addedDate;
@@ -254,6 +301,8 @@ class User {
 
   /**
    * @param mixed $authToken
+   *
+   * @return void
    */
   public function setAuthToken($authToken) {
     $this->authToken = $authToken;

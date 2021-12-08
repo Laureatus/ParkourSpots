@@ -14,11 +14,11 @@ class ReviewRepository {
   /**
    * Gets all reviews for a given spot id.
    *
-   * @param int $spotId
+   * @param mixed $spotId
    *
    * @return \Parkour\Review[]
    */
-  public function getReviews(int $spotId): array {
+  public function getReviews($spotId): array {
     $connection = Connection::connect();
     // @todo Prepared Statement einfügen
     $query = "SELECT * FROM review WHERE spot_id=$spotId";
@@ -34,11 +34,11 @@ class ReviewRepository {
   }
 
   /**
-   * @param int $spotId
+   * @param mixed $spotId
    *
    * @return int
    */
-  public function getRatingAvg(int $spotId): int {
+  public function getRatingAvg($spotId) {
     $connection = Connection::connect();
     // @todo Prepared Statement einfügen
     $query = $connection->prepare("SELECT CAST(AVG(rating) AS DECIMAL(10,0)) FROM review WHERE spot_id=$spotId;");

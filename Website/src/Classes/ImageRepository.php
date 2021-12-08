@@ -75,16 +75,12 @@ class ImageRepository {
 
   }
 
-  public function getImage(int $imageId) {
-    // @todo Prepared Statement einfügen
-    $query = "SELECT * FROM images WHERE image_id=$imageId";
-    $description = $this->connection->query($query);
-    $description->setFetchMode(\PDO::FETCH_ASSOC);
-    $description->execute();
+  public function getImage($imageId) {
+    $statement = $this->connection->prepare("SELECT * FROM images WHERE image_id=$imageId");
 
-    $images = [];
-    foreach ($images as $result) {
-      return new Image($result);
+    if ($statement->execute([$imageId])) {
+      $array = $statement->fetch(\PDO::FETCH_ASSOC);
+      return new Image($array);
     }
   }
 

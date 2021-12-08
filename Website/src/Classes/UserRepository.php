@@ -35,21 +35,21 @@ class UserRepository {
   }
 
   /**
-   * @param $user_id
+   * @param int $userId
    *
    * @return \Parkour\User
    */
-  public function getUser($user_id) {
+  public function getUser($userId) {
     $statement = $this->connection->prepare('select user_id, username, email, password, added_time, state, permission_status, auth_token from users WHERE user_id = ?');
 
-    if ($statement->execute([$user_id])) {
+    if ($statement->execute([$userId])) {
       $array = $statement->fetch(\PDO::FETCH_ASSOC);
       return new User($array);
     }
   }
 
   /**
-   * @param $username
+   * @param string $username
    *
    * @return \Parkour\User
    */

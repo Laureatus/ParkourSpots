@@ -11,7 +11,7 @@ modules:
             url: https://parkour.lndo.site/
         - \Helper\Acceptance
         - Db:
-              dsn: 'mysql:host=127.0.0.1;port=60196;dbname=parkour'
+              dsn: 'mysql:host=database;port=3306;dbname=parkour'
               user: 'lorin'
               password: 'db_P@ssw0rd'
               dump: 'tests/_data/dump.sql'

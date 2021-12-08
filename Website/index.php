@@ -146,7 +146,10 @@ switch ($action) {
     break;
 
   case 'submit_description':
-    $username = UserStorage::getLoggedInUser()->getUsername();
+    $user = UserStorage::getLoggedInUser();
+    if ($user instanceof User) {
+      $username = $user->getUsername();
+    }
     $repo = new ReviewRepository();
     $repo->insertDescription($spotId, $username, $comment, $rating);
     header("Location: ../../../index.php?spot_id=$spotId&action=detail_view");
@@ -183,7 +186,7 @@ switch ($action) {
     $image_id = $_GET['image_id'];
     $repo = new ImageRepository();
     $image = $repo->getImage($image_id);
-    $image->deleteImage();
+    $image->deleteImage($image_id);
     $count = Image::checkDir($spotId);
     if ($count >= 1) {
       header("Location: index.php?action=images&spot_id=" . $spotId . "");
@@ -254,7 +257,8 @@ switch ($action) {
   default:
     $username = "";
     $repository = new SpotRepository();
-    if (($user = UserStorage::getLoggedInUser())) {
+    $user = UserStorage::getLoggedInUser();
+    if ($user instanceof User) {
       $username = $user->getUsername();
     }
 

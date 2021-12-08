@@ -1,6 +1,7 @@
 <?php
 
 namespace Parkour;
+use PDO;
 
 /**
  * Creates a Spot Object.
@@ -82,7 +83,7 @@ class Spot {
   /**
    * Spot constructor.
    *
-   * @param array $data
+   * @param array<mixed> $data
    *   Array with data from SpotRepository.
    */
   public function __construct(array $data) {
@@ -111,8 +112,10 @@ class Spot {
   /**
    * Set a new ID for the Spot.
    *
-   * @param mixed $spotId
+   * @param int $spotId
    *   Set SpotId.
+   *
+   * @return void
    */
   public function setSpotId($spotId) {
     $this->spotId = $spotId;
@@ -133,6 +136,8 @@ class Spot {
    *
    * @param mixed $city
    *   Set the city of the Spot.
+   *
+   * @return void
    */
   public function setCity($city) {
     $this->city = $city;
@@ -153,6 +158,8 @@ class Spot {
    *
    * @param mixed $name
    *   Set the Name of the Spot.
+   *
+   * @return void
    */
   public function setName($name) {
     $this->name = $name;
@@ -173,6 +180,8 @@ class Spot {
    *
    * @param mixed $address
    *   Set the Address of the Spot.
+   *
+   * @return void
    */
   public function setAddress($address) {
     $this->address = $address;
@@ -193,6 +202,8 @@ class Spot {
    *
    * @param mixed $addedDate
    *   Set addedDate.
+   *
+   * @return void
    */
   public function setAddedDate($addedDate) {
     $this->addedDate = $addedDate;
@@ -213,6 +224,8 @@ class Spot {
    *
    * @param mixed $lng
    *   Set Longitude.
+   *
+   * @return void
    */
   public function setLng($lng) {
     $this->lng = $lng;
@@ -233,6 +246,8 @@ class Spot {
    *
    * @param mixed $lat
    *   Set new Lattitude.
+   *
+   * @return void
    */
   public function setLat($lat) {
     $this->lat = $lat;
@@ -253,6 +268,8 @@ class Spot {
    *
    * @param mixed $rating
    *   Set new Rating.
+   *
+   * @return void
    */
   public function setRating($rating) {
     $this->rating = $rating;
@@ -273,6 +290,8 @@ class Spot {
    *
    * @param mixed|null $userId
    *   Set UserID.
+   *
+   * @return void
    */
   public function setUserId($userId): void {
     $this->userId = $userId;
@@ -313,7 +332,7 @@ class Spot {
   /**
    * Get all Reviews from the selected Spot.
    *
-   * @return \Parkour\review[]
+   * @return \Parkour\Review[]
    *   Return Reviews by spotID
    */
   public function getReviews() {
@@ -342,7 +361,7 @@ class Spot {
   /**
    * Return all Images of the Spot.
    *
-   * @return array
+   * @return array<mixed>
    *   Return Image Array
    */
   public function getImages() {
