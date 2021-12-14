@@ -1,8 +1,6 @@
 <?php
 
-//@Todo Change the Variables naming so it matches better with the Database Table review and its columns.
-
-
+// @todo Change the Variables naming so it matches better with the Database Table review and its columns.
 namespace Parkour;
 
 /**
@@ -194,7 +192,5 @@ class Review {
       return $prepare->execute([$this->descriptionId]);
     }
   }
-
-
 
 }

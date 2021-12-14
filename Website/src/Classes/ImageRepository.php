@@ -1,17 +1,24 @@
 <?php
 
-
 namespace Parkour;
 
-
+/**
+ *
+ */
 class ImageRepository {
 
   private $connection;
 
+  /**
+   *
+   */
   public function __construct() {
     $this->connection = Connection::connect();
   }
 
+  /**
+   *
+   */
   public function renderImages($spotId) {
 
     $query = "SELECT * FROM images WHERE spot_id=" . $spotId . ".";
@@ -39,6 +46,9 @@ class ImageRepository {
     return $images;
   }
 
+  /**
+   *
+   */
   public function uploadImage($spotId, $image) {
     if ($image['name'] !== "") {
       $dir = TARGETDIR . $spotId;
@@ -75,6 +85,9 @@ class ImageRepository {
 
   }
 
+  /**
+   *
+   */
   public function getImage($imageId) {
     $statement = $this->connection->prepare("SELECT * FROM images WHERE image_id=$imageId");
 
@@ -83,6 +96,5 @@ class ImageRepository {
       return new Image($array);
     }
   }
-
 
 }

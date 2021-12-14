@@ -1,7 +1,6 @@
 <?php
 
 namespace Parkour;
-use PDO;
 
 /**
  * Creates a Spot Object.
@@ -83,7 +82,7 @@ class Spot {
   /**
    * Spot constructor.
    *
-   * @param array<mixed> $data
+   * @param arraymixed $data
    *   Array with data from SpotRepository.
    */
   public function __construct(array $data) {
@@ -361,7 +360,7 @@ class Spot {
   /**
    * Return all Images of the Spot.
    *
-   * @return array<mixed>
+   * @return arraymixed
    *   Return Image Array
    */
   public function getImages() {
@@ -389,9 +388,11 @@ class Spot {
     $query = "SELECT username FROM spot INNER JOIN users USING(user_id) WHERE spot_id = " . $this->spotId . ";";
     $connection = Connection::connect();
     $q = $connection->query($query);
-    $q->setFetchMode(\PDO::FETCH_ASSOC);
-    while ($user = $q->fetch(\PDO::FETCH_COLUMN)) {
-      $username = $user;
+    if ($q instanceof \PDOStatement) {
+      $q->setFetchMode(\PDO::FETCH_ASSOC);
+      while ($user = $q->fetch(\PDO::FETCH_COLUMN)) {
+        $username = $user;
+      }
     }
     return $username;
   }

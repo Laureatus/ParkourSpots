@@ -3,7 +3,7 @@
 namespace Parkour;
 
 /**
- *
+ * User
  */
 class User {
 
@@ -12,46 +12,64 @@ class User {
   const STATE_BLOCKED = 'BLOCKED';
 
   /**
-   * @var int
+   * ID of the User.
+   *
+   * @var mixed
    */
   private $userId;
 
   /**
-   * @var string
+   * Name of the User.
+   *
+   * @var mixed
    */
   private $username;
 
   /**
-   * @var string
+   * Email of the User.
+   *
+   * @var mixed
    */
   private $email;
 
   /**
+   * Encrypted Password of the User.
+   *
    * @var string
    */
   private $password;
 
   /**
-   * @var int
+   * Permission Status of the User.
+   *
+   * @var mixed
    */
   private $permissionStatus;
 
   /**
+   * Timestamp when the User registered his account.
+   *
    * @var mixed|null
    */
   private $addedDate;
 
   /**
+   * Token needed for Authentiation.
+   *
    * @var int
    */
   private $authToken;
 
   /**
+   * Shows if the user is active, inactive or banned.
+   *
    * @var mixed|null
    */
   private $state;
 
   /**
+   * Connection to the Database.
+   *
    * @var \PDO
    */
   private $connection;
@@ -60,6 +78,7 @@ class User {
    * User constructor.
    *
    * @param array $userdata
+   *   Array with all the necessary User data.
    */
   public function __construct(array $userdata) {
 
@@ -76,21 +95,24 @@ class User {
   }
 
   /**
-   * @return void
+   * Set the user state to active.
    */
   public function setUserActive() {
     $this->state = self::STATE_ACTIVE;
   }
 
   /**
-   * @return void
+   * Set the user state to blocked.
    */
   public function setUserBlocked() {
     $this->state = self::STATE_BLOCKED;
   }
 
   /**
+   * Insert a new User into the database.
+   *
    * @return bool
+   *   Return True|False
    */
   private function insert() {
 
@@ -197,64 +219,77 @@ class User {
   }
 
   /**
+   * Get the ID of a User.
+   *
    * @return mixed
+   *   Return userId
    */
   public function getUserId() {
     return $this->userId;
   }
 
   /**
-   * @param mixed $userId
+   * Set a new ID for the User.
    *
-   * @return void
+   * @param mixed $userId
+   *  The ID of the User.
    */
   public function setUserId($userId) {
     $this->userId = $userId;
   }
 
   /**
+   * Get the Name of the User.
+   *
    * @return mixed
+   *   Return the username.
    */
   public function getUsername() {
     return $this->username;
   }
 
   /**
-   * @param mixed $username
+   * Set a new name for the user.
    *
-   * @return void
+   * @param mixed $username
+   *   Set a new username.
    */
   public function setUsername($username) {
     $this->username = $username;
   }
 
   /**
+   * Get the Email address of a user.
+   *
    * @return mixed
+   *   Return an Email address.
    */
   public function getEmail() {
     return $this->email;
   }
 
   /**
-   * @param mixed $email
+   * Set a new Email for the User.
    *
-   * @return void
+   * @param mixed $email
+   *   The email of the User.
    */
   public function setEmail($email) {
     $this->email = $email;
   }
 
   /**
+   * Get the Hashed Password of the User.
+   *
    * @return mixed
+   *   Return Hashed Password.
    */
   public function getPassword() {
     return $this->password;
   }
 
   /**
-   * @param mixed $password
-   *
-   * @return void
+   * @param string $password
    */
   public function setPassword($password) {
     $this->password = $password;
@@ -269,8 +304,6 @@ class User {
 
   /**
    * @param mixed $permissionStatus
-   *
-   * @return void
    */
   public function setPermissionStatus($permissionStatus) {
     $this->permissionStatus = $permissionStatus;
@@ -285,8 +318,6 @@ class User {
 
   /**
    * @param mixed $addedDate
-   *
-   * @return void
    */
   public function setAddedDate($addedDate) {
     $this->addedDate = $addedDate;
@@ -300,9 +331,7 @@ class User {
   }
 
   /**
-   * @param mixed $authToken
-   *
-   * @return void
+   * @param int $authToken
    */
   public function setAuthToken($authToken) {
     $this->authToken = $authToken;

@@ -2,8 +2,6 @@
 
 namespace Parkour;
 
-use phpDocumentor\Reflection\Types\Mixed_;
-
 /**
  * Class ReviewRepository.
  *

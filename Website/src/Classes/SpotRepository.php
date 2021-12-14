@@ -19,12 +19,14 @@ class SpotRepository {
     $connection = Connection::connect();
     $query = "select spot_id, name, address, city, date_format(added_date, '%d.%m.%Y') as added_date from spot inner join location using(city);";
     $q = $connection->query($query);
-    $q->setFetchMode(\PDO::FETCH_ASSOC);
-
     $spots = [];
-    while ($spot = $q->fetch(\PDO::FETCH_ASSOC)) {
-      $spots[] = new Spot($spot);
+    if ($q instanceof \PDOStatement) {
+      $q->setFetchMode(\PDO::FETCH_ASSOC);
+      while ($spot = $q->fetch(\PDO::FETCH_ASSOC)) {
+        $spots[] = new Spot($spot);
+      }
     }
+
     return $spots;
   }
 
