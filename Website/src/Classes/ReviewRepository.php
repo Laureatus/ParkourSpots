@@ -3,7 +3,7 @@
 namespace Parkour;
 
 /**
- * Class ReviewRepository.
+ * Handle Review Objects.
  *
  * @package Parkour
  */
@@ -13,8 +13,10 @@ class ReviewRepository {
    * Gets all reviews for a given spot id.
    *
    * @param mixed $spotId
+   *   The ID of the spot.
    *
-   * @return \Parkour\Review[]
+   * @return array
+   *   Return the Reviews of the Spot
    */
   public function getReviews($spotId): array {
     $connection = Connection::connect();
@@ -32,9 +34,13 @@ class ReviewRepository {
   }
 
   /**
+   * Get the Average rating of the Spot.
+   *
    * @param mixed $spotId
+   *   The ID of the spot.
    *
    * @return int
+   *   Return the average Rating of the spot.
    */
   public function getRatingAvg($spotId) {
     $connection = Connection::connect();
@@ -52,12 +58,19 @@ class ReviewRepository {
   }
 
   /**
+   * Insert a new Description in the Database.
+   *
    * @param int $spot_id
+   *   The ID of the spot.
    * @param string $username
+   *   The name of the User.
    * @param string $comment
+   *   The review text.
    * @param int $rating
+   *   The Rating of the Review.
    *
    * @return false|string
+   *   Return new Description.
    */
   public function insertDescription($spot_id, $username, $comment, $rating) {
     $connection = Connection::connect();

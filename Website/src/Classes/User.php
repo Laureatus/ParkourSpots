@@ -3,7 +3,7 @@
 namespace Parkour;
 
 /**
- * User
+ * Handle User Objects.
  */
 class User {
 
@@ -47,7 +47,7 @@ class User {
   private $permissionStatus;
 
   /**
-   * Timestamp when the User registered his account.
+   * Timestamp when the User registered account.
    *
    * @var mixed|null
    */
@@ -143,7 +143,10 @@ class User {
   }
 
   /**
+   * Update the data of the User.
+   *
    * @return bool
+   *   Return TRUE|FALSE
    */
   private function update() {
 
@@ -182,16 +185,23 @@ class User {
   }
 
   /**
+   * Save the new User data to the Database.
+   *
    * @return bool
+   *   Return TRUE|FALSE.
    */
   public function save() {
     return empty($this->userId) ? $this->insert() : $this->update();
   }
 
   /**
+   * Authenticate a new User.
+   *
    * @param string $pwinput
+   *   Password input String from Login Form.
    *
    * @return bool
+   *   Return TRUE|FALSE.
    */
   public function authenticate($pwinput) {
     $password = $this->password;
@@ -232,7 +242,7 @@ class User {
    * Set a new ID for the User.
    *
    * @param mixed $userId
-   *  The ID of the User.
+   *   The ID of the User.
    */
   public function setUserId($userId) {
     $this->userId = $userId;
@@ -289,49 +299,70 @@ class User {
   }
 
   /**
+   * Set a new Password for the User.
+   *
    * @param string $password
+   *   Set new Password.
    */
   public function setPassword($password) {
     $this->password = $password;
   }
 
   /**
+   * Get the Permission status of the User.
+   *
    * @return mixed
+   *   Return PermissionStatus
    */
   public function getPermissionStatus() {
     return $this->permissionStatus;
   }
 
   /**
+   * Set a new Permission Status for the User.
+   *
    * @param mixed $permissionStatus
+   *   set new permissionStatus.
    */
   public function setPermissionStatus($permissionStatus) {
     $this->permissionStatus = $permissionStatus;
   }
 
   /**
+   * Get the Date when the User was added.
+   *
    * @return mixed
+   *   Return Date when the User was added.
    */
   public function getAddedDate() {
     return $this->addedDate;
   }
 
   /**
+   * Set new added Date for the user.
+   *
    * @param mixed $addedDate
+   *   set new addedDate.
    */
   public function setAddedDate($addedDate) {
     $this->addedDate = $addedDate;
   }
 
   /**
+   * Get the Auth token for registration.
+   *
    * @return mixed
+   *   Return the auth Token.
    */
   public function getAuthToken() {
     return $this->authToken;
   }
 
   /**
+   * Set a new Auth token for the registration.
+   *
    * @param int $authToken
+   *   Set new authToken.
    */
   public function setAuthToken($authToken) {
     $this->authToken = $authToken;

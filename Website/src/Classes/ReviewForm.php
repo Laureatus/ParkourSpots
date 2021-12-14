@@ -3,16 +3,20 @@
 namespace Parkour;
 
 /**
- * Class ReviewForm.
+ * Render the Review Form.
  *
  * @package Parkour
  */
 class ReviewForm {
 
   /**
+   * Render the Review Form.
+   *
    * @param int $spotId
+   *   The ID of the Spot.
    *
    * @return string
+   *   Return the Review Form as HTML string.
    */
   public static function render(int $spotId) {
     return <<<FORM

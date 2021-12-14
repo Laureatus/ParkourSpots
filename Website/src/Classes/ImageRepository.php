@@ -3,21 +3,34 @@
 namespace Parkour;
 
 /**
+ * Handle Images and Directories.
  *
+ * @package Parkour
  */
 class ImageRepository {
 
+  /**
+   * Connection to the Database.
+   *
+   * @var connection
+   */
   private $connection;
 
   /**
-   *
+   * ImageRepository constructor.
    */
   public function __construct() {
     $this->connection = Connection::connect();
   }
 
   /**
+   * Render the Images from a Spot.
    *
+   * @param mixed $spotId
+   *   The ID of a spot.
+   *
+   * @return string
+   *   Return Images as HTML String.
    */
   public function renderImages($spotId) {
 
@@ -47,7 +60,18 @@ class ImageRepository {
   }
 
   /**
+   * Upload a new image to the Database.
    *
+   * @param mixed $spotId
+   *   The ID of a Spot.
+   * @param mixed $image
+   *   The image name.
+   *
+   * @return bool
+   *   Return TRUE|FALSE
+   *
+   * @throws \Parkour\FileExistsException
+   *   Throw \Parkour\FileExistsException.
    */
   public function uploadImage($spotId, $image) {
     if ($image['name'] !== "") {
@@ -86,7 +110,13 @@ class ImageRepository {
   }
 
   /**
+   * Get a Image using the image ID.
    *
+   * @param mixed $imageId
+   *   The ID of the Image.
+   *
+   * @return \Parkour\Image
+   *   Return new Image Object.
    */
   public function getImage($imageId) {
     $statement = $this->connection->prepare("SELECT * FROM images WHERE image_id=$imageId");

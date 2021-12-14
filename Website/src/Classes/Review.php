@@ -1,10 +1,11 @@
 <?php
 
-// @todo Change the Variables naming so it matches better with the Database Table review and its columns.
 namespace Parkour;
 
+// @todo Change the Variables naming so it matches better with the Database Table review and its columns.
+
 /**
- * Class Review.
+ * Handle Review Objects.
  *
  * @package Parkour
  */

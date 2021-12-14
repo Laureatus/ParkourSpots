@@ -12,7 +12,7 @@ class UserStorage {
   /**
    * User Variable.
    *
-   * @param object $user
+   * @var mixed
    */
   private static $user;
 

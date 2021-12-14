@@ -3,7 +3,7 @@
 namespace Parkour;
 
 /**
- * Images.
+ * Handle Image objects.
  *
  * @package Parkour
  */
