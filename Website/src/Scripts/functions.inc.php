@@ -2,6 +2,7 @@
 
 /**
  * @file
+ * Important Functions for the Application.
  */
 
 include 'settings.php';
@@ -42,8 +43,10 @@ function get_all_cities() : array {
  * @todo In Spot Objekt einfügen ($spot->delete()) inkl. remove_directory
  *
  * @param int $spot_id
+ *   The ID of a spot.
  *
  * @return bool
+ *   Return TRUE|FALSE.
  */
 function delete_spot($spot_id) {
   $connection = Connection::connect();
@@ -59,8 +62,13 @@ function delete_spot($spot_id) {
 }
 
 /**
+ * Delete a Image directory.
+ *
  * @param int $spot_id
+ *   The ID of a spot.
+ *
  * @return bool
+ *   Return TRUE|FALSE
  */
 function remove_directory($spot_id) {
   $dir = "src/uploads/$spot_id";
@@ -72,11 +80,13 @@ function remove_directory($spot_id) {
 }
 
 /**
- * @todo Comment me :-)
+ * Validate the Form Input fields.
  *
- * @param array $form
+ * @param mixed $form
+ *   All the Form input data.
  *
  * @return array
+ *   Return ERRORS
  */
 function validate_form_submission($form) {
   $errors = [];
@@ -104,7 +114,13 @@ function validate_form_submission($form) {
 }
 
 /**
+ * Validate registration.
  *
+ * @param mixed $form
+ *   Registration data.
+ *
+ * @return array
+ *   Return ERRORS
  */
 function validate_registration($form) {
   $username = $form['username'];
@@ -139,7 +155,10 @@ function validate_registration($form) {
 }
 
 /**
+ * Send Veryfication Email.
  *
+ * @param mixed $form
+ *   Form Data.
  */
 function mailing($form) {
   $email = $form['email'];
@@ -167,8 +186,7 @@ function mailing($form) {
               ";
 
   // It is mandatory to set the content-type when sending HTML email.
-  $headers = "MIME-Version: 1.0" . "\r\n";
-  $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+  $headers = "MIME-Version: 1.0" . "\r\n" . "Content-type:text/html;charset=UTF-8" . "\r\n";
 
   // More headers. From is required, rest other headers are optional.
   $headers .= 'From: <noreply@parkour.com>' . "\r\n";
