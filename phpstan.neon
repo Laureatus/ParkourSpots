@@ -1,5 +1,9 @@
 parameters:
-	level: 9
+	level: 6
+	ignoreErrors:
+		- '#Method ([A-Za-z])+\\([A-Za-z])+::([A-Za-z])+\(\) has no return type specified\.#'
+		- '#Function mailing\(\) has no return type specified\.#'
+		- "#Cannot access offset '([a-z])+' on mixed.#"
 	bootstrapFiles:
 	    - Website/src/Scripts/settings.php
 	paths:

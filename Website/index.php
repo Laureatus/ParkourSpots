@@ -74,11 +74,12 @@ switch ($action) {
     $form = $twig->load('spotform.html.twig');
     $repo = new SpotRepository();
     $spot = $repo::getSpot($spotId);
+    $cities = get_all_cities();
     $content = $form->render([
       'spot' => $spot,
       'form' => $form,
       'spot_id' => $spotId,
-      'cities' => get_all_cities(),
+      'cities' => $cities,
       'authorized' => $authorized,
     ]);
     break;
@@ -97,12 +98,13 @@ switch ($action) {
     if (!isset($_SESSION['user_id']) && !isset($_SESSION['username'])) {
       $authorized = FALSE;
     }
+    $cities = get_all_cities();
     $form = $twig->load('spotform.html.twig');
     $content = $form->render([
       'spot' => $spot,
       'form' => $form,
       'spot_id' => $spotId,
-      'cities' => get_all_cities(),
+      'cities' => $cities,
       'authorized' => $authorized,
     ]);
     break;

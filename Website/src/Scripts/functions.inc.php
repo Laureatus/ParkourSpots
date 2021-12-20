@@ -19,20 +19,22 @@ use Parkour\Connection;
  *
  * @todo CityRepository & funktion löschen
  */
-function get_all_cities() : array {
+function get_all_cities() {
   $connection = Connection::connect();
 
   $query = "SELECT city FROM location;";
   $statement = $connection->query($query);
-  $statement->setFetchMode(PDO::FETCH_ASSOC);
 
-  $options = [];
-
-  if ($statement->rowCount() > 0) {
-    while ($rows = $statement->fetch()) {
-      $options[] = $rows['city'];
+  if ($statement != FALSE) {
+    $statement->setFetchMode(PDO::FETCH_ASSOC);
+    $options = [];
+    if ($statement->rowCount() > 0) {
+      while ($rows = $statement->fetch()) {
+        $options[] = $rows['city'];
+      }
     }
   }
+
 
   return $options;
 }
@@ -131,7 +133,10 @@ function validate_registration($form) {
   $emailQuery = "select email from users;";
   $connection = Connection::connect();
   $q = $connection->query($emailQuery);
-  $q->setFetchMode(PDO::FETCH_ASSOC);
+  if ($q != FALSE) {
+    $q->setFetchMode(PDO::FETCH_ASSOC);
+  }
+
 
   if (empty($username)) {
     $errors[] = 'username darf nicht leer sein';
@@ -140,7 +145,7 @@ function validate_registration($form) {
   if (empty($email)) {
     $errors[] = 'Email darf nicht leer sein';
   }
-  else {
+  elseif ($q != FALSE) {
     while ($user = $q->fetch(PDO::FETCH_COLUMN)) {
       if ($email == $user) {
         $error[] = "Email wird bereits verwendet.";
@@ -167,10 +172,13 @@ function mailing($form) {
   $emailQuery = "select auth_token from users where username = '$username';";
   $connection = Connection::connect();
   $q = $connection->query($emailQuery);
-  $q->setFetchMode(PDO::FETCH_ASSOC);
-  while ($auth_token = $q->fetch(PDO::FETCH_COLUMN)) {
-    $token = $auth_token;
+  if ($q != FALSE) {
+    $q->setFetchMode(PDO::FETCH_ASSOC);
+    while ($auth_token = $q->fetch(PDO::FETCH_COLUMN)) {
+      $token = $auth_token;
+    }
   }
+
 
   $to = $email;
   $subject = "Authenthifiziere deinen account";

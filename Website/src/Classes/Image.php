@@ -168,7 +168,9 @@ class Image {
     $connection = Connection::connect();
     $query = "SELECT * FROM images WHERE image_id=" . $image_id . ".";
     $results = $connection->query($query);
-    $results->setFetchMode(\PDO::FETCH_ASSOC);
+    if ($results != FALSE) {
+      $results->setFetchMode(\PDO::FETCH_ASSOC);
+    }
     foreach ($results as $key => $result) {
       $filepath = TARGETDIR . $result['path'];
       if (is_file($filepath)) {
@@ -188,10 +190,13 @@ class Image {
    *   return the amount of images in the directory.
    */
   public function checkDir($spotId) {
+    $count = '';
     $connection = Connection::connect();
     $sql = "select count(*) from images where spot_id = $spotId;";
     $res = $connection->query($sql);
-    $count = $res->fetchColumn();
+    if ($res != FALSE) {
+      $count = $res->fetchColumn();
+    }
     return $count;
   }
 

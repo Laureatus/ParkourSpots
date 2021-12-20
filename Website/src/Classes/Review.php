@@ -153,7 +153,7 @@ class Review {
   /**
    * Set a new Description for the Review.
    *
-   * @param string $comment
+   * @param mixed $comment
    *   Set new Description.
    */
   public function setComment($comment) {
@@ -166,7 +166,7 @@ class Review {
    * @param int $description_id
    *   The ID of the description.
    *
-   * @return self|void
+   * @return self
    *   Return a description.
    */
   public static function loadById($description_id) {
