@@ -1,4 +1,4 @@
-LOAD DATA LOCAL INFILE 'src/Scripts/plz_light.csv'
+LOAD DATA LOCAL INFILE 'Website/src/Scripts/plz_light.csv'
 INTO TABLE location
 FIELDS TERMINATED BY ';'
 ENCLOSED BY ';'
