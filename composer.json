@@ -1,12 +1,6 @@
 {
-    "require-dev": {
-        "codeception/codeception": "^4.1",
-        "codeception/module-phpbrowser": "^1.0.0",
-        "codeception/module-asserts": "^1.0.0",
-        "codeception/module-webdriver": "^1.4",
-        "codeception/module-db": "^1.1",
-        "phpstan/phpstan": "^1.2",
-        "phpstan/extension-installer": "^1.1",
-        "phpstan/phpstan-beberlei-assert": "^1.0"
+    "require": {
+        "twig/twig": "^3.0",
+        "ext-pdo": "*"
     }
 }
